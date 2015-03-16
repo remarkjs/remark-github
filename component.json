@@ -1,0 +1,23 @@
+{
+  "name": "mdast-github",
+  "version": "0.1.0",
+  "description": "Auto-link references like in GitHub issues, PRs, and comments",
+  "license": "MIT",
+  "keywords": [
+    "text",
+    "markdown",
+    "plain",
+    "text",
+    "table",
+    "of",
+    "contents",
+    "content",
+    "toc",
+    "generation",
+    "mdast"
+  ],
+  "repository": "wooorm/mdast-github",
+  "scripts": [
+    "index.js"
+  ]
+}
