@@ -5,7 +5,7 @@
  */
 
 var mdastGitHub = require('..');
-var mdast = require('mdast').use(mdastGitHub);
+var mdast = require('mdast');
 var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
@@ -38,6 +38,7 @@ var fixtures = readdir(ROOT);
  * @return {string}
  */
 function github(value, repo) {
+    var parser;
     var options;
 
     if (typeof repo === 'string' || !repo) {
@@ -48,7 +49,9 @@ function github(value, repo) {
         options = repo;
     }
 
-    return mdast.stringify(mdast.parse(value, options));
+    parser = mdast.use(mdastGitHub, options);
+
+    return parser.stringify(parser.parse(value));
 }
 
 /*
@@ -60,9 +63,9 @@ describe('mdast-github()', function () {
         assert(typeof mdastGitHub === 'function');
     });
 
-    it('should throw if not passed a node', function () {
-        assert.throws(function () {
-            mdastGitHub(true);
+    it('should not throw if not passed options', function () {
+        assert.doesNotThrow(function () {
+            mdastGitHub(mdast);
         });
     });
 });
@@ -306,6 +309,7 @@ describe('Miscellaneous', function () {
     });
 
     it('should not fail on ASTs without `position`', function () {
+        var parser = mdast.use(mdastGitHub);
         var ast = {
             'type': 'root',
             'children': [
@@ -322,7 +326,7 @@ describe('Miscellaneous', function () {
         };
 
         compare(
-            mdast.stringify(mdast.run(ast)),
+            parser.stringify(parser.run(ast)),
             '[1234567](https://github.com/' +
             'wooorm/mdast-github/commit/12345678)\n'
         );

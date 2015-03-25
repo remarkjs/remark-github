@@ -438,13 +438,71 @@ augment.mention = function (position, repo, $0, $1) {
 };
 
 /**
- * Adds an example section based on a valid example
- * JavaScript document to a `Usage` section.
+ * Construct a transformer
  *
- * @param {Node} node
+ * @param {Object} repo
+ * @return {function(node)}
  */
-function github(node, options) {
-    var repo = options.repository;
+function transformerFactory(repo) {
+    /**
+     * Adds an example section based on a valid example
+     * JavaScript document to a `Usage` section.
+     *
+     * @param {Node} node
+     */
+    return function (node) {
+        /**
+         * Replace a text node with results from `augment`.
+         *
+         * @param {Node} child
+         * @param {number} position
+         * @param {Array.<Node>} children
+         */
+        function replace(child, position, children) {
+            splice.apply(children, [position, 1].concat(
+                augment(child, repo)
+            ));
+        }
+
+        var visit;
+        var visitAll;
+
+        /**
+         * Visit `node`.  Returns zero or more text blocks.
+         *
+         * @param {Node} child
+         */
+        visit = function (child, position, children) {
+            if (isText(child)) {
+                replace(child, position, children);
+            } else if ('children' in child && child.type !== 'link') {
+                visitAll(child.children);
+            }
+        };
+
+        /**
+         * Visit all `children`.  Returns a single nested
+         * array.
+         *
+         * @param {Array.<Node>} children
+         */
+        visitAll = function (children) {
+            children.map(visit);
+        };
+
+        visit(node);
+    };
+}
+
+/**
+ * Attacher.
+ *
+ * @param {MDAST} _
+ * @param {Object?} options
+ * @return {function(node)}
+ */
+function attacher(_, options) {
+    var repo = (options || {}).repository;
     var pack;
 
     if (!repo) {
@@ -467,53 +525,14 @@ function github(node, options) {
         throw new Error('Missing `repository` field in `options`');
     }
 
-    repo = {
+    return transformerFactory({
         'user': repo[1],
         'project': repo[2]
-    };
-
-    /**
-     * Replace a text node with results from `augment`.
-     *
-     * @param {Node} child
-     * @param {number} position
-     * @param {Array.<Node>} children
-     */
-    function replace(child, position, children) {
-        splice.apply(children, [position, 1].concat(augment(child, repo)));
-    }
-
-    var visit;
-    var visitAll;
-
-    /**
-     * Visit `node`.  Returns zero or more text blocks.
-     *
-     * @param {Node} child
-     */
-    visit = function (child, position, children) {
-        if (isText(child)) {
-            replace(child, position, children);
-        } else if ('children' in child && child.type !== 'link') {
-            visitAll(child.children);
-        }
-    };
-
-    /**
-     * Visit all `children`.  Returns a single nested
-     * array.
-     *
-     * @param {Array.<Node>} children
-     */
-    visitAll = function (children) {
-        children.map(visit);
-    };
-
-    visit(node);
+    });
 }
 
 /*
- * Expose `github`.
+ * Expose.
  */
 
-module.exports = github;
+module.exports = attacher;
