@@ -52,9 +52,9 @@
     "make": "npm run lint && npm run test-coverage",
     "bundle": "browserify --no-builtins index.js -s mdastGitHub > mdast-github.js",
     "postbundle": "esmangle mdast-github.js > mdast-github.min.js",
-    "build-readme": "mdast --use mdast-toc --use mdast-usage --use index.js -o Readme.md Readme.md",
-    "build-history": "mdast --use index.js -o History.md History.md",
-    "build": "npm run bundle && npm run build-readme && npm run build-history",
+    "build-md": "mdast . --output",
+    "build-history": "mdast History.md --no-ignore --setting setext --output",
+    "build": "npm run bundle && npm run build-md && npm run build-history",
     "prepublish": "npm run build"
   }
 }
