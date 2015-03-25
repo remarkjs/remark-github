@@ -43,7 +43,6 @@ UMD: globals, AMD, and CommonJS ([uncompressed](mdast-github.js) and [compressed
 -   [Usage](#usage)
 -   [API](#api)
     -   [mdast.use(github)](#mdastusegithub)
--   [CLI](#cli)
 -   [License](#license)
 
 ## Usage
@@ -105,47 +104,6 @@ Adds references to commits, issues, pull-requests, and users similar to how [Git
 
 These links are generated relative to a project. In Node this is auto-detected by loading `package.json` and looking for a `repository` field.
 In the browser, or when overwriting this, you can pass a `repository` to [`mdast.parse`](https://github.com/wooorm/mdast#mdastparsevalue-options) or [`mdast.run()`](https://github.com/wooorm/mdast#mdastrunast-options).
-
-## CLI
-
-A simple wrapper around `mdast --use mdast-github`
-
-Install:
-
-```bash
-$ npm install --global mdast-github
-```
-
-Use:
-
-```text
-Usage: mdast-github [mdast options]
-
-Auto-link references like in GitHub issues, PRs, and comments
-
-Options:
-
-  -h, --help            output usage information
-  -v, --version         output version number
-
-A wrapper around `mdast --use mdast-github`
-
-Help for mdast:
-
-  https://github.com/wooorm/mdast
-
-Usage:
-
-# Pass `Readme.md` through mdast-github
-$ mdast-github Readme.md -o Readme.md
-
-# Pass stdin through mdast-github, with mdast options, and write to stdout
-$ cat Docs.md | mdast-github --setting setext > Docs-new.md
-
-# Use other plugins
-$ npm install mdast-usage
-$ mdast-github --use mdast-usage Readme.md
-```
 
 ## License
 

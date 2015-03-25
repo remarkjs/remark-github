@@ -16,17 +16,11 @@
     "reference",
     "mdast"
   ],
-  "dependencies": {
-    "win-fork": "^1.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/wooorm/mdast-github.git"
   },
   "author": "Titus Wormer <tituswormer@gmail.com>",
-  "bin": {
-    "mdast-github": "cli.js"
-  },
   "peerDependencies": {
     "mdast": ">=0.11.0"
   },
@@ -46,17 +40,15 @@
   },
   "scripts": {
     "test-api": "mocha --check-leaks test/index.js",
-    "test-cli": "bash test/cli.sh",
     "test-coveralls": "istanbul cover _mocha --report lcovonly -- --check-leaks test/index.js",
     "test-coverage": "istanbul cover _mocha -- test/index.js",
-    "test-travis": "npm run test-coveralls && npm run test-cli",
-    "test": "npm run test-api && npm run test-cli",
+    "test-travis": "npm run test-coveralls",
+    "test": "npm run test-api",
     "lint-api": "eslint index.js",
-    "lint-cli": "eslint --rule no-process-exit:false cli.js",
     "lint-test": "eslint --env mocha test/index.js",
     "lint-script": "eslint example.js",
-    "lint-style": "jscs --reporter inline index.js cli.js example.js test/index.js",
-    "lint": "npm run lint-api && npm run lint-cli && npm run lint-test && npm run lint-script && npm run lint-style",
+    "lint-style": "jscs --reporter inline index.js example.js test/index.js",
+    "lint": "npm run lint-api && npm run lint-test && npm run lint-script && npm run lint-style",
     "make": "npm run lint && npm run test-coverage",
     "bundle": "browserify --no-builtins index.js -s mdastGitHub > mdast-github.js",
     "postbundle": "esmangle mdast-github.js > mdast-github.min.js",
