@@ -89,7 +89,7 @@ Yields:
 
 ## API
 
-### [mdast](https://github.com/wooorm/mdast#api).[use](https://github.com/wooorm/mdast#mdastuseplugin)(github)
+### [mdast](https://github.com/wooorm/mdast#api).[use](https://github.com/wooorm/mdast#mdastuseplugin-options)(github, options)
 
 Adds references to commits, issues, pull-requests, and users similar to how [GitHub](https://help.github.com/articles/writing-on-github/#references) renders these in issues, comments, and pull request descriptions.
 
@@ -103,7 +103,7 @@ Adds references to commits, issues, pull-requests, and users similar to how [Git
 *   At-mentions: `@mention` and `@wooorm` — [@mention](https://github.com/blog/821) and [@wooorm](https://github.com/wooorm)
 
 These links are generated relative to a project. In Node this is auto-detected by loading `package.json` and looking for a `repository` field.
-In the browser, or when overwriting this, you can pass a `repository` to [`mdast.parse`](https://github.com/wooorm/mdast#mdastparsevalue-options) or [`mdast.run()`](https://github.com/wooorm/mdast#mdastrunast-options).
+In the browser, or when overwriting this, you can pass a `repository` to [`mdast.use`](https://github.com/wooorm/mdast#mdastuseplugin-options).
 
 ## License
 
