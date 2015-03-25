@@ -11,6 +11,6 @@ deploy:
   provider: npm
   email: tituswormer@gmail.com
   api_key:
-    secure: eXE7Veb+DIeH1B39sjwn22+LlJVqELk07/Mx48vWd5OGUK38NYN781mH+1cB6JrtIM0lJlAu1RJahbZo8uEcINEpZIXKR7UiUwOng1EbrSeV+DgC2HL71lPxapeYmU6eGkCiu2usAM6o7Wn8XY9//HP8+weBVnWhDCVuCqQSCx8=
+    secure: WeVahJ6HPX6v5JBXMwslKRqU4DWiegIcZ7s5hcitCfBnGje3z4e+AoJ01/WVcEyJkMVpo8i90IV16mv/S9yGo5xlankdOxo3Vc7wga/I5hacBsk/vjtdZ9zrkDm/MRG2kLWkn+diBbpANuklDwqdojEU4MLRQLbdydITGTCI5II=
   on:
     repo: wooorm/mdast-github
