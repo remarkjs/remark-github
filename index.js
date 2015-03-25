@@ -86,7 +86,12 @@ var EXPRESSIONS_REPO = new RegExp(
     '(?:^|/(?:repos/)?)' + REPO + '(?=\\.git|[\\/#@]|$)', 'i'
 );
 
-var EXPRESSIONS_WHITE_SPACE = new RegExp('\\s');
+/*
+ * Expression that matches characters not used in the above
+ * references.
+ */
+
+var EXPRESSIONS_NON_REFERENCE_LIKE = /[^/.@#_a-zA-Z0-9-]/;
 
 /*
  * Expressions to use.
@@ -255,7 +260,7 @@ function augment(parent, repo) {
 
         if (
             offset === 0 ||
-            EXPRESSIONS_WHITE_SPACE.test(value.charAt(offset - 1))
+            EXPRESSIONS_NON_REFERENCE_LIKE.test(value.charAt(offset - 1))
         ) {
             while (++index < length) {
                 name = order[index];
