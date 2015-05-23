@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-env mocha */
+
 /*
  * Dependencies.
  */
@@ -38,7 +40,6 @@ var fixtures = readdir(ROOT);
  * @return {string}
  */
 function github(value, repo) {
-    var parser;
     var options;
 
     if (typeof repo === 'string' || !repo) {
@@ -49,9 +50,7 @@ function github(value, repo) {
         options = repo;
     }
 
-    parser = mdast.use(mdastGitHub, options);
-
-    return parser.stringify(parser.parse(value));
+    return mdast.use(mdastGitHub, options).process(value);
 }
 
 /*
@@ -132,7 +131,7 @@ function describeRepository(repo) {
         input = [
             '-   SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
             '-   User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-            '-   #Num: #26',
+            '-   \# Num: #26',
             '-   GH-Num: GH-26',
             '-   User#Num: wooorm#26'
         ].join('\n') + '\n';
@@ -142,7 +141,7 @@ function describeRepository(repo) {
                 '/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)',
             '-   User@SHA: [wooorm@a5c3785](https://github.com/wooorm/' +
                 project + '/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)',
-            '-   # Num: [#26](https://github.com/' + user + '/' + project +
+            '-   \# Num: [#26](https://github.com/' + user + '/' + project +
                 '/issues/26)',
             '-   GH-Num: [GH-26](https://github.com/' + user + '/' + project +
                 '/issues/26)',

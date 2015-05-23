@@ -47,11 +47,16 @@ UMD: globals, AMD, and CommonJS ([uncompressed](mdast-github.js) and [compressed
 
 ## Usage
 
-Dependencies and input:
+Dependencies:
 
 ```javascript
 var github = require('mdast-github');
 var mdast = require('mdast').use(github);
+```
+
+Input:
+
+```javascript
 var input = [
     '* SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
     '* User@SHA: jlord@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
@@ -66,10 +71,10 @@ var input = [
 ].join('\n');
 ```
 
-Stringify:
+Process:
 
 ```javascript
-var doc = mdast.stringify(mdast.parse(input));
+var doc = mdast.process(input);
 ```
 
 Yields:
@@ -78,7 +83,7 @@ Yields:
 -   SHA: [a5c3785](https://github.com/wooorm/mdast-github/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)
 -   User@SHA: [jlord@a5c3785](https://github.com/jlord/mdast-github/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)
 -   User/Repository@SHA: [jlord/sheetsee.js@a5c3785](https://github.com/jlord/sheetsee.js/commit/a5c3785e)
--   # Num: [#26](https://github.com/wooorm/mdast-github/issues/26)
+-   #Num: [#26](https://github.com/wooorm/mdast-github/issues/26)
 -   GH-Num: [GH-26](https://github.com/wooorm/mdast-github/issues/26)
 -   User#Num: [jlord#26](https://github.com/jlord/mdast-github/issues/26)
 -   User/Repository#Num: [jlord/sheetsee.js#26](https://github.com/jlord/sheetsee.js/issues/26)

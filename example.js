@@ -1,7 +1,8 @@
-// Dependencies and input:
+// Dependencies:
 var github = require('./index.js');
 var mdast = require('mdast').use(github);
 
+// Input:
 var input = [
     '* SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
     '* User@SHA: jlord@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
@@ -15,8 +16,8 @@ var input = [
     '* And nothing.'
 ].join('\n');
 
-// Stringify:
-var doc = mdast.stringify(mdast.parse(input));
+// Process:
+var doc = mdast.process(input);
 
 // Yields:
 console.log('markdown', doc);
