@@ -1,3 +1,14 @@
+0.3.0 / 2015-05-25
+==================
+
+*   Refactor module ([fb936ab](https://github.com/wooorm/mdast-github/commit/fb936ab))
+*   Refactor test ([087c734](https://github.com/wooorm/mdast-github/commit/087c734))
+*   Update mdast ([844c4ad](https://github.com/wooorm/mdast-github/commit/844c4ad))
+*   Fix example, benchmark, test for changes in mdast ([f853398](https://github.com/wooorm/mdast-github/commit/f853398))
+*   Update browserify ([f3039ec](https://github.com/wooorm/mdast-github/commit/f3039ec))
+*   Update jscs-jsdoc ([d9e51ff](https://github.com/wooorm/mdast-github/commit/d9e51ff))
+*   Update eslint ([b215ba6](https://github.com/wooorm/mdast-github/commit/b215ba6))
+
 0.2.0 / 2015-03-16
 ==================
 
