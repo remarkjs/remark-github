@@ -64,7 +64,7 @@ describe('mdast-github()', function () {
 
     it('should not throw if not passed options', function () {
         assert.doesNotThrow(function () {
-            mdastGitHub(mdast);
+            mdast.use(mdastGitHub);
         });
     });
 });
@@ -305,30 +305,6 @@ describe('Miscellaneous', function () {
         );
 
         process.cwd = cwd;
-    });
-
-    it('should not fail on ASTs without `position`', function () {
-        var parser = mdast.use(mdastGitHub);
-        var ast = {
-            'type': 'root',
-            'children': [
-                {
-                    'type': 'paragraph',
-                    'children': [
-                        {
-                            'type': 'text',
-                            'value': '12345678'
-                        }
-                    ]
-                }
-            ]
-        };
-
-        compare(
-            parser.stringify(parser.run(ast)),
-            '[1234567](https://github.com/' +
-            'wooorm/mdast-github/commit/12345678)\n'
-        );
     });
 
     it('should throw without `repository`', function () {
