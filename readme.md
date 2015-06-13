@@ -7,19 +7,19 @@ Auto-link references to commits, issues, pull-requests, and users like GitHub: [
 [npm](https://docs.npmjs.com/cli/install)
 
 ```bash
-$ npm install mdast-github
+npm install mdast-github
 ```
 
 [Component.js](https://github.com/componentjs/component)
 
 ```bash
-$ component install wooorm/mdast-github
+component install wooorm/mdast-github
 ```
 
 [Bower](http://bower.io/#install-packages)
 
 ```bash
-$ bower install mdast-github
+bower install mdast-github
 ```
 
 [Duo](http://duojs.org/#getting-started)
@@ -99,19 +99,39 @@ Yields:
 
 ### [mdast](https://github.com/wooorm/mdast#api).[use](https://github.com/wooorm/mdast#mdastuseplugin-options)(github, options)
 
-Adds references to commits, issues, pull-requests, and users similar to how [GitHub](https://help.github.com/articles/writing-on-github/#references) renders these in issues, comments, and pull request descriptions.
+Adds references to commits, issues, pull-requests, and users similar to how
+[GitHub](https://help.github.com/articles/writing-on-github/#references)
+renders these in issues, comments, and pull request descriptions.
 
-*   SHA commits references: `e2c1dc7690932b0cef900fa4e7355df093448341` — [e2c1dc7](https://github.com/wooorm/mdast-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
-*   User@SHA: `wooorm@e2c1dc7690932b0cef900fa4e7355df093448341` — [wooorm@e2c1dc7](https://github.com/wooorm/mdast-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
-*   User/Repository@SHA: `wooorm/mdast-github@e2c1dc7690932b0cef900fa4e7355df093448341` — [wooorm/mdast-github@e2c1dc7](https://github.com/wooorm/mdast-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
-*   Hash-Num: `#1` — [#1](https://github.com/wooorm/mdast-github/issues/1)
-*   GH-Num: `GH-1` — [GH-1](https://github.com/wooorm/mdast-github/issues/1)
-*   User#Num: `wooorm#1` — [wooorm#1](https://github.com/wooorm/mdast-github/issues/1)
-*   User/Repository#Num: `wooorm/mdast-github#1` — [wooorm/mdast-github#1](https://github.com/wooorm/mdast-github/issues/1)
-*   At-mentions: `@mention` and `@wooorm` — [@mention](https://github.com/blog/821) and [@wooorm](https://github.com/wooorm)
+*   SHA commits references: `e2c1dc7690932b0cef900fa4e7355df093448341`
+    — [e2c1dc7](https://github.com/wooorm/mdast-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
 
-These links are generated relative to a project. In Node this is auto-detected by loading `package.json` and looking for a `repository` field.
-In the browser, or when overwriting this, you can pass a `repository` to [`mdast.use`](https://github.com/wooorm/mdast#mdastuseplugin-options).
+*   User@SHA: `wooorm@e2c1dc7690932b0cef900fa4e7355df093448341`
+    — [wooorm@e2c1dc7](https://github.com/wooorm/mdast-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
+
+*   User/Repository@SHA:
+    `wooorm/mdast-github@e2c1dc7690932b0cef900fa4e7355df093448341`
+    — [wooorm/mdast-github@e2c1dc7](https://github.com/wooorm/mdast-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
+
+*   Hash-Num: `#1`
+    — [#1](https://github.com/wooorm/mdast-github/issues/1)
+
+*   GH-Num: `GH-1`
+    — [GH-1](https://github.com/wooorm/mdast-github/issues/1)
+
+*   User#Num: `wooorm#1`
+    — [wooorm#1](https://github.com/wooorm/mdast-github/issues/1)
+
+*   User/Repository#Num: `wooorm/mdast-github#1`
+    — [wooorm/mdast-github#1](https://github.com/wooorm/mdast-github/issues/1)
+
+*   At-mentions: `@mention` and `@wooorm`
+    — [@mention](https://github.com/blog/821) and [@wooorm](https://github.com/wooorm)
+
+These links are generated relative to a project. In Node this is auto-detected
+by loading `package.json` and looking for a `repository` field.
+In the browser, or when overwriting this, you can pass a `repository` to
+[`mdast.use`](https://github.com/wooorm/mdast#mdastuseplugin-options).
 
 ## License
 

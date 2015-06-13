@@ -1,3 +1,7 @@
+<!--mdast setext-->
+
+<!--lint disable no-multiple-toplevel-headings-->
+
 0.3.0 / 2015-05-25
 ==================
 

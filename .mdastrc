@@ -1,7 +1,9 @@
 {
   "plugins": [
-    "mdast-toc",
-    "mdast-usage",
+    "comment-config",
+    "lint",
+    "toc",
+    "usage",
     "./"
   ],
   "settings": {
