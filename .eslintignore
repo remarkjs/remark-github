@@ -1,0 +1,6 @@
+build/
+components/
+coverage/
+build.js
+mdast-github.js
+mdast-github.min.js
