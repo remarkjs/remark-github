@@ -41,8 +41,11 @@ UMD: globals, AMD, and CommonJS ([uncompressed](mdast-github.js) and [compressed
 ## Table of Contents
 
 *   [Usage](#usage)
+
 *   [API](#api)
+
     *   [mdast.use(github, options)](#mdastusegithub-options)
+
 *   [License](#license)
 
 ## Usage
