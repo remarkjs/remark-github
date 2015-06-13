@@ -104,8 +104,8 @@ function compare(value, baseline) {
 function describeFixture(fixture) {
     it('should work on `' + fixture + '`', function () {
         var filepath = ROOT + '/' + fixture;
-        var output = read(filepath + '/Output.md', 'utf-8');
-        var input = read(filepath + '/Input.md', 'utf-8');
+        var output = read(filepath + '/output.md', 'utf-8');
+        var input = read(filepath + '/input.md', 'utf-8');
         var result = github(input, 'wooorm/mdast');
 
         compare(result, output);
