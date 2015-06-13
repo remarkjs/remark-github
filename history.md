@@ -2,6 +2,19 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+<!--lint disable maximum-line-length-->
+
+0.3.1 / 2015-06-13
+==================
+
+*   Add missing dev-dependencies ([694db40](https://github.com/wooorm/mdast-github/commit/694db40))
+*   Fix [b8a7f1e](https://github.com/wooorm/mdast-github/commit/b8a7f1e) for case-sensitive file-systems ([b467b17](https://github.com/wooorm/mdast-github/commit/b467b17))
+*   Add `.editorconfig` ([d4e66c4](https://github.com/wooorm/mdast-github/commit/d4e66c4))
+*   Refactor lint targets ([b8a7f1e](https://github.com/wooorm/mdast-github/commit/b8a7f1e))
+*   Add mdast-comment-config, mdast-lint as dependencies ([8a4aadf](https://github.com/wooorm/mdast-github/commit/8a4aadf))
+*   Update mdast, mdast-toc, mdast-usage ([17c63e0](https://github.com/wooorm/mdast-github/commit/17c63e0))
+*   Update eslint ([4936cd0](https://github.com/wooorm/mdast-github/commit/4936cd0))
+
 0.3.0 / 2015-05-25
 ==================
 
