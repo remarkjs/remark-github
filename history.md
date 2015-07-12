@@ -4,6 +4,11 @@
 
 <!--lint disable maximum-line-length-->
 
+0.3.2 / 2015-07-12
+==================
+
+*   Remove peer-dependencies ([a60b556](https://github.com/wooorm/mdast-github/commit/a60b556))
+
 0.3.1 / 2015-06-13
 ==================
 

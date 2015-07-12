@@ -1,6 +1,6 @@
 {
   "name": "mdast-github",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Auto-link references like in GitHub issues, PRs, and comments",
   "license": "MIT",
   "keywords": [
