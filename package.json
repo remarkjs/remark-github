@@ -50,7 +50,6 @@
     "bundle": "browserify --no-builtins index.js -s mdastGitHub > mdast-github.js",
     "postbundle": "esmangle mdast-github.js > mdast-github.min.js",
     "build-md": "mdast . --output --quiet",
-    "build": "npm run bundle && npm run build-md",
-    "prepublish": "npm run build"
+    "build": "npm run bundle && npm run build-md"
   }
 }
