@@ -21,9 +21,6 @@
     "url": "https://github.com/wooorm/mdast-github.git"
   },
   "author": "Titus Wormer <tituswormer@gmail.com>",
-  "peerDependencies": {
-    "mdast": ">=0.22.0"
-  },
   "devDependencies": {
     "browserify": "^10.0.0",
     "chalk": "^1.0.0",
