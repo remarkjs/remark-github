@@ -1,3 +1,11 @@
+/**
+ * @author Titus Wormer
+ * @copyright 2015 Titus Wormer
+ * @license MIT
+ * @module mdast:github:test
+ * @fileoverview Test suite for mdast-github.
+ */
+
 'use strict';
 
 /* eslint-env mocha */
@@ -6,13 +14,11 @@
  * Dependencies.
  */
 
-var mdastGitHub = require('..');
-var mdast = require('mdast');
 var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
-var diff = require('diff');
-var chalk = require('chalk');
+var mdast = require('mdast');
+var mdastGitHub = require('..');
 
 /*
  * Methods.
@@ -20,6 +26,7 @@ var chalk = require('chalk');
 
 var read = fs.readFileSync;
 var readdir = fs.readdirSync;
+var equal = assert.strictEqual;
 
 /*
  * Constants.
@@ -36,7 +43,8 @@ var fixtures = readdir(ROOT);
 /**
  * Shortcut to process.
  *
- * @param {string} value
+ * @param {string} value - Value to process.
+ * @param {string|Object} repo - Repository.
  * @return {string}
  */
 function github(value, repo) {
@@ -59,7 +67,7 @@ function github(value, repo) {
 
 describe('mdast-github()', function () {
     it('should be a function', function () {
-        assert(typeof mdastGitHub === 'function');
+        equal(typeof mdastGitHub, 'function');
     });
 
     it('should not throw if not passed options', function () {
@@ -70,36 +78,9 @@ describe('mdast-github()', function () {
 });
 
 /**
- * Diff text.
- *
- * @param {string} value
- * @param {string} baseline
- */
-function compare(value, baseline) {
-    var difference;
-
-    try {
-        assert(value === baseline);
-    } catch (error) {
-        /* istanbul ignore next */
-        difference = diff.diffLines(value, baseline);
-
-        difference.forEach(function (change) {
-            var colour = change.added ?
-                'green' : change.removed ? 'red' : 'dim';
-
-            process.stderr.write(chalk[colour](change.value));
-        });
-
-        /* istanbul ignore next */
-        throw error;
-    }
-}
-
-/**
  * Describe a fixtures.
  *
- * @param {string} fixture
+ * @param {string} fixture - Name / file-path.
  */
 function describeFixture(fixture) {
     it('should work on `' + fixture + '`', function () {
@@ -108,14 +89,15 @@ function describeFixture(fixture) {
         var input = read(filepath + '/input.md', 'utf-8');
         var result = github(input, 'wooorm/mdast');
 
-        compare(result, output);
+        equal(result, output);
     });
 }
 
 /**
  * Describe a repo URL.
  *
- * @param {Array.<string>} repo
+ * @param {Array.<string>} repo - Tuple of user and
+ *   project.
  */
 function describeRepository(repo) {
     var user = repo[1];
@@ -126,7 +108,6 @@ function describeRepository(repo) {
     it('should work on `' + repo + '`', function () {
         var input;
         var output;
-        var result;
 
         input = [
             '-   SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
@@ -149,9 +130,7 @@ function describeRepository(repo) {
                 '/issues/26)'
         ].join('\n') + '\n';
 
-        result = github(input, repo);
-
-        compare(result, output);
+        equal(github(input, repo), output);
     });
 }
 
@@ -278,8 +257,8 @@ describe('Repositories', function () {
 
 describe('Miscellaneous', function () {
     it('should load a `package.json` when available', function () {
-        assert(
-            github('test@12345678', null) ===
+        equal(
+            github('test@12345678', null),
             '[test@1234567](https://github.com/' +
             'test/mdast-github/commit/12345678)\n'
         );
@@ -298,7 +277,7 @@ describe('Miscellaneous', function () {
 
         process.cwd = fakeCWD;
 
-        compare(
+        equal(
             github('12345678', null),
             '[1234567](https://github.com/' +
             'wooorm/mdast/commit/12345678)\n'

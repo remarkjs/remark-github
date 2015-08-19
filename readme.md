@@ -1,4 +1,4 @@
-# mdast-github [![Build Status](https://img.shields.io/travis/wooorm/mdast-github.svg?style=flat)](https://travis-ci.org/wooorm/mdast-github) [![Coverage Status](https://img.shields.io/coveralls/wooorm/mdast-github.svg?style=flat)](https://coveralls.io/r/wooorm/mdast-github?branch=master)
+# mdast-github [![Build Status](https://img.shields.io/travis/wooorm/mdast-github.svg)](https://travis-ci.org/wooorm/mdast-github) [![Coverage Status](https://img.shields.io/codecov/c/github/wooorm/mdast-github.svg)](https://codecov.io/github/wooorm/mdast-github)
 
 Auto-link references to commits, issues, pull-requests, and users like GitHub: [Writing on GitHub](https://help.github.com/articles/writing-on-github/#references).
 

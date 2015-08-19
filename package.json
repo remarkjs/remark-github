@@ -16,32 +16,29 @@
     "reference",
     "mdast"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wooorm/mdast-github.git"
-  },
+  "repository": "wooorm/mdast-github",
   "author": "Titus Wormer <tituswormer@gmail.com>",
+  "files": [
+    "index.js"
+  ],
   "devDependencies": {
-    "browserify": "^10.0.0",
-    "chalk": "^1.0.0",
-    "diff": "^1.2.0",
-    "eslint": "^0.24.0",
+    "browserify": "^11.0.0",
+    "eslint": "^1.0.0",
     "esmangle": "^1.0.0",
     "istanbul": "^0.3.0",
-    "jscs": "^1.0.0",
+    "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
-    "mdast": "^0.26.0",
-    "mdast-comment-config": "^0.1.0",
-    "mdast-lint": "^0.4.0",
+    "mdast": "^1.0.0",
+    "mdast-comment-config": "^1.0.0",
+    "mdast-lint": "^1.0.0",
     "mdast-toc": "^0.5.0",
-    "mdast-usage": "^0.3.0",
+    "mdast-usage": "^1.0.0",
     "mocha": "^2.0.0"
   },
   "scripts": {
     "test-api": "mocha --check-leaks test/index.js",
-    "test-coveralls": "istanbul cover _mocha --report lcovonly -- --check-leaks test/index.js",
     "test-coverage": "istanbul cover _mocha -- test/index.js",
-    "test-travis": "npm run test-coveralls",
+    "test-travis": "npm run test-coverage",
     "test": "npm run test-api",
     "lint-api": "eslint .",
     "lint-style": "jscs --reporter inline .",
@@ -49,7 +46,7 @@
     "make": "npm run lint && npm run test-coverage",
     "bundle": "browserify --no-builtins index.js -s mdastGitHub > mdast-github.js",
     "postbundle": "esmangle mdast-github.js > mdast-github.min.js",
-    "build-md": "mdast . --output --quiet",
+    "build-md": "mdast . --quiet",
     "build": "npm run bundle && npm run build-md"
   }
 }

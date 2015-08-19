@@ -1,5 +1,15 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.mdastGitHub = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
+/**
+ * @author Titus Wormer
+ * @copyright 2015 Titus Wormer
+ * @license MIT
+ * @module mdast:github
+ * @fileoverview
+ *   Auto-link references like in GitHub issues, PRs,
+ *   and comments.
+ */
+
 'use strict';
 
 /*
@@ -35,7 +45,7 @@ var BLACKLIST = [
 /**
  * Check if a value is a SHA.
  *
- * @param {string} sha
+ * @param {string} sha - Commit hash.
  * @return {boolean}
  */
 function isSHA(sha) {
@@ -45,7 +55,7 @@ function isSHA(sha) {
 /**
  * Abbreviate a SHA.
  *
- * @param {string} sha
+ * @param {string} sha - Commit hash.
  * @return {string}
  */
 function abbr(sha) {
@@ -67,8 +77,8 @@ OVERWRITES.mentions = OVERWRITES.mention = 'blog/821';
  * Return a URL to GitHub, relative to an optional
  * `repo` object, or `user` and `project`.
  *
- * @param {Object|string?} repo
- * @param {string?} project
+ * @param {Object|string?} repo - Repository.
+ * @param {string?} project - Project.
  * @return {string}
  */
 function gh(repo, project) {
@@ -162,7 +172,7 @@ var order = [
  *
  * @property {boolean} notInLink
  * @this {Parser}
- * @param {Function} eat
+ * @param {Function} eat - Eater.
  * @param {string} $0 - Whole content.
  * @param {Object} $1 - Username.
  * @param {Object} $2 - Project.
@@ -189,7 +199,7 @@ ghRepoSHA.notInLink = true;
  *
  * @property {boolean} notInLink
  * @this {Parser}
- * @param {Function} eat
+ * @param {Function} eat - Eater.
  * @param {string} $0 - Whole content.
  * @param {Object} $1 - Username.
  * @param {Object} $2 - SHA.
@@ -215,7 +225,7 @@ ghUserSHA.notInLink = true;
  *
  * @property {boolean} notInLink
  * @this {Parser}
- * @param {Function} eat
+ * @param {Function} eat - Eater.
  * @param {string} $0 - Whole content.
  * @param {Object} $1 - SHA.
  * @return {Node?}
@@ -238,7 +248,7 @@ ghSha.notInLink = true;
  *
  * @property {boolean} notInLink
  * @this {Parser}
- * @param {Function} eat
+ * @param {Function} eat - Eater.
  * @param {string} $0 - Whole content.
  * @param {Object} $1 - Username.
  * @param {Object} $2 - Project.
@@ -259,7 +269,7 @@ ghRepoIssue.notInLink = true;
  *
  * @property {boolean} notInLink
  * @this {Parser}
- * @param {Function} eat
+ * @param {Function} eat - Eater.
  * @param {string} $0 - Whole content.
  * @param {Object} $1 - Username.
  * @param {Object} $2 - Issue number.
@@ -279,7 +289,7 @@ ghUserIssue.notInLink = true;
  *
  * @property {boolean} notInLink
  * @this {Parser}
- * @param {Function} eat
+ * @param {Function} eat - Eater.
  * @param {string} $0 - Whole content.
  * @param {Object} $1 - Issue number.
  * @return {Node}
@@ -296,7 +306,7 @@ ghIssue.notInLink = true;
 /**
  * Render a mention.
  *
- * @param {Function} eat
+ * @param {Function} eat - Eater.
  * @param {string} $0 - Whole content.
  * @param {Object} $1 - Username.
  * @return {Node}
@@ -322,7 +332,7 @@ function inlineTextFactory(repo) {
      * Factory to parse plain-text, and look for github
      * entities.
      *
-     * @param {Function} eat
+     * @param {Function} eat - Eater.
      * @param {string} $0 - Content.
      * @return {Array.<Node>}
      */
@@ -341,8 +351,8 @@ function inlineTextFactory(repo) {
 /**
  * Attacher.
  *
- * @param {MDAST} mdast
- * @param {Object?} [options]
+ * @param {MDAST} mdast - Instance.
+ * @param {Object?} [options] - Configuration.
  */
 function attacher(mdast, options) {
     var repo = (options || {}).repository;
