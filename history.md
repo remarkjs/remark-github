@@ -4,6 +4,11 @@
 
 <!--lint disable maximum-line-length-->
 
+1.0.0 / 2015-08-19
+==================
+
+*   Update dependencies, dev-dependencies ([2d61248](https://github.com/wooorm/mdast-github/commit/2d61248))
+
 0.3.2 / 2015-07-12
 ==================
 
