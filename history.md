@@ -4,6 +4,11 @@
 
 <!--lint disable maximum-line-length-->
 
+2.0.0-alpha.1 / 2015-12-13
+==================
+
+*   Refactor for changes in mdast ([bbcf85b](https://github.com/wooorm/mdast-github/commit/bbcf85b))
+
 1.0.0 / 2015-08-19
 ==================
 
