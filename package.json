@@ -28,7 +28,7 @@
     "istanbul": "^0.3.0",
     "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
-    "mdast": "^1.0.0",
+    "mdast": "^3.0.0-alpha.2",
     "mdast-comment-config": "^1.0.0",
     "mdast-lint": "^1.0.0",
     "mdast-toc": "^0.5.0",
@@ -48,5 +48,8 @@
     "postbundle": "esmangle mdast-github.js > mdast-github.min.js",
     "build-md": "mdast . --quiet",
     "build": "npm run bundle && npm run build-md"
+  },
+  "dependencies": {
+    "mdast": "^3.0.0-alpha.2"
   }
 }

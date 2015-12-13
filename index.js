@@ -10,17 +10,48 @@
 
 'use strict';
 
-/*
- * Cached method.
- */
+/* global global */
 
-var has = Object.prototype.hasOwnProperty;
+/* eslint-env commonjs */
 
 /*
- * Hide process use from browserify.
+ * Constants.
  */
 
-var proc = typeof global !== 'undefined' && global.process;
+var GIT_SUFFIX = '.git';
+var GH_ISSUE_PREFIX = 'gh-';
+var COMMITS = 'commit/';
+var ISSUES = 'issues/';
+var MAX_SHA_LENGTH = 40;
+var MIN_SHA_LENGTH = 7;
+var MAX_USER_LENGTH = 39;
+var MAX_PROJECT_LENGTH = 100;
+
+/*
+ * Characters.
+ */
+
+var C_SLASH = '/';
+var C_HASH = '#';
+var C_AT = '@';
+
+/*
+ * Character codes.
+ */
+
+var CC_0 = '0'.charCodeAt(0);
+var CC_9 = '9'.charCodeAt(0);
+var CC_A_LOWER = 'a'.charCodeAt(0);
+var CC_F_LOWER = 'f'.charCodeAt(0);
+var CC_Z_LOWER = 'z'.charCodeAt(0);
+var CC_A_UPPER = 'A'.charCodeAt(0);
+var CC_F_UPPER = 'F'.charCodeAt(0);
+var CC_Z_UPPER = 'Z'.charCodeAt(0);
+var CC_SLASH = C_SLASH.charCodeAt(0);
+var CC_DOT = '.'.charCodeAt(0);
+var CC_DASH = '-'.charCodeAt(0);
+var CC_HASH = C_HASH.charCodeAt(0);
+var CC_AT = C_AT.charCodeAt(0);
 
 /*
  * Blacklist of SHAs which are also valid words.
@@ -39,6 +70,29 @@ var BLACKLIST = [
     'deedeed',
     'fabaceae'
 ];
+
+/*
+ * Map of overwrites for at-mentions.
+ * GitHub does some fancy stuff with `@mention`, by linking
+ * it to their blog-post introducing the feature.
+ * To my knowledge, there are no other magical usernames.
+ */
+
+var OVERWRITES = {};
+
+OVERWRITES.mentions = OVERWRITES.mention = 'blog/821';
+
+/*
+ * Cached method.
+ */
+
+var has = Object.prototype.hasOwnProperty;
+
+/*
+ * Hide process use from browserify.
+ */
+
+var proc = typeof global !== 'undefined' && global.process;
 
 /**
  * Check if a value is a SHA.
@@ -60,17 +114,6 @@ function abbr(sha) {
     return sha.slice(0, 7);
 }
 
-/*
- * Map of overwrites for at-mentions.
- * GitHub does some fancy stuff with `@mention`, by linking
- * it to their blog-post introducing the feature.
- * To my knowledge, there are no other magical usernames.
- */
-
-var OVERWRITES = {};
-
-OVERWRITES.mentions = OVERWRITES.mention = 'blog/821';
-
 /**
  * Return a URL to GitHub, relative to an optional
  * `repo` object, or `user` and `project`.
@@ -90,7 +133,7 @@ function gh(repo, project) {
     }
 
     if (repo) {
-        base += repo.user + '/' + repo.project + '/';
+        base += repo.user + C_SLASH + repo.project + C_SLASH;
     }
 
     return base;
@@ -108,19 +151,8 @@ function gh(repo, project) {
 
 var NAME = '(?:[a-z0-9]{1,2}|[a-z0-9][a-z0-9-]{1,37}[a-z0-9])';
 var USER = '(' + NAME + ')';
-var PERSON = '(' + NAME + '(?:\\/' + NAME + ')?)';
-var HASH = '([a-f0-9]{7,40})';
-var NUMBER = '([0-9]+)';
 var PROJECT = '((?:[a-z0-9-]|\\.git[a-z0-9-]|\\.(?!git))+)';
 var REPO = USER + '\\/' + PROJECT;
-
-var SHA = new RegExp('^' + HASH + '\\b', 'i');
-var USER_SHA = new RegExp('^' + USER + '@' + HASH + '\\b', 'i');
-var REPO_SHA = new RegExp('^' + REPO + '@' + HASH + '\\b', 'i');
-var ISSUE = new RegExp('^(?:GH-|#)' + NUMBER + '\\b', 'i');
-var USER_ISSUE = new RegExp('^' + USER + '#' + NUMBER + '\\b', 'i');
-var REPO_ISSUE = new RegExp('^' + REPO + '#' + NUMBER + '\\b', 'i');
-var MENTION = new RegExp('^@' + PERSON + '\\b(?!-)', 'i');
 
 /*
  * Match a repo from a git / github URL.
@@ -130,221 +162,566 @@ var REPOSITORY = new RegExp(
     '(?:^|/(?:repos/)?)' + REPO + '(?=\\.git|[\\/#@]|$)', 'i'
 );
 
-/*
- * Expression that matches characters not used in the above
- * references.
- */
-
-var NON_GITHUB = /^[\s\S]+?(?:[^/.@#_a-zA-Z0-9-](?=[@#_a-zA-Z0-9-])|(?=$))/;
-
-/*
- * Expressions to use.
- */
-
-var expressions = {
-    'ghRepoSHA': REPO_SHA,
-    'ghUserSHA': USER_SHA,
-    'ghSha': SHA,
-    'ghRepoIssue': REPO_ISSUE,
-    'ghUserIssue': USER_ISSUE,
-    'ghIssue': ISSUE,
-    'ghMention': MENTION
-};
-
-/*
- * Order in which to use expressions.
- */
-
-var order = [
-    'ghRepoSHA',
-    'ghUserSHA',
-    'ghSha',
-    'ghRepoIssue',
-    'ghUserIssue',
-    'ghIssue',
-    'ghMention'
-];
-
 /**
- * Render a SHA relative to a repo.
+ * Check whether `code` is a hexadecimal character.
  *
- * @property {boolean} notInLink
- * @this {Parser}
- * @param {Function} eat - Eater.
- * @param {string} $0 - Whole content.
- * @param {Object} $1 - Username.
- * @param {Object} $2 - Project.
- * @param {Object} $3 - SHA.
- * @return {Node?}
+ * @param {number} code - Single character code to check.
+ * @return {boolean} - Whether or not `code` is a valid
+ *   hexadecimal character.
  */
-function ghRepoSHA(eat, $0, $1, $2, $3) {
-    var now = eat.now();
-    var href;
-    var value;
-
-    if (isSHA($3)) {
-        href = gh($1, $2) + 'commit/' + $3;
-        value = $1 + '/' + $2 + '@' + abbr($3);
-
-        return eat($0)(this.renderLink(true, href, value, null, now, eat));
-    }
+function isHexadecimal(code) {
+    return (code >= CC_0 && code <= CC_9) ||
+        (code >= CC_A_LOWER && code <= CC_F_LOWER) ||
+        (code >= CC_A_UPPER && code <= CC_F_UPPER);
 }
 
-ghRepoSHA.notInLink = true;
-
 /**
- * Render a SHA relative to a user.
+ * Check whether `code` is a decimal character.
  *
- * @property {boolean} notInLink
- * @this {Parser}
- * @param {Function} eat - Eater.
- * @param {string} $0 - Whole content.
- * @param {Object} $1 - Username.
- * @param {Object} $2 - SHA.
- * @return {Node?}
+ * @param {number} code - Single character code to check.
+ * @return {boolean} - Whether or not `code` is a valid
+ *   decimal character.
  */
-function ghUserSHA(eat, $0, $1, $2) {
-    var now = eat.now();
-    var href;
-    var value;
-
-    if (isSHA($2)) {
-        href = gh($1, this.github.project) + 'commit/' + $2;
-        value = $1 + '@' + abbr($2);
-
-        return eat($0)(this.renderLink(true, href, value, null, now, eat));
-    }
+function isDecimal(code) {
+    return code >= CC_0 && code <= CC_9;
 }
 
-ghUserSHA.notInLink = true;
-
 /**
- * Render a SHA.
+ * Check whether `code` is a repo character.
  *
- * @property {boolean} notInLink
- * @this {Parser}
- * @param {Function} eat - Eater.
- * @param {string} $0 - Whole content.
- * @param {Object} $1 - SHA.
- * @return {Node?}
+ * @param {number} code - Single character code to check.
+ * @return {boolean} - Whether or not `code` is a valid
+ *   repo character.
  */
-function ghSha(eat, $0, $1) {
-    var now = eat.now();
-    var href;
-
-    if (isSHA($1)) {
-        href = gh(this.github) + 'commit/' + $1;
-
-        return eat($0)(this.renderLink(true, href, abbr($0), null, now, eat));
-    }
+function isValidRepoCharacter(code) {
+    return code === CC_SLASH ||
+        code === CC_DOT ||
+        code === CC_DASH ||
+        (code >= CC_0 && code <= CC_9) ||
+        (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
+        (code >= CC_A_UPPER && code <= CC_Z_UPPER)
 }
 
-ghSha.notInLink = true;
-
 /**
- * Render an issue relative to a repo.
+ * Check whether `code` is a valid project name character.
  *
- * @property {boolean} notInLink
- * @this {Parser}
- * @param {Function} eat - Eater.
- * @param {string} $0 - Whole content.
- * @param {Object} $1 - Username.
- * @param {Object} $2 - Project.
- * @param {Object} $3 - Issue number.
- * @return {Node}
+ * @param {number} code - Single character code to check.
+ * @return {boolean} - Whether or not `code` is a valid
+ *   project name character.
  */
-function ghRepoIssue(eat, $0, $1, $2, $3) {
-    var now = eat.now();
-    var href = gh($1, $2) + 'issues/' + $3;
-
-    return eat($0)(this.renderLink(true, href, $0, null, now, eat));
+function isValidProjectNameCharacter(code) {
+    return code === CC_DOT ||
+        code === CC_DASH ||
+        (code >= CC_0 && code <= CC_9) ||
+        (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
+        (code >= CC_A_UPPER && code <= CC_Z_UPPER)
 }
 
-ghRepoIssue.notInLink = true;
-
 /**
- * Render an issue relative to a user.
+ * Check whether `code` is a valid username character.
  *
- * @property {boolean} notInLink
- * @this {Parser}
- * @param {Function} eat - Eater.
- * @param {string} $0 - Whole content.
- * @param {Object} $1 - Username.
- * @param {Object} $2 - Issue number.
- * @return {Node}
+ * @param {number} code - Single character code to check.
+ * @return {boolean} - Whether or not `code` is a valid
+ *   username character.
  */
-function ghUserIssue(eat, $0, $1, $2) {
-    var now = eat.now();
-    var href = gh($1, this.github.project) + 'issues/' + $2;
-
-    return eat($0)(this.renderLink(true, href, $0, null, now, eat));
+function isValidUserNameCharacter(code) {
+    return code === CC_DASH ||
+        (code >= CC_0 && code <= CC_9) ||
+        (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
+        (code >= CC_A_UPPER && code <= CC_Z_UPPER)
 }
 
-ghUserIssue.notInLink = true;
-
 /**
- * Render an issue.
+ * Create a bound regex locator.
  *
- * @property {boolean} notInLink
- * @this {Parser}
- * @param {Function} eat - Eater.
- * @param {string} $0 - Whole content.
- * @param {Object} $1 - Issue number.
- * @return {Node}
- */
-function ghIssue(eat, $0, $1) {
-    var now = eat.now();
-    var href = gh(this.github) + 'issues/' + $1;
-
-    return eat($0)(this.renderLink(true, href, $0, null, now, eat));
-}
-
-ghIssue.notInLink = true;
-
-/**
- * Render a mention.
+ * @example
+ *   regexLocatorFactory(/-/g);
  *
- * @param {Function} eat - Eater.
- * @param {string} $0 - Whole content.
- * @param {Object} $1 - Username.
- * @return {Node}
+ * @param {RegExp} regex - Expressions to bind to.
+ * @return {Function} - Locator.
  */
-function ghMention(eat, $0, $1) {
-    var now = eat.now();
-    var href = gh() + (has.call(OVERWRITES, $1) ? OVERWRITES[$1] : $1);
-
-    return eat($0)(this.renderLink(true, href, $0, null, now, eat));
-}
-
-ghMention.notInLink = true;
-
-/**
- * Factory to parse plain-text, and look for github
- * entities.
- *
- * @param {Object} repo - User/project object.
- * @return {Function} - Tokenizer.
- */
-function inlineTextFactory(repo) {
+function regexLocatorFactory(regex) {
     /**
-     * Factory to parse plain-text, and look for github
-     * entities.
+     * Find the place where a regex begins.
      *
-     * @param {Function} eat - Eater.
-     * @param {string} $0 - Content.
-     * @return {Array.<Node>}
+     * @example
+     *   regexLocatorFactory(/-/g)('foo - bar'); // 4
+     *
+     * @param {string} value - Value to search.
+     * @param {number} fromIndex - Index to start searching at.
+     * @return {number} - Location of match.
      */
-    function inlineText(eat, $0) {
-        var self = this;
-        var now = eat.now();
+    function locator(value, fromIndex) {
+        var result;
+        var prev;
 
-        self.github = repo;
+        regex.lastIndex = fromIndex;
 
-        return eat($0)(self.augmentGitHub($0, now));
+        result = regex.exec(value);
+
+        if (result) {
+            result = regex.lastIndex - result[0].length;
+            prev = value.charCodeAt(result - 1);
+
+            if (
+                isValidUserNameCharacter(prev) ||
+                prev === CC_HASH ||
+                prev === CC_AT
+            ) {
+                /* Find the next possible value. */
+                return locator(value, regex.lastIndex);
+            }
+
+            return result;
+        }
+
+        return -1;
     }
 
-    return inlineText;
+    return locator;
 }
+
+/**
+ * Tokenise a hash.
+ *
+ * @example
+ *   tokenizeHash(eat, 'bada555');
+ *
+ * @property {boolean} notInLink - Disable nested links.
+ * @property {Function} locator - Hash locator.
+ * @param {function(string)} eat - Eater.
+ * @param {string} value - Rest of content.
+ * @param {boolean?} [silent] - Whether this is a dry run.
+ * @return {Node?|boolean} - `link` node.
+ */
+function tokenizeHash(eat, value, silent) {
+    var self = this;
+    var index = 0;
+    var length = value.length;
+    var subvalue;
+    var href;
+    var now;
+
+    if (length > MAX_SHA_LENGTH) {
+        length = MAX_SHA_LENGTH;
+    }
+
+    while (index < length) {
+        if (!isHexadecimal(value.charCodeAt(index))) {
+            break;
+        }
+
+        index++;
+    }
+
+    if (
+        index < MIN_SHA_LENGTH ||
+        (index === length && isHexadecimal(value.charCodeAt(index)))
+    ) {
+        return;
+    }
+
+    subvalue = value.slice(0, index);
+
+    if (!isSHA(subvalue)) {
+        return;
+    }
+
+    /* istanbul ignore if - maybe used by plug-ins */
+    if (silent) {
+        return true;
+    }
+
+    href = gh(self.github) + 'commit/' + subvalue;
+    now = eat.now();
+
+    return eat(subvalue)(
+        self.renderLink(true, href, abbr(subvalue), null, now, eat)
+    );
+}
+
+tokenizeHash.locator = regexLocatorFactory(/\b[a-f0-9]{7,40}\b/gi);
+tokenizeHash.notInLink = true;
+
+/**
+ * Find a possible mention.
+ *
+ * @example
+ *   locateMention('foo @bar'); // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible mention.
+ */
+function locateMention(value, fromIndex) {
+    var index = value.indexOf(C_AT, fromIndex);
+
+    if (
+        index !== -1 &&
+        isValidRepoCharacter(value.charCodeAt(index - 1))
+    ) {
+        return locateMention(value, index + 1);
+    }
+
+    return index;
+}
+
+/**
+ * Tokenise a mention.
+ *
+ * @example
+ *   tokenizeMention(eat, '@baz');
+ *
+ * @property {boolean} notInLink - Disable nested links.
+ * @property {Function} locator - Mention locator.
+ * @param {function(string)} eat - Eater.
+ * @param {string} value - Rest of content.
+ * @param {boolean?} [silent] - Whether this is a dry run.
+ * @return {Node?|boolean} - `link` node.
+ */
+function tokenizeMention(eat, value, silent) {
+    var self = this;
+    var index;
+    var length;
+    var slash;
+    var code;
+    var subvalue;
+    var handle;
+    var href;
+    var now;
+
+    if (
+        value.charCodeAt(0) !== CC_AT ||
+        value.charCodeAt(1) === CC_DASH
+    ) {
+        return;
+    }
+
+    slash = -1;
+    length = value.length;
+    index = 1;
+
+    while (index < length) {
+        code = value.charCodeAt(index);
+
+        if (code === CC_SLASH) {
+            if (slash !== -1) {
+                break;
+            }
+
+            slash = index;
+
+            if (
+                value.charCodeAt(index - 1) === CC_DASH ||
+                value.charCodeAt(index + 1) === CC_DASH
+            ) {
+                return;
+            }
+        } else if (!isValidUserNameCharacter(code)) {
+            break;
+        }
+
+        index++;
+    }
+
+    if (
+        value.charCodeAt(index - 1) === CC_DASH ||
+        index > MAX_USER_LENGTH + 1
+    ) {
+        return;
+    }
+
+    /* istanbul ignore if - maybe used by plug-ins */
+    if (silent) {
+        return true;
+    }
+
+    now = eat.now();
+    handle = value.slice(1, index);
+    subvalue = C_AT + handle;
+
+    href = gh();
+    href += has.call(OVERWRITES, handle) ? OVERWRITES[handle] : handle;
+
+    now.column++;
+
+    return eat(subvalue)(
+        self.renderLink(true, href, subvalue, null, now, eat)
+    );
+}
+
+tokenizeMention.locator = locateMention;
+tokenizeMention.notInLink = true;
+
+/**
+ * Tokenise an issue.
+ *
+ * @example
+ *   tokenizeIssue(eat, 'GH-1');
+ *   tokenizeIssue(eat, '#3');
+ *
+ * @property {boolean} notInLink - Disable nested links.
+ * @property {Function} locator - Issue locator.
+ * @param {function(string)} eat - Eater.
+ * @param {string} value - Rest of content.
+ * @param {boolean?} [silent] - Whether this is a dry run.
+ * @return {Node?|boolean} - `link` node.
+ */
+function tokenizeIssue(eat, value, silent) {
+    var self = this;
+    var index;
+    var length;
+    var start;
+    var subvalue;
+    var href;
+    var now;
+
+    if (value.charCodeAt(0) === CC_HASH) {
+        index = 1;
+    } else if (
+        value.slice(0, GH_ISSUE_PREFIX.length).toLowerCase() ===
+        GH_ISSUE_PREFIX
+    ) {
+        index = GH_ISSUE_PREFIX.length;
+    } else {
+        return;
+    }
+
+    start = index;
+    length = value.length;
+
+    while (index < length) {
+        if (!isDecimal(value.charCodeAt(index))) {
+            break;
+        }
+
+        index++;
+    }
+
+    if (index === start) {
+        return;
+    }
+
+    /* istanbul ignore if - maybe used by plug-ins */
+    if (silent) {
+        return true;
+    }
+
+    now = eat.now();
+    href = gh(self.github) + ISSUES + value.slice(start, index);
+    subvalue = value.slice(0, index);
+
+    now.column += start;
+
+    return eat(subvalue)(
+        self.renderLink(true, href, subvalue, null, now, eat)
+    );
+}
+
+tokenizeIssue.locator = regexLocatorFactory(/\bgh-|#/gi);
+tokenizeIssue.notInLink = true;
+
+/**
+ * Find a possible reference.
+ *
+ * @example
+ *   locateRepoReference('foo bar/baz#1'); // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible reference.
+ */
+function locateRepoReference(value, fromIndex) {
+    var hash = value.indexOf(C_AT, fromIndex);
+    var issue = value.indexOf(C_HASH, fromIndex);
+    var index;
+    var start;
+    var test;
+
+    if (hash === -1) {
+        index = issue;
+    } else if (issue === -1) {
+        index = hash;
+    } else {
+        index = (hash > issue ? issue : hash);
+    }
+
+    start = index;
+
+    if (start === -1) {
+        return index;
+    }
+
+    while (index >= fromIndex) {
+        if (!isValidRepoCharacter(value.charCodeAt(index - 1))) {
+            break;
+        }
+
+        index--;
+    }
+
+    if (index < start && index >= fromIndex) {
+        test = start === hash ? isHexadecimal : isDecimal;
+
+        if (
+            test(value.charCodeAt(start + 1)) &&
+            !isValidRepoCharacter(value.charCodeAt(index - 1))
+        ) {
+            return index;
+        }
+    }
+
+    /* Find the next possible value. */
+    return locateRepoReference(value, start + 1);
+}
+
+/**
+ * Tokenise a reference.
+ *
+ * @example
+ *   tokenizeRepoReference(eat, 'foo@bada555');
+ *
+ * @property {boolean} notInLink - Disable nested links.
+ * @property {Function} locator - Reference locator.
+ * @param {function(string)} eat - Eater.
+ * @param {string} value - Rest of content.
+ * @param {boolean?} [silent] - Whether this is a dry run.
+ * @return {Node?|boolean} - `link` node.
+ */
+function tokenizeRepoReference(eat, value, silent) {
+    var self = this;
+    var delimiter;
+    var href;
+    var index = 0;
+    var length = value.length;
+    var code;
+    var handle;
+    var handleEnd;
+    var project;
+    var projectStart;
+    var projectEnd;
+    var referenceStart;
+    var reference;
+    var subvalue;
+    var test;
+    var suffix;
+    var now;
+    var content;
+
+    /* First character of username cannot be a dash. */
+    if (value.charCodeAt(index) === CC_DASH) {
+        return;
+    }
+
+    while (index < length) {
+        if (!isValidUserNameCharacter(value.charCodeAt(index))) {
+            break;
+        }
+
+        index++;
+    }
+
+    /* Last character of username cannot be a dash. */
+    if (value.charCodeAt(index - 1) === CC_DASH) {
+        return;
+    }
+
+    code = value.charCodeAt(index);
+
+    /* Last character of username cannot be a dash. */
+    if (!index || index > MAX_USER_LENGTH) {
+        return;
+    }
+
+    handleEnd = index;
+
+    if (code === CC_SLASH) {
+        index++;
+        projectStart = index;
+
+        while (index < length) {
+            if (!isValidProjectNameCharacter(value.charCodeAt(index))) {
+                break;
+            }
+
+            index++;
+        }
+
+        if (
+            (index - projectStart) > MAX_PROJECT_LENGTH ||
+            (value.slice(index - GIT_SUFFIX.length, index) === GIT_SUFFIX)
+        ) {
+            return;
+        }
+
+        projectEnd = index;
+    }
+
+    code = value.charCodeAt(index);
+
+    if (code === CC_HASH) {
+        test = isDecimal;
+        suffix = ISSUES;
+    } else if (code === CC_AT) {
+        test = isHexadecimal;
+        suffix = COMMITS;
+    } else {
+        return;
+    }
+
+    delimiter = value.charAt(index);
+    index++;
+    referenceStart = index;
+
+    while (index < length) {
+        if (!test(value.charCodeAt(index))) {
+            if (isValidUserNameCharacter(value.charCodeAt(index))) {
+                return;
+            }
+
+            break;
+        }
+
+        index++;
+    }
+
+    reference = value.slice(referenceStart, index);
+    content = reference;
+
+    if (suffix === COMMITS) {
+        if (
+            reference.length < MIN_SHA_LENGTH ||
+            reference.length > MAX_SHA_LENGTH
+        ) {
+            reference = null;
+        } else {
+            content = abbr(content);
+        }
+    }
+
+    if (!reference) {
+        return;
+    }
+
+    /* istanbul ignore if - maybe used by plug-ins */
+    if (silent) {
+        return true;
+    }
+
+    handle = value.slice(0, handleEnd);
+    project = projectEnd && value.slice(projectStart, projectEnd);
+    href = gh(handle, project || self.github.project) + suffix + reference;
+    subvalue = value.slice(0, index)
+    content = handle + (project ? C_SLASH + project : '') + delimiter +
+        content;
+
+    return eat(subvalue)(
+        self.renderLink(true, href, content, null, now, eat)
+    );
+}
+
+tokenizeRepoReference.locator = locateRepoReference;
+tokenizeRepoReference.notInLink = true;
 
 /**
  * Attacher.
@@ -356,7 +733,7 @@ function attacher(mdast, options) {
     var repo = (options || {}).repository;
     var proto = mdast.Parser.prototype;
     var scope = proto.inlineTokenizers;
-    var current = scope.inlineText;
+    var methods = proto.inlineMethods;
     var pack;
 
     /*
@@ -394,43 +771,26 @@ function attacher(mdast, options) {
     };
 
     /*
-     * Add a tokenizer to the `Parser`.
+     * Add tokenizers to the `Parser`.
      */
 
-    proto.augmentGitHub = proto.tokenizeFactory('gh');
+    scope.mention = tokenizeMention;
+    scope.issue = tokenizeIssue;
+    scope.hash = tokenizeHash;
+    scope.repoReference = tokenizeRepoReference;
+
+    proto.github = repo;
 
     /*
-     * Copy tokenizers, expressions, and methods.
+     * Specify order (just before `inlineText`).
      */
 
-    proto.ghMethods = order.concat();
-
-    proto.ghTokenizers = {
-        'ghSha': ghSha,
-        'ghUserSHA': ghUserSHA,
-        'ghRepoSHA': ghRepoSHA,
-        'ghRepoIssue': ghRepoIssue,
-        'ghUserIssue': ghUserIssue,
-        'ghIssue': ghIssue,
-        'ghMention': ghMention
-    };
-
-    proto.expressions.gfm.ghSha = expressions.ghSha;
-    proto.expressions.gfm.ghUserSHA = expressions.ghUserSHA;
-    proto.expressions.gfm.ghRepoSHA = expressions.ghRepoSHA;
-    proto.expressions.gfm.ghIssue = expressions.ghIssue;
-    proto.expressions.gfm.ghUserIssue = expressions.ghUserIssue;
-    proto.expressions.gfm.ghRepoIssue = expressions.ghRepoIssue;
-    proto.expressions.gfm.ghMention = expressions.ghMention;
-
-    /*
-     * Overwrite `inlineText`.
-     */
-
-    proto.ghMethods.push('ghText');
-    proto.ghTokenizers.ghText = current;
-    proto.expressions.gfm.ghText = NON_GITHUB;
-    scope.inlineText = inlineTextFactory(repo);
+    methods.splice(methods.indexOf('inlineText'), 0,
+        'mention',
+        'issue',
+        'hash',
+        'repoReference'
+    );
 }
 
 /*

@@ -54,7 +54,7 @@ And what about here
 Or here
     [wooorm/mdast@0000000](https://github.com/wooorm/mdast/commit/0000000)
 
-And these SHAs which could also be words? wooorm/mdast@deedeed, and wooorm/mdast@fabaceae.
+And these SHAs which could also be words? [wooorm/mdast@deedeed](https://github.com/wooorm/mdast/commit/deedeed), and [wooorm/mdast@fabacea](https://github.com/wooorm/mdast/commit/fabaceae).
 
 Usernames: this is not a valid, -wooorm/mdast@0000000; nor is this wooorm-/mdast@0000000; but this is [w-w/mdast@0000000](https://github.com/w-w/mdast/commit/0000000), and so is [w/mdast@0000000](https://github.com/w/mdast/commit/0000000) and [ww/mdast@0000000](https://github.com/ww/mdast/commit/0000000).
 
