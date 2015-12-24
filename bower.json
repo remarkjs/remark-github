@@ -1,6 +1,6 @@
 {
-  "name": "mdast-github",
-  "main": "mdast-github.js",
+  "name": "remark-github",
+  "main": "remark-github.js",
   "description": "Auto-link references like in GitHub issues, PRs, and comments",
   "license": "MIT",
   "keywords": [
@@ -14,11 +14,11 @@
     "content",
     "toc",
     "generation",
-    "mdast"
+    "remark"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/wooorm/mdast-github.git"
+    "url": "https://github.com/wooorm/remark-github.git"
   },
   "authors": [
     "Titus Wormer <tituswormer@gmail.com>"

@@ -1,5 +1,5 @@
 {
-  "name": "mdast-github",
+  "name": "remark-github",
   "version": "1.0.0",
   "description": "Auto-link references like in GitHub issues, PRs, and comments",
   "license": "MIT",
@@ -14,9 +14,9 @@
     "pull",
     "request",
     "reference",
-    "mdast"
+    "remark"
   ],
-  "repository": "wooorm/mdast-github",
+  "repository": "wooorm/remark-github",
   "author": "Titus Wormer <tituswormer@gmail.com>",
   "files": [
     "index.js"
@@ -28,11 +28,11 @@
     "istanbul": "^0.3.0",
     "jscs": "^2.0.0",
     "jscs-jsdoc": "^1.0.0",
-    "mdast": "^3.0.0-alpha.2",
-    "mdast-comment-config": "^1.0.0",
-    "mdast-lint": "^1.0.0",
-    "mdast-toc": "^0.5.0",
-    "mdast-usage": "^1.0.0",
+    "mdast": "^3.0.0-alpha.5",
+    "mdast-comment-config": "^2.0.0-alpha.1",
+    "mdast-lint": "^2.0.0-alpha.1",
+    "mdast-toc": "^1.0.0",
+    "mdast-usage": "^2.0.0-alpha.1",
     "mocha": "^2.0.0"
   },
   "scripts": {
@@ -44,12 +44,9 @@
     "lint-style": "jscs --reporter inline .",
     "lint": "npm run lint-api && npm run lint-style",
     "make": "npm run lint && npm run test-coverage",
-    "bundle": "browserify --no-builtins index.js -s mdastGitHub > mdast-github.js",
-    "postbundle": "esmangle mdast-github.js > mdast-github.min.js",
+    "bundle": "browserify --no-builtins index.js -s remarkGitHub > remark-github.js",
+    "postbundle": "esmangle remark-github.js > remark-github.min.js",
     "build-md": "mdast . --quiet",
     "build": "npm run bundle && npm run build-md"
-  },
-  "dependencies": {
-    "mdast": "^3.0.0-alpha.2"
   }
 }

@@ -3,7 +3,7 @@
  * @copyright 2015 Titus Wormer
  * @license MIT
  * @module mdast:github:test
- * @fileoverview Test suite for mdast-github.
+ * @fileoverview Test suite for remark-github.
  */
 
 'use strict';
@@ -65,7 +65,7 @@ function github(value, repo) {
  * Tests.
  */
 
-describe('mdast-github()', function () {
+describe('remark-github()', function () {
     it('should be a function', function () {
         equal(typeof mdastGitHub, 'function');
     });
@@ -260,7 +260,7 @@ describe('Miscellaneous', function () {
         equal(
             github('test@12345678', null),
             '[test@1234567](https://github.com/' +
-            'test/mdast-github/commit/12345678)\n'
+            'test/remark-github/commit/12345678)\n'
         );
     });
 

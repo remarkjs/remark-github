@@ -1,5 +1,5 @@
 {
-  "name": "mdast-github",
+  "name": "remark-github",
   "version": "1.0.0",
   "description": "Auto-link references like in GitHub issues, PRs, and comments",
   "license": "MIT",
@@ -14,9 +14,9 @@
     "content",
     "toc",
     "generation",
-    "mdast"
+    "remark"
   ],
-  "repository": "wooorm/mdast-github",
+  "repository": "wooorm/remark-github",
   "scripts": [
     "index.js"
   ]

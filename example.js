@@ -1,6 +1,6 @@
 // Dependencies:
 var github = require('./index.js');
-var mdast = require('mdast').use(github);
+var remark = require('remark').use(github);
 
 // Input:
 var input = [
@@ -17,7 +17,7 @@ var input = [
 ].join('\n');
 
 // Process:
-var doc = mdast.process(input);
+var doc = remark.process(input);
 
 // Yields:
 console.log('markdown', doc);

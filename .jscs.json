@@ -5,8 +5,8 @@
     "coverage/",
     "node_modules/",
     "build.js",
-    "mdast-github.js",
-    "mdast-github.min.js"
+    "remark-github.js",
+    "remark-github.min.js"
   ],
   "jsDoc": {
     "checkAnnotations": "jsdoc3",

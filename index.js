@@ -2,7 +2,7 @@
  * @author Titus Wormer
  * @copyright 2015 Titus Wormer
  * @license MIT
- * @module mdast:github
+ * @module remark:github
  * @fileoverview
  *   Auto-link references like in GitHub issues, PRs,
  *   and comments.
@@ -726,12 +726,12 @@ tokenizeRepoReference.notInLink = true;
 /**
  * Attacher.
  *
- * @param {MDAST} mdast - Instance.
+ * @param {Remark} remark - Instance.
  * @param {Object?} [options] - Configuration.
  */
-function attacher(mdast, options) {
+function attacher(remark, options) {
     var repo = (options || {}).repository;
-    var proto = mdast.Parser.prototype;
+    var proto = remark.Parser.prototype;
     var scope = proto.inlineTokenizers;
     var methods = proto.inlineMethods;
     var pack;

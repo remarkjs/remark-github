@@ -3,5 +3,5 @@ components/
 coverage/
 build.js
 example.js
-mdast-github.js
-mdast-github.min.js
+remark-github.js
+remark-github.min.js

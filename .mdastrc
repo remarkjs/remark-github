@@ -4,7 +4,6 @@
     "comment-config",
     "lint",
     "toc",
-    "usage",
     "./"
   ],
   "settings": {
