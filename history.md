@@ -4,6 +4,12 @@
 
 <!--lint disable maximum-line-length-->
 
+2.0.0 / 2015-12-24
+==================
+
+*   Rename `mdast-github` > `remark-github` ([7082f35](https://github.com/wooorm/remark-github/commit/7082f35))
+*   Refactor for changes in mdast ([bbcf85b](https://github.com/wooorm/remark-github/commit/bbcf85b))
+
 1.0.0 / 2015-08-19
 ==================
 
