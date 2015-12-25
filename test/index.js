@@ -44,7 +44,7 @@ var fixtures = readdir(ROOT);
  *
  * @param {string} value - Value to process.
  * @param {string|Object} repo - Repository.
- * @return {string}
+ * @return {string} - Processed `value`.
  */
 function github(value, repo) {
     var options;
@@ -208,23 +208,26 @@ test('Repositories', function (t) {
         t.equal(
             github([
                 '-   SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-                '-   User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
+                '-   User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e' +
+                    '889087fd2e',
                 '-   \# Num: #26',
                 '-   GH-Num: GH-26',
                 '-   User#Num: wooorm#26',
                 ''
             ].join('\n'), repo),
             [
-                '-   SHA: [a5c3785](https://github.com/' + user + '/' + project +
-                    '/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)',
+                '-   SHA: [a5c3785](https://github.com/' + user + '/' +
+                    project + '/commit/a5c3785ed8d6a35868bc169f07e40e' +
+                        '889087fd2e)',
                 '-   User@SHA: [wooorm@a5c3785](https://github.com/wooorm/' +
-                    project + '/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)',
-                '-   \# Num: [#26](https://github.com/' + user + '/' + project +
-                    '/issues/26)',
-                '-   GH-Num: [GH-26](https://github.com/' + user + '/' + project +
-                    '/issues/26)',
-                '-   User#Num: [wooorm#26](https://github.com/wooorm/' + project +
-                    '/issues/26)',
+                    project + '/commit/a5c3785ed8d6a35868bc169f07e40e' +
+                        '889087fd2e)',
+                '-   \# Num: [#26](https://github.com/' + user + '/' +
+                    project + '/issues/26)',
+                '-   GH-Num: [GH-26](https://github.com/' + user + '/' +
+                    project + '/issues/26)',
+                '-   User#Num: [wooorm#26](https://github.com/wooorm/' +
+                    project + '/issues/26)',
                 ''
             ].join('\n'),
             'should work on `' + repo + '`'

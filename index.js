@@ -98,7 +98,7 @@ var proc = typeof global !== 'undefined' && global.process;
  * Check if a value is a SHA.
  *
  * @param {string} sha - Commit hash.
- * @return {boolean}
+ * @return {boolean} - Whether `sha` is not blacklisted.
  */
 function isSHA(sha) {
     return BLACKLIST.indexOf(sha.toLowerCase()) === -1;
@@ -108,7 +108,7 @@ function isSHA(sha) {
  * Abbreviate a SHA.
  *
  * @param {string} sha - Commit hash.
- * @return {string}
+ * @return {string} - Abbreviated sha.
  */
 function abbr(sha) {
     return sha.slice(0, 7);
@@ -120,7 +120,7 @@ function abbr(sha) {
  *
  * @param {Object|string?} repo - Repository.
  * @param {string?} project - Project.
- * @return {string}
+ * @return {string} - URL.
  */
 function gh(repo, project) {
     var base = 'https://github.com/';
@@ -199,7 +199,7 @@ function isValidRepoCharacter(code) {
         code === CC_DASH ||
         (code >= CC_0 && code <= CC_9) ||
         (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
-        (code >= CC_A_UPPER && code <= CC_Z_UPPER)
+        (code >= CC_A_UPPER && code <= CC_Z_UPPER);
 }
 
 /**
@@ -214,7 +214,7 @@ function isValidProjectNameCharacter(code) {
         code === CC_DASH ||
         (code >= CC_0 && code <= CC_9) ||
         (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
-        (code >= CC_A_UPPER && code <= CC_Z_UPPER)
+        (code >= CC_A_UPPER && code <= CC_Z_UPPER);
 }
 
 /**
@@ -228,7 +228,7 @@ function isValidUserNameCharacter(code) {
     return code === CC_DASH ||
         (code >= CC_0 && code <= CC_9) ||
         (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
-        (code >= CC_A_UPPER && code <= CC_Z_UPPER)
+        (code >= CC_A_UPPER && code <= CC_Z_UPPER);
 }
 
 /**
@@ -711,7 +711,7 @@ function tokenizeRepoReference(eat, value, silent) {
     handle = value.slice(0, handleEnd);
     project = projectEnd && value.slice(projectStart, projectEnd);
     href = gh(handle, project || self.github.project) + suffix + reference;
-    subvalue = value.slice(0, index)
+    subvalue = value.slice(0, index);
     content = handle + (project ? C_SLASH + project : '') + delimiter +
         content;
 
