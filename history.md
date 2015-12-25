@@ -4,6 +4,19 @@
 
 <!--lint disable maximum-line-length-->
 
+2.0.1 / 2015-12-25
+==================
+
+*   Add node 4, 5 to travis ([cc3992e](https://github.com/wooorm/remark-github/commit/cc3992e))
+*   Remove distribution files from source ([10d4614](https://github.com/wooorm/remark-github/commit/10d4614))
+*   Remove support for bower ([bf06b8e](https://github.com/wooorm/remark-github/commit/bf06b8e))
+*   Remove superfluous ignores ([0b9a667](https://github.com/wooorm/remark-github/commit/0b9a667))
+*   Update jscs style guidelines ([ea60d82](https://github.com/wooorm/remark-github/commit/ea60d82))
+*   Refactor npm test target ([308737b](https://github.com/wooorm/remark-github/commit/308737b))
+*   Refactor to replace mocha with tape ([a6318c0](https://github.com/wooorm/remark-github/commit/a6318c0))
+*   Update dev-dependencies ([698b551](https://github.com/wooorm/remark-github/commit/698b551))
+*   Replace internal dependency of mdast > remark ([384629d](https://github.com/wooorm/remark-github/commit/384629d))
+
 2.0.0 / 2015-12-24
 ==================
 
