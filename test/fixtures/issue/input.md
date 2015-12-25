@@ -4,7 +4,7 @@
 -   So are these: #123456789, and: GH-123456789;
 -   And these: gH-1, Gh-1, and gh-1.
 
-These will always be a header in pedantic mode (mdast requires initial spaces for ATX-headings)
+These will always be a header in pedantic mode (remark requires initial spaces for ATX-headings)
 #1
 
 Or here

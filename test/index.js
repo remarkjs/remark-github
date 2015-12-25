@@ -2,7 +2,7 @@
  * @author Titus Wormer
  * @copyright 2015 Titus Wormer
  * @license MIT
- * @module mdast:github:test
+ * @module remark:github:test
  * @fileoverview Test suite for remark-github.
  */
 
@@ -17,8 +17,8 @@
 var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
-var mdast = require('mdast');
-var mdastGitHub = require('..');
+var remark = require('remark');
+var remarkGitHub = require('..');
 
 /*
  * Methods.
@@ -58,7 +58,7 @@ function github(value, repo) {
         options = repo;
     }
 
-    return mdast.use(mdastGitHub, options).process(value);
+    return remark.use(remarkGitHub, options).process(value);
 }
 
 /*
@@ -67,12 +67,12 @@ function github(value, repo) {
 
 describe('remark-github()', function () {
     it('should be a function', function () {
-        equal(typeof mdastGitHub, 'function');
+        equal(typeof remarkGitHub, 'function');
     });
 
     it('should not throw if not passed options', function () {
         assert.doesNotThrow(function () {
-            mdast.use(mdastGitHub);
+            remark.use(remarkGitHub);
         });
     });
 });
@@ -87,7 +87,7 @@ function describeFixture(fixture) {
         var filepath = ROOT + '/' + fixture;
         var output = read(filepath + '/output.md', 'utf-8');
         var input = read(filepath + '/input.md', 'utf-8');
-        var result = github(input, 'wooorm/mdast');
+        var result = github(input, 'wooorm/remark');
 
         equal(result, output);
     });
@@ -280,7 +280,7 @@ describe('Miscellaneous', function () {
         equal(
             github('12345678', null),
             '[1234567](https://github.com/' +
-            'wooorm/mdast/commit/12345678)\n'
+            'wooorm/remark/commit/12345678)\n'
         );
 
         process.cwd = cwd;
