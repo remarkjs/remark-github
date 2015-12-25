@@ -16,12 +16,6 @@ npm install remark-github
 component install wooorm/remark-github
 ```
 
-[Bower](http://bower.io/#install-packages)
-
-```bash
-bower install remark-github
-```
-
 [Duo](http://duojs.org/#getting-started)
 
 ```javascript
