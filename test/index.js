@@ -8,15 +8,15 @@
 
 'use strict';
 
-/* eslint-env node, mocha */
+/* eslint-env node */
 
 /*
  * Dependencies.
  */
 
-var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
+var test = require('tape');
 var remark = require('remark');
 var remarkGitHub = require('..');
 
@@ -26,7 +26,6 @@ var remarkGitHub = require('..');
 
 var read = fs.readFileSync;
 var readdir = fs.readdirSync;
-var equal = assert.strictEqual;
 
 /*
  * Constants.
@@ -65,85 +64,33 @@ function github(value, repo) {
  * Tests.
  */
 
-describe('remark-github()', function () {
-    it('should be a function', function () {
-        equal(typeof remarkGitHub, 'function');
-    });
+test('remark-github()', function (t) {
+    t.equal(typeof remarkGitHub, 'function', 'should be a function');
 
-    it('should not throw if not passed options', function () {
-        assert.doesNotThrow(function () {
-            remark.use(remarkGitHub);
-        });
-    });
+    t.doesNotThrow(function () {
+        remark.use(remarkGitHub);
+    }, 'should not throw if not passed options');
+
+    t.end();
 });
-
-/**
- * Describe a fixtures.
- *
- * @param {string} fixture - Name / file-path.
- */
-function describeFixture(fixture) {
-    it('should work on `' + fixture + '`', function () {
-        var filepath = ROOT + '/' + fixture;
-        var output = read(filepath + '/output.md', 'utf-8');
-        var input = read(filepath + '/input.md', 'utf-8');
-        var result = github(input, 'wooorm/remark');
-
-        equal(result, output);
-    });
-}
-
-/**
- * Describe a repo URL.
- *
- * @param {Array.<string>} repo - Tuple of user and
- *   project.
- */
-function describeRepository(repo) {
-    var user = repo[1];
-    var project = repo[2];
-
-    repo = repo[0];
-
-    it('should work on `' + repo + '`', function () {
-        var input;
-        var output;
-
-        input = [
-            '-   SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-            '-   User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-            '-   \# Num: #26',
-            '-   GH-Num: GH-26',
-            '-   User#Num: wooorm#26'
-        ].join('\n') + '\n';
-
-        output = [
-            '-   SHA: [a5c3785](https://github.com/' + user + '/' + project +
-                '/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)',
-            '-   User@SHA: [wooorm@a5c3785](https://github.com/wooorm/' +
-                project + '/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)',
-            '-   \# Num: [#26](https://github.com/' + user + '/' + project +
-                '/issues/26)',
-            '-   GH-Num: [GH-26](https://github.com/' + user + '/' + project +
-                '/issues/26)',
-            '-   User#Num: [wooorm#26](https://github.com/wooorm/' + project +
-                '/issues/26)'
-        ].join('\n') + '\n';
-
-        equal(github(input, repo), output);
-    });
-}
 
 /*
  * Gather fixtures.
  */
 
-fixtures = fixtures.filter(function (filepath) {
-    return filepath.indexOf('.') !== 0;
-});
+test('Fixtures', function (t) {
+    fixtures.filter(function (filepath) {
+        return filepath.indexOf('.') !== 0;
+    }).forEach(function (fixture) {
+        var filepath = ROOT + '/' + fixture;
+        var output = read(filepath + '/output.md', 'utf-8');
+        var input = read(filepath + '/input.md', 'utf-8');
+        var result = github(input, 'wooorm/remark');
 
-describe('Fixtures', function () {
-    fixtures.forEach(describeFixture);
+        t.equal(result, output, 'should work on `' + fixture + '`');
+    });
+
+    t.end();
 });
 
 /*
@@ -251,57 +198,86 @@ var repositories = [
     ]
 ];
 
-describe('Repositories', function () {
-    repositories.forEach(describeRepository);
+test('Repositories', function (t) {
+    repositories.forEach(function (repo) {
+        var user = repo[1];
+        var project = repo[2];
+
+        repo = repo[0];
+
+        t.equal(
+            github([
+                '-   SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
+                '-   User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
+                '-   \# Num: #26',
+                '-   GH-Num: GH-26',
+                '-   User#Num: wooorm#26',
+                ''
+            ].join('\n'), repo),
+            [
+                '-   SHA: [a5c3785](https://github.com/' + user + '/' + project +
+                    '/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)',
+                '-   User@SHA: [wooorm@a5c3785](https://github.com/wooorm/' +
+                    project + '/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)',
+                '-   \# Num: [#26](https://github.com/' + user + '/' + project +
+                    '/issues/26)',
+                '-   GH-Num: [GH-26](https://github.com/' + user + '/' + project +
+                    '/issues/26)',
+                '-   User#Num: [wooorm#26](https://github.com/wooorm/' + project +
+                    '/issues/26)',
+                ''
+            ].join('\n'),
+            'should work on `' + repo + '`'
+        );
+    });
+
+    t.end();
 });
 
-describe('Miscellaneous', function () {
-    it('should load a `package.json` when available', function () {
-        equal(
-            github('test@12345678', null),
-            '[test@1234567](https://github.com/' +
-            'test/remark-github/commit/12345678)\n'
-        );
-    });
+test('Miscellaneous', function (t) {
+    t.equal(
+        github('test@12345678', null),
+        '[test@1234567](https://github.com/' +
+        'test/remark-github/commit/12345678)\n',
+        'should load a `package.json` when available'
+    );
 
-    it('should accept a `repository.url` in a `package.json`', function () {
-        var cwd = process.cwd;
+    var cwd = process.cwd;
+    var fake;
 
-        /**
-         * Move cwd to a path without another
-         * `package.json`.
-         */
-        function fakeCWD() {
-            return cwd() + '/test';
-        }
+    /**
+     * Move cwd to a path without another
+     * `package.json`.
+     */
+    function fakeCWD() {
+        return cwd() + fake;
+    }
 
-        process.cwd = fakeCWD;
+    process.cwd = fakeCWD;
 
-        equal(
-            github('12345678', null),
-            '[1234567](https://github.com/' +
-            'wooorm/remark/commit/12345678)\n'
-        );
+    /* Move cwd to the tests. */
+    fake = '/test';
 
-        process.cwd = cwd;
-    });
+    t.equal(
+        github('12345678', null),
+        '[1234567](https://github.com/' +
+        'wooorm/remark/commit/12345678)\n',
+        'should accept a `repository.url` in a `package.json`'
+    );
 
-    it('should throw without `repository`', function () {
-        var cwd = process.cwd;
+    /* Move cwd to a path without a `package.json`. */
+    fake = '/test/fixtures';
 
-        /**
-         * Move cwd to a path without a `package.json`.
-         */
-        function fakeCWD() {
-            return cwd() + '/test/fixtures';
-        }
-
-        process.cwd = fakeCWD;
-
-        assert.throws(function () {
+    t.throws(
+        function () {
             github('1234567', null);
-        }, /Missing `repository`/);
+        },
+        /Missing `repository`/,
+        'should throw without `repository`'
+    );
 
-        process.cwd = cwd;
-    });
+    /* Reset CWD */
+    process.cwd = cwd;
+
+    t.end();
 });
