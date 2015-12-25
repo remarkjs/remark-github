@@ -1,5 +1,4 @@
 language: node_js
-script: npm run-script test-travis
 node_js:
 - '0.10'
 - '0.11'
@@ -7,3 +6,12 @@ node_js:
 - iojs
 sudo: false
 after_script: npm install codecov.io && cat ./coverage/lcov.info | codecov
+deploy:
+  provider: releases
+  api_key:
+    secure: FbRS8IqAHbmwPSSuMaE9a2EV4Br/AIbAwFrsxKmhqMlK8Rc/irnopku+3WKYeuRud/cAqTZsPvv8h4iAik+91KVS5l9acSVpf5M8Wghz6AAxXRBjJ0NALMgqqbDypmdJZf30QCuVq0G0u6Nuxc4D7udg7o76o09fCBmP2ZahjIc=
+  file:
+    - "remark-github.js"
+    - "remark-github.min.js"
+  on:
+    tags: true

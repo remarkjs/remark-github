@@ -10,27 +10,9 @@ Auto-link references to commits, issues, pull-requests, and users like GitHub: [
 npm install remark-github
 ```
 
-[Component.js](https://github.com/componentjs/component)
-
-```bash
-component install wooorm/remark-github
-```
-
-[Duo](http://duojs.org/#getting-started)
-
-```javascript
-var github = require('wooorm/remark-github');
-```
-
-UMD: globals, AMD, and CommonJS ([uncompressed](remark-github.js) and [compressed](remark-github.min.js)):
-
-```html
-<script src="path/to/remark.js"></script>
-<script src="path/to/remark-github.js"></script>
-<script>
-  remark.use(remarkGitHub);
-</script>
-```
+**remark-github** is also available for [duo](http://duojs.org/#getting-started),
+and as an AMD, CommonJS, and globals module, [uncompressed and
+compressed](https://github.com/wooorm/remark-github/releases).
 
 ## Table of Contents
 
