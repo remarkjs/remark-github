@@ -36,17 +36,15 @@
     "tape": "^4.0.0"
   },
   "scripts": {
-    "test-api": "node test/index.js",
-    "test-coverage": "istanbul cover test/index.js",
-    "test-travis": "npm run test-coverage",
-    "test": "npm run test-api",
+    "build-md": "remark . --quiet --frail",
+    "build-bundle": "browserify --no-builtins index.js -s remarkGitHub > remark-github.js",
+    "build-mangle": "esmangle remark-github.js > remark-github.min.js",
+    "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
     "lint-api": "eslint .",
     "lint-style": "jscs --reporter inline .",
     "lint": "npm run lint-api && npm run lint-style",
-    "make": "npm run lint && npm run test-coverage",
-    "bundle": "browserify --no-builtins index.js -s remarkGitHub > remark-github.js",
-    "postbundle": "esmangle remark-github.js > remark-github.min.js",
-    "build-md": "remark . --quiet",
-    "build": "npm run bundle && npm run build-md"
+    "test-api": "node test/index.js",
+    "test-coverage": "istanbul cover test/index.js",
+    "test": "npm run build && npm run lint && npm run test-coverage"
   }
 }
