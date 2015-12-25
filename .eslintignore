@@ -1,7 +1,5 @@
-build/
 components/
 coverage/
-build.js
 example.js
 remark-github.js
 remark-github.min.js
