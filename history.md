@@ -4,6 +4,11 @@
 
 <!--lint disable maximum-line-length-->
 
+3.0.0 / 2016-01-13
+==================
+
+*   Fix output to be more similar to GitHub ([`067fdc5`](https://github.com/wooorm/remark-github/commit/067fdc5))
+
 2.0.1 / 2015-12-25
 ==================
 
