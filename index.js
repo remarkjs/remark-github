@@ -301,6 +301,7 @@ function tokenizeHash(eat, value, silent) {
     var subvalue;
     var href;
     var now;
+    var node;
 
     if (length > MAX_SHA_LENGTH) {
         length = MAX_SHA_LENGTH;
@@ -335,9 +336,17 @@ function tokenizeHash(eat, value, silent) {
     href = gh(self.github) + 'commit/' + subvalue;
     now = eat.now();
 
-    return eat(subvalue)(
-        self.renderLink(true, href, abbr(subvalue), null, now, eat)
+    node = eat(subvalue)(
+        self.renderLink(true, href, subvalue, null, now, eat)
     );
+
+    node.children = [{
+        'type': 'inlineCode',
+        'value': abbr(subvalue),
+        'position': node.children[0].position
+    }];
+
+    return node;
 }
 
 tokenizeHash.locator = regexLocatorFactory(/\b[a-f0-9]{7,40}\b/gi);
@@ -388,6 +397,7 @@ function tokenizeMention(eat, value, silent) {
     var subvalue;
     var handle;
     var href;
+    var node;
     var now;
 
     if (
@@ -445,9 +455,16 @@ function tokenizeMention(eat, value, silent) {
 
     now.column++;
 
-    return eat(subvalue)(
-        self.renderLink(true, href, subvalue, null, now, eat)
-    );
+    node = eat(subvalue)(self.renderLink(
+        true, href, subvalue, null, now, eat
+    ));
+
+    node.children = [{
+        'type': 'strong',
+        'children': node.children
+    }];
+
+    return node;
 }
 
 tokenizeMention.locator = locateMention;
@@ -607,6 +624,8 @@ function tokenizeRepoReference(eat, value, silent) {
     var suffix;
     var now;
     var content;
+    var node;
+    var add;
 
     /* First character of username cannot be a dash. */
     if (value.charCodeAt(index) === CC_DASH) {
@@ -688,15 +707,14 @@ function tokenizeRepoReference(eat, value, silent) {
     reference = value.slice(referenceStart, index);
     content = reference;
 
-    if (suffix === COMMITS) {
-        if (
+    if (
+        suffix === COMMITS &&
+        (
             reference.length < MIN_SHA_LENGTH ||
             reference.length > MAX_SHA_LENGTH
-        ) {
-            reference = null;
-        } else {
-            content = abbr(content);
-        }
+        )
+    ) {
+        reference = null;
     }
 
     if (!reference) {
@@ -712,12 +730,21 @@ function tokenizeRepoReference(eat, value, silent) {
     project = projectEnd && value.slice(projectStart, projectEnd);
     href = gh(handle, project || self.github.project) + suffix + reference;
     subvalue = value.slice(0, index);
-    content = handle + (project ? C_SLASH + project : '') + delimiter +
-        content;
+    handle += (project ? C_SLASH + project : '') + delimiter;
+    add = eat(subvalue);
 
-    return eat(subvalue)(
-        self.renderLink(true, href, content, null, now, eat)
-    );
+    if (suffix === COMMITS) {
+        node = add(self.renderLink(true, href, handle, null, now, eat));
+
+        node.children.push({
+            'type': 'inlineCode',
+            'value': abbr(content)
+        });
+
+        return node;
+    }
+
+    return add(self.renderLink(true, href, handle + content, null, now, eat));
 }
 
 tokenizeRepoReference.locator = locateRepoReference;

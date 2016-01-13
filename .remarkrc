@@ -3,6 +3,7 @@
   "plugins": [
     "comment-config",
     "lint",
+    "usage",
     "toc",
     "./"
   ],

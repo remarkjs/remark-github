@@ -4,16 +4,16 @@ var remark = require('remark').use(github);
 
 // Input:
 var input = [
-    '* SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-    '* User@SHA: jlord@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-    '* User/Repository@SHA: jlord/sheetsee.js@a5c3785e',
-    '* #Num: #26',
-    '* GH-Num: GH-26',
-    '* User#Num: jlord#26',
-    '* User/Repository#Num: jlord/sheetsee.js#26',
+    '* SHA: 1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921',
+    '* User@SHA: jlord@1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921',
+    '* User/Repository@SHA: jlord/sheetsee.js@1f2a4fb',
+    '* #Num: #1',
+    '* GH-Num: GH-1',
+    '* User#Num: jlord#1',
+    '* User/Repository#Num: jlord/sheetsee.js#1',
     '* @mention',
     '* And @mentioning someone else',
-    '* And nothing.'
+    '* And nothing'
 ].join('\n');
 
 // Process:

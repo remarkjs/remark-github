@@ -216,10 +216,10 @@ test('Repositories', function (t) {
                 ''
             ].join('\n'), repo),
             [
-                '-   SHA: [a5c3785](https://github.com/' + user + '/' +
+                '-   SHA: [`a5c3785`](https://github.com/' + user + '/' +
                     project + '/commit/a5c3785ed8d6a35868bc169f07e40e' +
                         '889087fd2e)',
-                '-   User@SHA: [wooorm@a5c3785](https://github.com/wooorm/' +
+                '-   User@SHA: [wooorm@`a5c3785`](https://github.com/wooorm/' +
                     project + '/commit/a5c3785ed8d6a35868bc169f07e40e' +
                         '889087fd2e)',
                 '-   \# Num: [#26](https://github.com/' + user + '/' +
@@ -240,7 +240,7 @@ test('Repositories', function (t) {
 test('Miscellaneous', function (t) {
     t.equal(
         github('test@12345678', null),
-        '[test@1234567](https://github.com/' +
+        '[test@`1234567`](https://github.com/' +
         'test/remark-github/commit/12345678)\n',
         'should load a `package.json` when available'
     );
@@ -263,7 +263,7 @@ test('Miscellaneous', function (t) {
 
     t.equal(
         github('12345678', null),
-        '[1234567](https://github.com/' +
+        '[`1234567`](https://github.com/' +
         'wooorm/remark/commit/12345678)\n',
         'should accept a `repository.url` in a `package.json`'
     );

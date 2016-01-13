@@ -37,16 +37,16 @@ Input:
 
 ```javascript
 var input = [
-    '* SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-    '* User@SHA: jlord@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-    '* User/Repository@SHA: jlord/sheetsee.js@a5c3785e',
-    '* #Num: #26',
-    '* GH-Num: GH-26',
-    '* User#Num: jlord#26',
-    '* User/Repository#Num: jlord/sheetsee.js#26',
+    '* SHA: 1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921',
+    '* User@SHA: jlord@1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921',
+    '* User/Repository@SHA: jlord/sheetsee.js@1f2a4fb',
+    '* #Num: #1',
+    '* GH-Num: GH-1',
+    '* User#Num: jlord#1',
+    '* User/Repository#Num: jlord/sheetsee.js#1',
     '* @mention',
     '* And @mentioning someone else',
-    '* And nothing.'
+    '* And nothing'
 ].join('\n');
 ```
 
@@ -59,16 +59,16 @@ var doc = remark.process(input);
 Yields:
 
 ```markdown
--   SHA: [a5c3785](https://github.com/wooorm/remark-github/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)
--   User@SHA: [jlord@a5c3785](https://github.com/jlord/remark-github/commit/a5c3785ed8d6a35868bc169f07e40e889087fd2e)
--   User/Repository@SHA: [jlord/sheetsee.js@a5c3785](https://github.com/jlord/sheetsee.js/commit/a5c3785e)
--   #Num: [#26](https://github.com/wooorm/remark-github/issues/26)
--   GH-Num: [GH-26](https://github.com/wooorm/remark-github/issues/26)
--   User#Num: [jlord#26](https://github.com/jlord/remark-github/issues/26)
--   User/Repository#Num: [jlord/sheetsee.js#26](https://github.com/jlord/sheetsee.js/issues/26)
--   [@mention](https://github.com/blog/821)
--   And [@mentioning](https://github.com/mentioning) someone else
--   And nothing.
+-   SHA: [`1f2a4fb`](https://github.com/wooorm/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921)
+-   User@SHA: [jlord@`1f2a4fb`](https://github.com/jlord/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921)
+-   User/Repository@SHA: [jlord/sheetsee.js@`1f2a4fb`](https://github.com/jlord/sheetsee.js/commit/1f2a4fb)
+-   \#Num: [#1](https://github.com/wooorm/remark-github/issues/1)
+-   GH-Num: [GH-1](https://github.com/wooorm/remark-github/issues/1)
+-   User#Num: [jlord#1](https://github.com/jlord/remark-github/issues/1)
+-   User/Repository#Num: [jlord/sheetsee.js#1](https://github.com/jlord/sheetsee.js/issues/1)
+-   [**@mention**](https://github.com/blog/821)
+-   And [**@mentioning**](https://github.com/mentioning) someone else
+-   And nothing
 ```
 
 ## API
@@ -79,15 +79,15 @@ Adds references to commits, issues, pull-requests, and users similar to how
 [GitHub](https://help.github.com/articles/writing-on-github/#references)
 renders these in issues, comments, and pull request descriptions.
 
-*   SHA commits references: `e2c1dc7690932b0cef900fa4e7355df093448341`
-    — [e2c1dc7](https://github.com/wooorm/remark-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
+*   SHA commits references: `1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921`
+    — [`1f2a4fb`](https://github.com/wooorm/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921)
 
-*   User@SHA: `wooorm@e2c1dc7690932b0cef900fa4e7355df093448341`
-    — [wooorm@e2c1dc7](https://github.com/wooorm/remark-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
+*   User@SHA: `wooorm@1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921`
+    — [wooorm@`1f2a4fb`](https://github.com/wooorm/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921)
 
 *   User/Repository@SHA:
-    `wooorm/remark-github@e2c1dc7690932b0cef900fa4e7355df093448341`
-    — [wooorm/remark-github@e2c1dc7](https://github.com/wooorm/remark-github/commit/e2c1dc7690932b0cef900fa4e7355df093448341)
+    `wooorm/remark-github@1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921`
+    — [wooorm/remark-github@`1f2a4fb`](https://github.com/wooorm/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921)
 
 *   Hash-Num: `#1`
     — [#1](https://github.com/wooorm/remark-github/issues/1)
@@ -102,7 +102,7 @@ renders these in issues, comments, and pull request descriptions.
     — [wooorm/remark-github#1](https://github.com/wooorm/remark-github/issues/1)
 
 *   At-mentions: `@mention` and `@wooorm`
-    — [@mention](https://github.com/blog/821) and [@wooorm](https://github.com/wooorm)
+    — [**@mention**](https://github.com/blog/821) and [**@wooorm**](https://github.com/wooorm)
 
 These links are generated relative to a project. In Node this is auto-detected
 by loading `package.json` and looking for a `repository` field.
