@@ -16,11 +16,16 @@
     "reference",
     "remark"
   ],
-  "repository": "wooorm/remark-github",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wooorm/remark-github.git"
+  },
+  "bugs": "https://github.com/wooorm/remark-github/issues",
   "author": "Titus Wormer <tituswormer@gmail.com>",
   "files": [
     "index.js"
   ],
+  "dependencies": {},
   "devDependencies": {
     "browserify": "^13.0.0",
     "eslint": "^1.0.0",

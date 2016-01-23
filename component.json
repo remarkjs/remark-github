@@ -17,6 +17,7 @@
     "remark"
   ],
   "repository": "wooorm/remark-github",
+  "dependencies": {},
   "scripts": [
     "index.js"
   ]
