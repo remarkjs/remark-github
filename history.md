@@ -4,6 +4,15 @@
 
 <!--lint disable maximum-line-length-->
 
+4.0.0 / 2016-01-23
+==================
+
+*   Add support for transforming links to references ([`bb00af7`](https://github.com/wooorm/remark-github/commit/bb00af7))
+*   Refactor `readme.md` ([`c9dd323`](https://github.com/wooorm/remark-github/commit/c9dd323))
+*   Update metadata in `package.json`, `component.json` ([`8ff5ee4`](https://github.com/wooorm/remark-github/commit/8ff5ee4))
+*   Add npm deployment to Travis ([`b098760`](https://github.com/wooorm/remark-github/commit/b098760))
+*   Update dev-dependencies ([`c408345`](https://github.com/wooorm/remark-github/commit/c408345))
+
 3.0.0 / 2016-01-13
 ==================
 
