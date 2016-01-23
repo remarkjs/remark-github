@@ -15,14 +15,24 @@
 /* eslint-env commonjs */
 
 /*
+ * Dependencies.
+ */
+
+var visit = require('unist-util-visit');
+var toString = require('mdast-util-to-string');
+
+/*
  * Constants.
  */
 
 var GIT_SUFFIX = '.git';
 var GH_ISSUE_PREFIX = 'gh-';
-var COMMITS = 'commit/';
-var ISSUES = 'issues/';
+var GH_URL_PREFIX = 'https://github.com/';
+var MESSAGE_COMMENT = ' (comment)';
+var EMPTY = '';
+var GH_URL_PREFIX_LENGTH = GH_URL_PREFIX.length;
 var MAX_SHA_LENGTH = 40;
+var MINUSCULE_SHA_LENGTH = 4;
 var MIN_SHA_LENGTH = 7;
 var MAX_USER_LENGTH = 39;
 var MAX_PROJECT_LENGTH = 100;
@@ -52,6 +62,23 @@ var CC_DOT = '.'.charCodeAt(0);
 var CC_DASH = '-'.charCodeAt(0);
 var CC_HASH = C_HASH.charCodeAt(0);
 var CC_AT = C_AT.charCodeAt(0);
+
+/*
+ * Enum of known pages.
+ */
+
+var COMMIT = 'commit';
+var ISSUE = 'issues';
+var PULL = 'pull';
+
+/*
+ * Node types.
+ */
+
+var T_INLINE_CODE = 'inlineCode';
+var T_TEXT = 'text';
+var T_STRONG = 'strong';
+var T_LINK = 'link';
 
 /*
  * Blacklist of SHAs which are also valid words.
@@ -100,8 +127,8 @@ var proc = typeof global !== 'undefined' && global.process;
  * @param {string} sha - Commit hash.
  * @return {boolean} - Whether `sha` is not blacklisted.
  */
-function isSHA(sha) {
-    return BLACKLIST.indexOf(sha.toLowerCase()) === -1;
+function isBlacklisted(sha) {
+    return BLACKLIST.indexOf(sha.toLowerCase()) !== -1;
 }
 
 /**
@@ -111,7 +138,7 @@ function isSHA(sha) {
  * @return {string} - Abbreviated sha.
  */
 function abbr(sha) {
-    return sha.slice(0, 7);
+    return sha.slice(0, MIN_SHA_LENGTH);
 }
 
 /**
@@ -123,7 +150,7 @@ function abbr(sha) {
  * @return {string} - URL.
  */
 function gh(repo, project) {
-    var base = 'https://github.com/';
+    var base = GH_URL_PREFIX;
 
     if (project) {
         repo = {
@@ -232,6 +259,148 @@ function isValidUserNameCharacter(code) {
 }
 
 /**
+ * Get the end of a username which starts at character
+ * `fromIndex` in `value`.
+ *
+ * @param {string} value - Value to check.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - End position of username, or `-1`.
+ */
+function getUserNameEndPosition(value, fromIndex) {
+    var index = fromIndex;
+    var length = value.length;
+    var size;
+
+    /* First character of username cannot be a dash. */
+    if (value.charCodeAt(index) === CC_DASH) {
+        return -1;
+    }
+
+    while (index < length) {
+        if (!isValidUserNameCharacter(value.charCodeAt(index))) {
+            break;
+        }
+
+        index++;
+    }
+
+    size = index - fromIndex;
+
+    /* Last character of username cannot be a dash. */
+    if (
+        !size ||
+        size > MAX_USER_LENGTH ||
+        value.charCodeAt(index - 1) === CC_DASH
+    ) {
+        return -1;
+    }
+
+    return index;
+}
+
+/**
+ * Get the end of a project which starts at character
+ * `fromIndex` in `value`.
+ *
+ * @param {string} value - Value to check.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - End position of project, or `-1`.
+ */
+function getProjectEndPosition(value, fromIndex) {
+    var index = fromIndex;
+    var length = value.length;
+    var size;
+
+    while (index < length) {
+        if (!isValidProjectNameCharacter(value.charCodeAt(index))) {
+            break;
+        }
+
+        index++;
+    }
+
+    size = fromIndex - index;
+
+    if (
+        !size ||
+        size > MAX_PROJECT_LENGTH ||
+        (value.slice(index - GIT_SUFFIX.length, index) === GIT_SUFFIX)
+    ) {
+        return -1;
+    }
+
+    return index;
+}
+
+/**
+ * Get the end of a SHA which starts at character
+ * `fromIndex` in `value`.
+ *
+ * @param {string} value - Value to check.
+ * @param {number} fromIndex - Index to start searching at.
+ * @param {boolean} [allowShort=false] - Whether to allow
+ *   extra short SHAs (4 characters instead of 7).
+ * @return {number} - End position of SHA, or `-1`.
+ */
+function getSHAEndPosition(value, fromIndex, allowShort) {
+    var index = fromIndex;
+    var length = value.length;
+    var size;
+
+    /* No reason walking too far. */
+
+    if (length > index + MAX_SHA_LENGTH) {
+        length = index + MAX_SHA_LENGTH;
+    }
+
+    while (index < length) {
+        if (!isHexadecimal(value.charCodeAt(index))) {
+            break;
+        }
+
+        index++;
+    }
+
+    size = index - fromIndex;
+
+    if (
+        size < (allowShort ? MINUSCULE_SHA_LENGTH : MIN_SHA_LENGTH) ||
+        (size === MAX_SHA_LENGTH && isHexadecimal(value.charCodeAt(index)))
+    ) {
+        return -1;
+    }
+
+    return index;
+}
+
+/**
+ * Get the end of an issue which starts at character
+ * `fromIndex` in `value`.
+ *
+ * @param {string} value - Value to check.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - End position of issue, or `-1`.
+ */
+function getIssueEndPosition(value, fromIndex) {
+    var index = fromIndex;
+    var length = value.length;
+
+    while (index < length) {
+        if (!isDecimal(value.charCodeAt(index))) {
+            break;
+        }
+
+        index++;
+    }
+
+    if (index - fromIndex === 0) {
+        return -1;
+    }
+
+    return index;
+}
+
+/**
  * Create a bound regex locator.
  *
  * @example
@@ -296,35 +465,19 @@ function regexLocatorFactory(regex) {
  */
 function tokenizeHash(eat, value, silent) {
     var self = this;
-    var index = 0;
-    var length = value.length;
+    var index = getSHAEndPosition(value, 0);
     var subvalue;
     var href;
     var now;
     var node;
 
-    if (length > MAX_SHA_LENGTH) {
-        length = MAX_SHA_LENGTH;
-    }
-
-    while (index < length) {
-        if (!isHexadecimal(value.charCodeAt(index))) {
-            break;
-        }
-
-        index++;
-    }
-
-    if (
-        index < MIN_SHA_LENGTH ||
-        (index === length && isHexadecimal(value.charCodeAt(index)))
-    ) {
+    if (index === -1) {
         return;
     }
 
     subvalue = value.slice(0, index);
 
-    if (!isSHA(subvalue)) {
+    if (isBlacklisted(subvalue)) {
         return;
     }
 
@@ -333,7 +486,7 @@ function tokenizeHash(eat, value, silent) {
         return true;
     }
 
-    href = gh(self.github) + 'commit/' + subvalue;
+    href = gh(self.github) + COMMIT + C_SLASH + subvalue;
     now = eat.now();
 
     node = eat(subvalue)(
@@ -341,7 +494,7 @@ function tokenizeHash(eat, value, silent) {
     );
 
     node.children = [{
-        'type': 'inlineCode',
+        'type': T_INLINE_CODE,
         'value': abbr(subvalue),
         'position': node.children[0].position
     }];
@@ -391,54 +544,32 @@ function locateMention(value, fromIndex) {
 function tokenizeMention(eat, value, silent) {
     var self = this;
     var index;
-    var length;
-    var slash;
-    var code;
     var subvalue;
     var handle;
     var href;
     var node;
     var now;
 
-    if (
-        value.charCodeAt(0) !== CC_AT ||
-        value.charCodeAt(1) === CC_DASH
-    ) {
+    if (value.charCodeAt(0) !== CC_AT) {
         return;
     }
 
-    slash = -1;
-    length = value.length;
-    index = 1;
+    index = getUserNameEndPosition(value, 1);
 
-    while (index < length) {
-        code = value.charCodeAt(index);
+    if (index === -1) {
+        return;
+    }
 
-        if (code === CC_SLASH) {
-            if (slash !== -1) {
-                break;
-            }
+    /*
+     * Support teams.
+     */
 
-            slash = index;
+    if (value.charCodeAt(index) === CC_SLASH) {
+        index = getUserNameEndPosition(value, index + 1);
 
-            if (
-                value.charCodeAt(index - 1) === CC_DASH ||
-                value.charCodeAt(index + 1) === CC_DASH
-            ) {
-                return;
-            }
-        } else if (!isValidUserNameCharacter(code)) {
-            break;
+        if (index === -1) {
+            return;
         }
-
-        index++;
-    }
-
-    if (
-        value.charCodeAt(index - 1) === CC_DASH ||
-        index > MAX_USER_LENGTH + 1
-    ) {
-        return;
     }
 
     /* istanbul ignore if - maybe used by plug-ins */
@@ -460,7 +591,7 @@ function tokenizeMention(eat, value, silent) {
     ));
 
     node.children = [{
-        'type': 'strong',
+        'type': T_STRONG,
         'children': node.children
     }];
 
@@ -487,7 +618,6 @@ tokenizeMention.notInLink = true;
 function tokenizeIssue(eat, value, silent) {
     var self = this;
     var index;
-    var length;
     var start;
     var subvalue;
     var href;
@@ -505,17 +635,9 @@ function tokenizeIssue(eat, value, silent) {
     }
 
     start = index;
-    length = value.length;
+    index = getIssueEndPosition(value, index);
 
-    while (index < length) {
-        if (!isDecimal(value.charCodeAt(index))) {
-            break;
-        }
-
-        index++;
-    }
-
-    if (index === start) {
+    if (index === -1) {
         return;
     }
 
@@ -525,7 +647,7 @@ function tokenizeIssue(eat, value, silent) {
     }
 
     now = eat.now();
-    href = gh(self.github) + ISSUES + value.slice(start, index);
+    href = gh(self.github) + ISSUE + C_SLASH + value.slice(start, index);
     subvalue = value.slice(0, index);
 
     now.column += start;
@@ -610,7 +732,6 @@ function tokenizeRepoReference(eat, value, silent) {
     var delimiter;
     var href;
     var index = 0;
-    var length = value.length;
     var code;
     var handle;
     var handleEnd;
@@ -627,63 +748,34 @@ function tokenizeRepoReference(eat, value, silent) {
     var node;
     var add;
 
-    /* First character of username cannot be a dash. */
-    if (value.charCodeAt(index) === CC_DASH) {
-        return;
-    }
+    index = getUserNameEndPosition(value, index);
 
-    while (index < length) {
-        if (!isValidUserNameCharacter(value.charCodeAt(index))) {
-            break;
-        }
-
-        index++;
-    }
-
-    /* Last character of username cannot be a dash. */
-    if (value.charCodeAt(index - 1) === CC_DASH) {
-        return;
-    }
-
-    code = value.charCodeAt(index);
-
-    /* Last character of username cannot be a dash. */
-    if (!index || index > MAX_USER_LENGTH) {
+    if (index === -1) {
         return;
     }
 
     handleEnd = index;
+    code = value.charCodeAt(index);
 
     if (code === CC_SLASH) {
         index++;
         projectStart = index;
+        index = getProjectEndPosition(value, projectStart);
 
-        while (index < length) {
-            if (!isValidProjectNameCharacter(value.charCodeAt(index))) {
-                break;
-            }
-
-            index++;
-        }
-
-        if (
-            (index - projectStart) > MAX_PROJECT_LENGTH ||
-            (value.slice(index - GIT_SUFFIX.length, index) === GIT_SUFFIX)
-        ) {
+        if (index === -1) {
             return;
         }
 
         projectEnd = index;
+        code = value.charCodeAt(projectEnd);
     }
 
-    code = value.charCodeAt(index);
-
     if (code === CC_HASH) {
-        test = isDecimal;
-        suffix = ISSUES;
+        suffix = ISSUE;
+        test = getIssueEndPosition;
     } else if (code === CC_AT) {
-        test = isHexadecimal;
-        suffix = COMMITS;
+        suffix = COMMIT;
+        test = getSHAEndPosition;
     } else {
         return;
     }
@@ -692,34 +784,13 @@ function tokenizeRepoReference(eat, value, silent) {
     index++;
     referenceStart = index;
 
-    while (index < length) {
-        if (!test(value.charCodeAt(index))) {
-            if (isValidUserNameCharacter(value.charCodeAt(index))) {
-                return;
-            }
+    index = test(value, referenceStart);
 
-            break;
-        }
-
-        index++;
-    }
-
-    reference = value.slice(referenceStart, index);
-    content = reference;
-
-    if (
-        suffix === COMMITS &&
-        (
-            reference.length < MIN_SHA_LENGTH ||
-            reference.length > MAX_SHA_LENGTH
-        )
-    ) {
-        reference = null;
-    }
-
-    if (!reference) {
+    if (index === -1 || isValidUserNameCharacter(value.charCodeAt(index))) {
         return;
     }
+
+    content = reference = value.slice(referenceStart, index);
 
     /* istanbul ignore if - maybe used by plug-ins */
     if (silent) {
@@ -728,16 +799,17 @@ function tokenizeRepoReference(eat, value, silent) {
 
     handle = value.slice(0, handleEnd);
     project = projectEnd && value.slice(projectStart, projectEnd);
-    href = gh(handle, project || self.github.project) + suffix + reference;
+    href = gh(handle, project || self.github.project);
     subvalue = value.slice(0, index);
-    handle += (project ? C_SLASH + project : '') + delimiter;
+    handle += (project ? C_SLASH + project : EMPTY) + delimiter;
     add = eat(subvalue);
+    href += suffix + C_SLASH + reference;
 
-    if (suffix === COMMITS) {
+    if (suffix === COMMIT) {
         node = add(self.renderLink(true, href, handle, null, now, eat));
 
         node.children.push({
-            'type': 'inlineCode',
+            'type': T_INLINE_CODE,
             'value': abbr(content)
         });
 
@@ -751,10 +823,84 @@ tokenizeRepoReference.locator = locateRepoReference;
 tokenizeRepoReference.notInLink = true;
 
 /**
+ * Parse a link and determine whether it links to GitHub.
+ *
+ * @param {LinkNode} node - Link node.
+ * @return {Object?} - Information.
+ */
+function parseLink(node) {
+    var link = {};
+    var url = node.href;
+    var start;
+    var end;
+    var page;
+
+    if (
+        url.slice(0, GH_URL_PREFIX_LENGTH) !== GH_URL_PREFIX ||
+        node.children.length !== 1 ||
+        node.children[0].type !== T_TEXT ||
+        toString(node).slice(0, GH_URL_PREFIX_LENGTH) !== GH_URL_PREFIX
+    ) {
+        return;
+    }
+
+    start = GH_URL_PREFIX_LENGTH;
+    end = getUserNameEndPosition(url, GH_URL_PREFIX_LENGTH);
+
+    if (end === -1 || url.charCodeAt(end) !== CC_SLASH) {
+        return;
+    }
+
+    link.user = url.slice(start, end);
+
+    start = end + 1;
+    end = getUserNameEndPosition(url, start);
+
+    if (end === -1 || url.charCodeAt(end) !== CC_SLASH) {
+        return;
+    }
+
+    link.project = url.slice(start, end);
+
+    start = end + 1;
+    end = url.indexOf(C_SLASH, start);
+
+    if (end === -1) {
+        return;
+    }
+
+    page = url.slice(start, end);
+
+    if (page !== COMMIT && page !== ISSUE && page !== PULL) {
+        return;
+    }
+
+    link.page = page;
+    start = end + 1;
+
+    if (page === COMMIT) {
+        end = getSHAEndPosition(url, start, true);
+    } else {
+        end = getIssueEndPosition(url, start);
+    }
+
+    if (end === -1) {
+        return;
+    }
+
+    link.reference = url.slice(start, end);
+    link.comment = url.charCodeAt(end) === CC_HASH &&
+        url.length > end + 1;
+
+    return link;
+}
+
+/**
  * Attacher.
  *
  * @param {Remark} remark - Instance.
  * @param {Object?} [options] - Configuration.
+ * @return {Function} - Transformer.
  */
 function attacher(remark, options) {
     var repo = (options || {}).repository;
@@ -776,7 +922,11 @@ function attacher(remark, options) {
             pack = {};
         }
 
-        repo = pack.repository ? pack.repository.url || pack.repository : '';
+        if (pack.repository) {
+            repo = pack.repository.url || pack.repository;
+        } else {
+            repo = EMPTY;
+        }
     }
 
     /*
@@ -818,6 +968,70 @@ function attacher(remark, options) {
         'hash',
         'repoReference'
     );
+
+    /**
+     * Transformer.
+     *
+     * @param {Node} tree - Root node.
+     */
+    function transformer(tree) {
+        visit(tree, T_LINK, function (node) {
+            var link = parseLink(node);
+            var children;
+            var base;
+            var comment;
+
+            if (!link) {
+                return;
+            }
+
+            comment = link.comment ? MESSAGE_COMMENT : EMPTY;
+
+            if (link.project !== repo.project) {
+                base = link.user + C_SLASH + link.project;
+            } else if (link.user !== repo.user) {
+                base = link.user;
+            } else {
+                base = EMPTY;
+            }
+
+            if (link.page !== COMMIT) {
+                base += C_HASH;
+
+                children = [
+                    {
+                        'type': T_TEXT,
+                        'value': base + abbr(link.reference) + comment
+                    }
+                ];
+            } else {
+                children = [];
+
+                if (base) {
+                    children.push({
+                        'type': T_TEXT,
+                        'value': base + C_AT
+                    });
+                }
+
+                children.push({
+                    'type': T_INLINE_CODE,
+                    'value': abbr(link.reference)
+                });
+
+                if (link.comment) {
+                    children.push({
+                        'type': T_TEXT,
+                        'value': comment
+                    });
+                }
+            }
+
+            node.children = children;
+        });
+    }
+
+    return transformer;
 }
 
 /*

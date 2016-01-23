@@ -17,7 +17,10 @@
     "remark"
   ],
   "repository": "wooorm/remark-github",
-  "dependencies": {},
+  "dependencies": {
+    "wooorm/mdast-util-to-string": "^1.0.1",
+    "wooorm/unist-util-visit": "^1.0.0"
+  },
   "scripts": [
     "index.js"
   ]

@@ -25,7 +25,10 @@
   "files": [
     "index.js"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "mdast-util-to-string": "^1.0.1",
+    "unist-util-visit": "^1.0.0"
+  },
   "devDependencies": {
     "browserify": "^13.0.0",
     "eslint": "^1.0.0",
