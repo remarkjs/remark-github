@@ -830,7 +830,7 @@ tokenizeRepoReference.notInLink = true;
  */
 function parseLink(node) {
     var link = {};
-    var url = node.href;
+    var url = node.url || /* istanbul ignore next - remark@<4.0.0 */ node.href;
     var start;
     var end;
     var page;
