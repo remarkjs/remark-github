@@ -4,6 +4,12 @@
 
 <!--lint disable maximum-line-length-->
 
+4.0.1 / 2016-02-07
+==================
+
+*   Fix npm deployment from Travis on older Node versions ([`92d3585`](https://github.com/wooorm/remark-github/commit/92d3585))
+*   Update for changes in remark ([`2210600`](https://github.com/wooorm/remark-github/commit/2210600))
+
 4.0.0 / 2016-01-23
 ==================
 
