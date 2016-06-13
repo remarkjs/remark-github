@@ -57,7 +57,7 @@ function github(value, repo) {
         options = repo;
     }
 
-    return remark.use(remarkGitHub, options).process(value);
+    return remark().use(remarkGitHub, options).process(value).toString();
 }
 
 /*
@@ -68,7 +68,7 @@ test('remark-github()', function (t) {
     t.equal(typeof remarkGitHub, 'function', 'should be a function');
 
     t.doesNotThrow(function () {
-        remark.use(remarkGitHub);
+        remark().use(remarkGitHub);
     }, 'should not throw if not passed options');
 
     t.end();

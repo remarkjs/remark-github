@@ -743,7 +743,6 @@ function tokenizeRepoReference(eat, value, silent) {
     var subvalue;
     var test;
     var suffix;
-    var now;
     var content;
     var node;
     var add;
@@ -806,7 +805,9 @@ function tokenizeRepoReference(eat, value, silent) {
     href += suffix + C_SLASH + reference;
 
     if (suffix === COMMIT) {
-        node = add(self.renderLink(true, href, handle, null, now, eat));
+        node = add(
+            self.renderLink(true, href, handle, null, eat.now())
+        );
 
         node.children.push({
             'type': T_INLINE_CODE,
@@ -816,7 +817,7 @@ function tokenizeRepoReference(eat, value, silent) {
         return node;
     }
 
-    return add(self.renderLink(true, href, handle + content, null, now, eat));
+    return add(self.renderLink(true, href, handle + content, null, eat.now()));
 }
 
 tokenizeRepoReference.locator = locateRepoReference;

@@ -20,7 +20,7 @@ Dependencies:
 
 ```javascript
 var github = require('remark-github');
-var remark = require('remark').use(github);
+var remark = require('remark')().use(github);
 ```
 
 Input:
@@ -43,7 +43,7 @@ var input = [
 Process:
 
 ```javascript
-var doc = remark.process(input);
+var file = remark.process(input);
 ```
 
 Yields:
