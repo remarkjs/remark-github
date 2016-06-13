@@ -1,8 +1,13 @@
 <!--remark setext-->
 
-<!--lint disable no-multiple-toplevel-headings-->
+<!--lint disable no-multiple-toplevel-headings maximum-line-length-->
 
-<!--lint disable maximum-line-length-->
+5.0.0 / 2016-06-13
+==================
+
+*   Remove support for Duo ([`6552e50`](https://github.com/wooorm/remark-github/commit/6552e50))
+*   Update `readme.md` ([`fd812af`](https://github.com/wooorm/remark-github/commit/fd812af))
+*   Update for changes in remark@5.0.0 ([`c6f268f`](https://github.com/wooorm/remark-github/commit/c6f268f))
 
 4.0.1 / 2016-02-07
 ==================
