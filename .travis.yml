@@ -1,11 +1,10 @@
 language: node_js
 node_js:
-- '0.10'
 - '0.11'
 - '0.12'
 - '4.0'
 - '5.0'
-- iojs
+- '6.0'
 sudo: false
 after_script: npm install codecov.io && cat ./coverage/lcov.info | codecov
 deploy:
@@ -15,7 +14,7 @@ deploy:
       secure: NWyqFudUi3MRx9d73d0AyNuuxxAOIzcxVUWzjnxzM5PXKfGcWoZeJzd6QYA0TENdIIf0Sjt4nMNrTFKlW/QkAE0lnRkEtT7odxi+oCxtX3MNDUDtT+Ug9/9RcDaf/lm4YF12gAKRL+qbISC2/vBIFPLGLJokyvKApWlUIBzhznk=
     on:
       tags: true
-      node: '5.0'
+      node: '6.0'
   - provider: releases
     api_key:
       secure: FbRS8IqAHbmwPSSuMaE9a2EV4Br/AIbAwFrsxKmhqMlK8Rc/irnopku+3WKYeuRud/cAqTZsPvv8h4iAik+91KVS5l9acSVpf5M8Wghz6AAxXRBjJ0NALMgqqbDypmdJZf30QCuVq0G0u6Nuxc4D7udg7o76o09fCBmP2ZahjIc=
@@ -24,3 +23,4 @@ deploy:
       - "remark-github.min.js"
     on:
       tags: true
+      node: '6.0'
