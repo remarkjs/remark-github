@@ -65,7 +65,7 @@ Yields:
 
 ## API
 
-### `remark.use(commentConfig[, options])`
+### `remark.use(github[, options])`
 
 Adds references to commits, issues, pull-requests, and users similar to how
 [GitHub][writing-on-github]
