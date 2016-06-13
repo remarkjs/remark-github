@@ -1,18 +1,20 @@
-# remark-github [![Build Status][travis-badge]][travis] [![Coverage Status][codecov-badge]][codecov]
+# remark-github [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
+
+<!--lint disable list-item-spacing-->
 
 Auto-link references to commits, issues, pull-requests, and users like
 GitHub: [Writing on GitHub][writing-on-github].
 
 ## Installation
 
-[npm][npm-install]:
+[npm][]:
 
 ```bash
 npm install remark-github
 ```
 
-**remark-github** is also available for [duo][duo-install], and as an
-AMD, CommonJS, and globals module, [uncompressed and compressed][releases].
+**remark-github** is also available as an AMD, CommonJS, and
+globals module, [uncompressed and compressed][releases].
 
 ## Usage
 
@@ -63,41 +65,28 @@ Yields:
 
 ## API
 
-### `remark.use(github[, options])`
+### `remark.use(commentConfig[, options])`
 
 Adds references to commits, issues, pull-requests, and users similar to how
 [GitHub][writing-on-github]
 renders these in issues, comments, and pull request descriptions.
 
-*   SHA commits references: `1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921`
-    — [`1f2a4fb`][sha]
-
-*   User@SHA: `wooorm@1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921`
-    — [wooorm@`1f2a4fb`][user-sha]
-
-*   User/Repository@SHA:
-    `wooorm/remark-github@1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921`
+*   SHA commits references: `1f2a4fb` — [`1f2a4fb`][sha]
+*   User@SHA: `wooorm@1f2a4fb` — [wooorm@`1f2a4fb`][user-sha]
+*   User/Repository@SHA: `wooorm/remark-github@1f2a4fb`
     — [wooorm/remark-github@`1f2a4fb`][project-sha]
-
-*   Hash-Num: `#1`
-    — [#1][issue]
-
-*   GH-Num: `GH-1`
-    — [GH-1][issue]
-
-*   User#Num: `wooorm#1`
-    — [wooorm#1][user-issue]
-
+*   Hash-Num: `#1` — [#1][issue]
+*   GH-Num: `GH-1` — [GH-1][issue]
+*   User#Num: `wooorm#1` — [wooorm#1][user-issue]
 *   User/Repository#Num: `wooorm/remark-github#1`
     — [wooorm/remark-github#1][project-issue]
-
 *   At-mentions: `@mention` and `@wooorm`
     — [**@mention**][mentions] and [**@wooorm**][mention]
 
-These links are generated relative to a project. In Node this is auto-detected
-by loading `package.json` and looking for a `repository` field.
-In the browser, or when overwriting this, you can pass a `repository` to
-[`remark.use`](https://github.com/wooorm/remark#remarkuseplugin-options).
+These links are generated relative to a project.  In Node this is
+auto-detected by loading `package.json` and looking for a `repository`
+field.  In the browser, or when overwriting this, you can pass a
+`repository` in `options`.
 
 ## License
 
@@ -105,23 +94,25 @@ In the browser, or when overwriting this, you can pass a `repository` to
 
 <!-- Definitions -->
 
-[travis-badge]: https://img.shields.io/travis/wooorm/remark-github.svg
+[build-badge]: https://img.shields.io/travis/wooorm/remark-github.svg
 
-[travis]: https://travis-ci.org/wooorm/remark-github
+[build-status]: https://travis-ci.org/wooorm/remark-github
 
-[codecov-badge]: https://img.shields.io/codecov/c/github/wooorm/remark-github.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/remark-github.svg
 
-[codecov]: https://codecov.io/github/wooorm/remark-github
+[coverage-status]: https://codecov.io/github/wooorm/remark-github
 
-[npm-install]: https://docs.npmjs.com/cli/install
+[chat-badge]: https://img.shields.io/gitter/room/wooorm/remark.svg
 
-[duo-install]: http://duojs.org/#getting-started
+[chat]: https://gitter.im/wooorm/remark
 
 [releases]: https://github.com/wooorm/remark-github/releases
 
 [license]: LICENSE
 
 [author]: http://wooorm.com
+
+[npm]: https://docs.npmjs.com/cli/install
 
 [writing-on-github]: https://help.github.com/articles/writing-on-github/#references
 
