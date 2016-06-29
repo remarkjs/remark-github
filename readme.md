@@ -29,38 +29,54 @@ Input:
 
 ```javascript
 var input = [
-    '* SHA: 1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921',
-    '* User@SHA: jlord@1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921',
-    '* User/Repository@SHA: jlord/sheetsee.js@1f2a4fb',
-    '* #Num: #1',
-    '* GH-Num: GH-1',
-    '* User#Num: jlord#1',
-    '* User/Repository#Num: jlord/sheetsee.js#1',
-    '* @mention',
-    '* And @mentioning someone else',
-    '* And nothing'
+    'References:',
+    '',
+    '* Commit: f8083175fe890cbf14f41d0a06e7aa35d4989587',
+    '* Commit (fork): foo@f8083175fe890cbf14f41d0a06e7aa35d4989587.',
+    '* Commit (repo): wooorm/remark@e1aa9f6c02de18b9459b7d269712bcb50183ce89.',
+    '* Issue or PR (`#`): #1.',
+    '* Issue or PR (`GH-`): GH-1.',
+    '* Issue or PR (fork): foo#1.',
+    '* Issue or PR (project): wooorm/remark#1.',
+    '* Mention: @wooorm.',
+    '',
+    'Normalising of links:',
+    '',
+    '* Commit: https://github.com/wooorm/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89.',
+    '* Commit comment: https://github.com/wooorm/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693.',
+    '* Issue or PR: https://github.com/wooorm/remark/issues/182',
+    '* Issue or PR comment: https://github.com/wooorm/remark-github/issues/3#issue-151160339',
+    '* Mention: @ben-eb.'
 ].join('\n');
 ```
 
 Process:
 
 ```javascript
-var file = remark.process(input);
+var doc = remark.process(input).toString();
 ```
 
 Yields:
 
 ```markdown
--   SHA: [`1f2a4fb`](https://github.com/wooorm/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921)
--   User@SHA: [jlord@`1f2a4fb`](https://github.com/jlord/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921)
--   User/Repository@SHA: [jlord/sheetsee.js@`1f2a4fb`](https://github.com/jlord/sheetsee.js/commit/1f2a4fb)
--   \#Num: [#1](https://github.com/wooorm/remark-github/issues/1)
--   GH-Num: [GH-1](https://github.com/wooorm/remark-github/issues/1)
--   User#Num: [jlord#1](https://github.com/jlord/remark-github/issues/1)
--   User/Repository#Num: [jlord/sheetsee.js#1](https://github.com/jlord/sheetsee.js/issues/1)
--   [**@mention**](https://github.com/blog/821)
--   And [**@mentioning**](https://github.com/mentioning) someone else
--   And nothing
+References:
+
+-   Commit: [`f808317`](https://github.com/wooorm/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
+-   Commit (fork): [foo@`f808317`](https://github.com/foo/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587).
+-   Commit (repo): [wooorm/remark@`e1aa9f6`](https://github.com/wooorm/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89).
+-   Issue or PR (`#`): [#1](https://github.com/wooorm/remark-github/issues/1).
+-   Issue or PR (`GH-`): [GH-1](https://github.com/wooorm/remark-github/issues/1).
+-   Issue or PR (fork): [foo#1](https://github.com/foo/remark-github/issues/1).
+-   Issue or PR (project): [wooorm/remark#1](https://github.com/wooorm/remark/issues/1).
+-   Mention: [**@wooorm**](https://github.com/wooorm).
+
+Normalising of links:
+
+-   Commit: [wooorm/remark@`e1aa9f6`](https://github.com/wooorm/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89).
+-   Commit comment: [wooorm/remark@`ac63bc3` (comment)](https://github.com/wooorm/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693).
+-   Issue or PR: [wooorm/remark#182](https://github.com/wooorm/remark/issues/182)
+-   Issue or PR comment: [#3 (comment)](https://github.com/wooorm/remark-github/issues/3#issue-151160339)
+-   Mention: [**@ben-eb**](https://github.com/ben-eb).
 ```
 
 ## API
@@ -71,17 +87,17 @@ Adds references to commits, issues, pull-requests, and users similar to how
 [GitHub][writing-on-github]
 renders these in issues, comments, and pull request descriptions.
 
-*   SHA commits references: `1f2a4fb` — [`1f2a4fb`][sha]
-*   User@SHA: `wooorm@1f2a4fb` — [wooorm@`1f2a4fb`][user-sha]
-*   User/Repository@SHA: `wooorm/remark-github@1f2a4fb`
-    — [wooorm/remark-github@`1f2a4fb`][project-sha]
-*   Hash-Num: `#1` — [#1][issue]
-*   GH-Num: `GH-1` — [GH-1][issue]
-*   User#Num: `wooorm#1` — [wooorm#1][user-issue]
-*   User/Repository#Num: `wooorm/remark-github#1`
-    — [wooorm/remark-github#1][project-issue]
-*   At-mentions: `@mention` and `@wooorm`
-    — [**@mention**][mentions] and [**@wooorm**][mention]
+*   Commits: `1f2a4fb` — [`1f2a4fb`][sha].
+*   Commits across forks: `wooorm@1f2a4fb` — [wooorm@`1f2a4fb`][user-sha].
+*   Commits across projects: `wooorm/remark-github@1f2a4fb`
+    — [wooorm/remark-github@`1f2a4fb`][project-sha].
+*   Prefix issues: `GH-1` — [GH-1][issue].
+*   Hash issues: `#1` — [#1][issue].
+*   Issues across forks: `wooorm#1` — [wooorm#1][user-issue].
+*   Issues across projects: `wooorm/remark-github#1`
+    — [wooorm/remark-github#1][project-issue].
+*   At-mentions: `@mention` and `@wooorm`.
+    — [**@mention**][mentions] and [**@wooorm**][mention].
 
 These links are generated relative to a project.  In Node this is
 auto-detected by loading `package.json` and looking for a `repository`

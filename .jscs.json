@@ -2,6 +2,7 @@
   "excludeFiles": [
     "coverage/",
     "node_modules/",
+    "example.js",
     "remark-github.js",
     "remark-github.min.js"
   ],
