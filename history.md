@@ -2,6 +2,11 @@
 
 <!--lint disable no-multiple-toplevel-headings maximum-line-length-->
 
+5.1.0 / 2016-07-06
+==================
+
+*   Add support for not using `strong` in mentions ([`5c50190`](https://github.com/wooorm/remark-github/commit/5c50190))
+
 5.0.0 / 2016-06-13
 ==================
 
