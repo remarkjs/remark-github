@@ -190,19 +190,6 @@ var REPOSITORY = new RegExp(
 );
 
 /**
- * Check whether `code` is a hexadecimal character.
- *
- * @param {number} code - Single character code to check.
- * @return {boolean} - Whether or not `code` is a valid
- *   hexadecimal character.
- */
-function isHexadecimal(code) {
-    return (code >= CC_0 && code <= CC_9) ||
-        (code >= CC_A_LOWER && code <= CC_F_LOWER) ||
-        (code >= CC_A_UPPER && code <= CC_F_UPPER);
-}
-
-/**
  * Check whether `code` is a decimal character.
  *
  * @param {number} code - Single character code to check.
@@ -211,6 +198,31 @@ function isHexadecimal(code) {
  */
 function isDecimal(code) {
     return code >= CC_0 && code <= CC_9;
+}
+
+/**
+ * Check whether `code` is an alphabetical character.
+ *
+ * @param {number} code - Single character code to check.
+ * @return {boolean} - Whether or not `code` is a valid
+ *   alphabetical character.
+ */
+function isAlphabetical(code) {
+    return (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
+        (code >= CC_A_UPPER && code <= CC_Z_UPPER);
+}
+
+/**
+ * Check whether `code` is a hexadecimal character.
+ *
+ * @param {number} code - Single character code to check.
+ * @return {boolean} - Whether or not `code` is a valid
+ *   hexadecimal character.
+ */
+function isHexadecimal(code) {
+    return isDecimal(code) ||
+        (code >= CC_A_LOWER && code <= CC_F_LOWER) ||
+        (code >= CC_A_UPPER && code <= CC_F_UPPER);
 }
 
 /**
@@ -224,9 +236,8 @@ function isValidRepoCharacter(code) {
     return code === CC_SLASH ||
         code === CC_DOT ||
         code === CC_DASH ||
-        (code >= CC_0 && code <= CC_9) ||
-        (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
-        (code >= CC_A_UPPER && code <= CC_Z_UPPER);
+        isDecimal(code) ||
+        isAlphabetical(code);
 }
 
 /**
@@ -239,9 +250,8 @@ function isValidRepoCharacter(code) {
 function isValidProjectNameCharacter(code) {
     return code === CC_DOT ||
         code === CC_DASH ||
-        (code >= CC_0 && code <= CC_9) ||
-        (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
-        (code >= CC_A_UPPER && code <= CC_Z_UPPER);
+        isDecimal(code) ||
+        isAlphabetical(code);
 }
 
 /**
@@ -252,10 +262,7 @@ function isValidProjectNameCharacter(code) {
  *   username character.
  */
 function isValidUserNameCharacter(code) {
-    return code === CC_DASH ||
-        (code >= CC_0 && code <= CC_9) ||
-        (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
-        (code >= CC_A_UPPER && code <= CC_Z_UPPER);
+    return code === CC_DASH || isDecimal(code) || isAlphabetical(code);
 }
 
 /**
@@ -590,10 +597,12 @@ function tokenizeMention(eat, value, silent) {
         true, href, subvalue, null, now, eat
     ));
 
-    node.children = [{
-        'type': T_STRONG,
-        'children': node.children
-    }];
+    if (self.githubOptions.mentionStrong !== false) {
+        node.children = [{
+            'type': T_STRONG,
+            'children': node.children
+        }];
+    }
 
     return node;
 }
@@ -904,7 +913,8 @@ function parseLink(node) {
  * @return {Function} - Transformer.
  */
 function attacher(remark, options) {
-    var repo = (options || {}).repository;
+    var settings = options || {};
+    var repo = settings.repository;
     var proto = remark.Parser.prototype;
     var scope = proto.inlineTokenizers;
     var methods = proto.inlineMethods;
@@ -958,6 +968,7 @@ function attacher(remark, options) {
     scope.repoReference = tokenizeRepoReference;
 
     proto.github = repo;
+    proto.githubOptions = settings;
 
     /*
      * Specify order (just before `inlineText`).

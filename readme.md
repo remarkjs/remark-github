@@ -104,6 +104,12 @@ auto-detected by loading `package.json` and looking for a `repository`
 field.  In the browser, or when overwriting this, you can pass a
 `repository` in `options`.
 
+By default, mentions are wrapped in `strong` nodes (which render to
+`<strong>` in HTML), to simulate the look of mentions on GitHub.
+However, this creates different HTML markup, as the GitHub site applies
+these styles using CSS.  Pass `mentionStrong: false` to turn off this
+behaviour.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
