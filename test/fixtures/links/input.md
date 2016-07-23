@@ -11,6 +11,8 @@ pretty.
 
 ## Non-references
 
+An empty link: [this and that]().
+
 A link to GH:
 <https://github.com>
 
