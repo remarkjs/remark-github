@@ -26,37 +26,64 @@
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
   ],
   "files": [
-    "index.js"
+    "index.js",
+    "lib"
   ],
   "dependencies": {
+    "has": "^1.0.1",
+    "is-alphabetical": "^1.0.0",
+    "is-decimal": "^1.0.0",
+    "is-hexadecimal": "^1.0.0",
     "mdast-util-to-string": "^1.0.1",
     "unist-util-visit": "^1.0.0"
   },
   "devDependencies": {
     "browserify": "^13.0.0",
-    "eslint": "^2.0.0",
     "esmangle": "^1.0.0",
     "istanbul": "^0.4.0",
-    "jscs": "^3.0.0",
-    "jscs-jsdoc": "^2.0.0",
     "remark": "^5.0.0",
     "remark-cli": "^1.0.0",
     "remark-comment-config": "^4.0.0",
     "remark-lint": "^4.0.0",
     "remark-toc": "^3.0.0",
     "remark-usage": "^4.0.0-alpha.1",
-    "tape": "^4.0.0"
+    "remark-validate-links": "^4.0.0",
+    "tape": "^4.0.0",
+    "xo": "^0.16.0"
   },
   "scripts": {
     "build-md": "remark . --quiet --frail",
     "build-bundle": "browserify --no-builtins index.js -s remarkGitHub > remark-github.js",
     "build-mangle": "esmangle remark-github.js > remark-github.min.js",
     "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
-    "lint-api": "eslint .",
-    "lint-style": "jscs --reporter inline .",
-    "lint": "npm run lint-api && npm run lint-style",
+    "lint": "xo",
     "test-api": "node test/index.js",
     "test-coverage": "istanbul cover test/index.js",
     "test": "npm run build && npm run lint && npm run test-coverage"
+  },
+  "xo": {
+    "space": true,
+    "rules": {
+      "guard-for-in": "off",
+      "eqeqeq": "off",
+      "no-eq-null": "off"
+    },
+    "ignores": [
+      "remark-github.js",
+      "remark-github.min.js"
+    ]
+  },
+  "remarkConfig": {
+    "output": true,
+    "plugins": [
+      "comment-config",
+      "./",
+      "lint",
+      "usage",
+      "validate-links"
+    ],
+    "settings": {
+      "bullet": "*"
+    }
   }
 }

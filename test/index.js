@@ -9,34 +9,24 @@
 'use strict';
 
 /* eslint-env node */
+/* eslint-disable import/no-extraneous-dependencies */
 
-/*
- * Dependencies.
- */
-
+/* Dependencies. */
 var fs = require('fs');
 var path = require('path');
 var test = require('tape');
 var remark = require('remark');
 var remarkGitHub = require('..');
 
-/*
- * Methods.
- */
-
+/* Methods. */
+var join = path.join;
 var read = fs.readFileSync;
 var readdir = fs.readdirSync;
 
-/*
- * Constants.
- */
+/* Constants. */
+var ROOT = join(__dirname, 'fixtures');
 
-var ROOT = path.join(__dirname, 'fixtures');
-
-/*
- * Fixtures.
- */
-
+/* Fixtures. */
 var fixtures = readdir(ROOT);
 
 /**
@@ -47,254 +37,228 @@ var fixtures = readdir(ROOT);
  * @return {string} - Processed `value`.
  */
 function github(value, repo) {
-    var options;
+  var options;
 
-    if (typeof repo === 'string' || !repo) {
-        options = {
-            'repository': repo || null
-        };
-    } else {
-        options = repo;
-    }
+  if (typeof repo === 'string' || !repo) {
+    options = {repository: repo || null};
+  } else {
+    options = repo;
+  }
 
-    return remark().use(remarkGitHub, options).process(value).toString();
+  return remark().use(remarkGitHub, options).process(value).toString();
 }
 
-/*
- * Tests.
- */
-
+/* Tests. */
 test('remark-github()', function (t) {
-    t.equal(typeof remarkGitHub, 'function', 'should be a function');
+  t.equal(typeof remarkGitHub, 'function', 'should be a function');
 
-    t.doesNotThrow(function () {
-        remark().use(remarkGitHub);
-    }, 'should not throw if not passed options');
+  t.doesNotThrow(function () {
+    remark().use(remarkGitHub);
+  }, 'should not throw if not passed options');
 
-    t.equal(
-        github('@mention'),
-        '[**@mention**](https://github.com/blog/821)\n',
-        'should wrap mentions in `strong` by default'
-    )
+  t.equal(
+    github('@mention'),
+    '[**@mention**](https://github.com/blog/821)\n',
+    'should wrap mentions in `strong` by default'
+  );
 
-    t.equal(
-        github('@mention', {
-            'mentionStrong': false
-        }),
-        '[@mention](https://github.com/blog/821)\n',
-        'should support `mentionStrong: false`'
-    )
+  t.equal(
+    github('@mention', {mentionStrong: false}),
+    '[@mention](https://github.com/blog/821)\n',
+    'should support `mentionStrong: false`'
+  );
 
-    t.end();
+  t.end();
 });
 
-/*
- * Gather fixtures.
- */
-
+/* Fixtures. */
 test('Fixtures', function (t) {
-    fixtures.filter(function (filepath) {
-        return filepath.indexOf('.') !== 0;
-    }).forEach(function (fixture) {
-        var filepath = ROOT + '/' + fixture;
-        var output = read(filepath + '/output.md', 'utf-8');
-        var input = read(filepath + '/input.md', 'utf-8');
-        var result = github(input, 'wooorm/remark');
+  fixtures.filter(function (filepath) {
+    return filepath.indexOf('.') !== 0;
+  }).forEach(function (fixture) {
+    var filepath = join(ROOT, fixture);
+    var output = read(join(filepath, 'output.md'), 'utf-8');
+    var input = read(join(filepath, 'input.md'), 'utf-8');
+    var result = github(input, 'wooorm/remark');
 
-        t.equal(result, output, 'should work on `' + fixture + '`');
-    });
+    t.equal(result, output, 'should work on `' + fixture + '`');
+  });
 
-    t.end();
+  t.end();
 });
 
-/*
- * List of repo references possible in `package.json`s.
+/* List of repo references possible in `package.json`s.
  *
  * From repo-utils/parse-github-repo-url, with some
- * tiny additions.
- */
-
+ * tiny additions. */
 var repositories = [
-    [
-        'component/emitter',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://github.com/component/emitter',
-        'component',
-        'emitter'
-    ],
-    [
-        'git://github.com/component/emitter.git',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://github.com/repos/component/emitter/tarball',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://github.com/repos/component/emitter/zipball',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://codeload.github.com/component/emitter/legacy.zip',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://codeload.github.com/component/emitter/legacy.tar.gz',
-        'component',
-        'emitter'
-    ],
-    [
-        'component/emitter#1',
-        'component',
-        'emitter'
-    ],
-    [
-        'component/emitter@1',
-        'component',
-        'emitter'
-    ],
-    [
-        'component/emitter#"1"',
-        'component',
-        'emitter'
-    ],
-    [
-        'component/emitter@"1"',
-        'component',
-        'emitter'
-    ],
-    [
-        'git://github.com/component/emitter.git#1',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://github.com/repos/component/emitter/tarball/1',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://github.com/repos/component/emitter/zipball/1',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://codeload.github.com/component/emitter/legacy.zip/1',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://codeload.github.com/component/emitter/legacy.tar.gz/1',
-        'component',
-        'emitter'
-    ],
-    [
-        'https://github.com/component/emitter/archive/1.tar.gz',
-        'component',
-        'emitter'
-    ],
-    [
-        'github/.gitignore',
-        'github',
-        '.gitignore'
-    ],
-    [
-        'github/.gitc',
-        'github',
-        '.gitc'
-    ]
+  [
+    'component/emitter',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://github.com/component/emitter',
+    'component',
+    'emitter'
+  ],
+  [
+    'git://github.com/component/emitter.git',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://github.com/repos/component/emitter/tarball',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://github.com/repos/component/emitter/zipball',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://codeload.github.com/component/emitter/legacy.zip',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://codeload.github.com/component/emitter/legacy.tar.gz',
+    'component',
+    'emitter'
+  ],
+  [
+    'component/emitter#1',
+    'component',
+    'emitter'
+  ],
+  [
+    'component/emitter@1',
+    'component',
+    'emitter'
+  ],
+  [
+    'component/emitter#"1"',
+    'component',
+    'emitter'
+  ],
+  [
+    'component/emitter@"1"',
+    'component',
+    'emitter'
+  ],
+  [
+    'git://github.com/component/emitter.git#1',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://github.com/repos/component/emitter/tarball/1',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://github.com/repos/component/emitter/zipball/1',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://codeload.github.com/component/emitter/legacy.zip/1',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://codeload.github.com/component/emitter/legacy.tar.gz/1',
+    'component',
+    'emitter'
+  ],
+  [
+    'https://github.com/component/emitter/archive/1.tar.gz',
+    'component',
+    'emitter'
+  ],
+  [
+    'github/.gitignore',
+    'github',
+    '.gitignore'
+  ],
+  [
+    'github/.gitc',
+    'github',
+    '.gitc'
+  ]
 ];
 
 test('Repositories', function (t) {
-    repositories.forEach(function (repo) {
-        var user = repo[1];
-        var project = repo[2];
+  repositories.forEach(function (repo) {
+    var user = repo[1];
+    var project = repo[2];
 
-        repo = repo[0];
+    repo = repo[0];
 
-        t.equal(
-            github([
-                '-   SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-                '-   User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e' +
-                    '889087fd2e',
-                '-   \# Num: #26',
-                '-   GH-Num: GH-26',
-                '-   User#Num: wooorm#26',
-                ''
-            ].join('\n'), repo),
-            [
-                '-   SHA: [`a5c3785`](https://github.com/' + user + '/' +
-                    project + '/commit/a5c3785ed8d6a35868bc169f07e40e' +
-                        '889087fd2e)',
-                '-   User@SHA: [wooorm@`a5c3785`](https://github.com/wooorm/' +
-                    project + '/commit/a5c3785ed8d6a35868bc169f07e40e' +
-                        '889087fd2e)',
-                '-   \# Num: [#26](https://github.com/' + user + '/' +
-                    project + '/issues/26)',
-                '-   GH-Num: [GH-26](https://github.com/' + user + '/' +
-                    project + '/issues/26)',
-                '-   User#Num: [wooorm#26](https://github.com/wooorm/' +
-                    project + '/issues/26)',
-                ''
-            ].join('\n'),
-            'should work on `' + repo + '`'
-        );
-    });
+    t.equal(
+      github([
+        '-   SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
+        '-   User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e' +
+          '889087fd2e',
+        '-   # Num: #26',
+        '-   GH-Num: GH-26',
+        '-   User#Num: wooorm#26',
+        ''
+      ].join('\n'), repo),
+      [
+        '-   SHA: [`a5c3785`](https://github.com/' + user + '/' +
+          project + '/commit/a5c3785ed8d6a35868bc169f07e40e' +
+          '889087fd2e)',
+        '-   User@SHA: [wooorm@`a5c3785`](https://github.com/wooorm/' +
+          project + '/commit/a5c3785ed8d6a35868bc169f07e40e' +
+          '889087fd2e)',
+        '-   # Num: [#26](https://github.com/' + user + '/' +
+          project + '/issues/26)',
+        '-   GH-Num: [GH-26](https://github.com/' + user + '/' +
+          project + '/issues/26)',
+        '-   User#Num: [wooorm#26](https://github.com/wooorm/' +
+          project + '/issues/26)',
+        ''
+      ].join('\n'),
+      'should work on `' + repo + '`'
+    );
+  });
 
-    t.end();
+  t.end();
 });
 
+/* Miscellaneous. */
 test('Miscellaneous', function (t) {
-    t.equal(
-        github('test@12345678', null),
-        '[test@`1234567`](https://github.com/' +
-        'test/remark-github/commit/12345678)\n',
-        'should load a `package.json` when available'
-    );
+  var original = process.cwd();
 
-    var cwd = process.cwd;
-    var fake;
+  t.equal(
+    github('test@12345678', null),
+    '[test@`1234567`](https://github.com/' +
+    'test/remark-github/commit/12345678)\n',
+    'should load a `package.json` when available'
+  );
 
-    /**
-     * Move cwd to a path without another
-     * `package.json`.
-     */
-    function fakeCWD() {
-        return cwd() + fake;
-    }
+  process.chdir(__dirname);
 
-    process.cwd = fakeCWD;
+  t.equal(
+    github('12345678', null),
+    '[`1234567`](https://github.com/' +
+    'wooorm/remark/commit/12345678)\n',
+    'should accept a `repository.url` in a `package.json`'
+  );
 
-    /* Move cwd to the tests. */
-    fake = '/test';
+  process.chdir(join(__dirname, 'fixtures'));
 
-    t.equal(
-        github('12345678', null),
-        '[`1234567`](https://github.com/' +
-        'wooorm/remark/commit/12345678)\n',
-        'should accept a `repository.url` in a `package.json`'
-    );
+  t.throws(
+    function () {
+      github('1234567', null);
+    },
+    /Missing `repository`/,
+    'should throw without `repository`'
+  );
 
-    /* Move cwd to a path without a `package.json`. */
-    fake = '/test/fixtures';
+  process.chdir(original);
 
-    t.throws(
-        function () {
-            github('1234567', null);
-        },
-        /Missing `repository`/,
-        'should throw without `repository`'
-    );
-
-    /* Reset CWD */
-    process.cwd = cwd;
-
-    t.end();
+  t.end();
 });
