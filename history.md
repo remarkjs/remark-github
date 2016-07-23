@@ -2,6 +2,12 @@
 
 <!--lint disable no-multiple-toplevel-headings maximum-line-length-->
 
+5.1.1 / 2016-07-23
+==================
+
+*   Fix bug where links without urls failed ([`c320354`](https://github.com/wooorm/remark-github/commit/c320354))
+*   Refactor code style to use `xo` ([`65fcad8`](https://github.com/wooorm/remark-github/commit/65fcad8))
+
 5.1.0 / 2016-07-06
 ==================
 
