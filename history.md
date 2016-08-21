@@ -2,6 +2,11 @@
 
 <!--lint disable no-multiple-toplevel-headings maximum-line-length-->
 
+6.0.0 / 2016-08-21
+==================
+
+*   Update for changes in remark@6.0.0 ([`52cff5a`](https://github.com/wooorm/remark-github/commit/52cff5a))
+
 5.1.1 / 2016-07-23
 ==================
 
