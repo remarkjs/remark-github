@@ -1,7 +1,5 @@
 # remark-github [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
 
-<!--lint disable list-item-spacing-->
-
 Auto-link references to commits, issues, pull-requests, and users like
 GitHub: [Writing on GitHub][writing-on-github].
 
@@ -12,9 +10,6 @@ GitHub: [Writing on GitHub][writing-on-github].
 ```bash
 npm install remark-github
 ```
-
-**remark-github** is also available as an AMD, CommonJS, and
-globals module, [uncompressed and compressed][releases].
 
 ## Usage
 
@@ -133,8 +128,6 @@ behaviour.
 [chat-badge]: https://img.shields.io/gitter/room/wooorm/remark.svg
 
 [chat]: https://gitter.im/wooorm/remark
-
-[releases]: https://github.com/wooorm/remark-github/releases
 
 [license]: LICENSE
 

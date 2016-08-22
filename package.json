@@ -16,19 +16,15 @@
     "reference",
     "remark"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wooorm/remark-github.git"
-  },
+  "repository": "https://github.com/wooorm/remark-github",
   "bugs": "https://github.com/wooorm/remark-github/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
   ],
-  "files": [
-    "index.js",
-    "lib"
-  ],
+  "engines": {
+    "node": ">=0.11.0"
+  },
   "dependencies": {
     "has": "^1.0.1",
     "is-alphabetical": "^1.0.0",
@@ -37,53 +33,44 @@
     "mdast-util-to-string": "^1.0.1",
     "unist-util-visit": "^1.0.0"
   },
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "devDependencies": {
     "browserify": "^13.0.0",
     "esmangle": "^1.0.0",
-    "istanbul": "^0.4.0",
+    "nyc": "^8.0.0",
     "remark": "^6.0.0",
-    "remark-cli": "^1.0.0",
-    "remark-comment-config": "^4.0.0",
-    "remark-lint": "^4.0.0",
-    "remark-toc": "^3.0.0",
-    "remark-usage": "^4.0.0-alpha.1",
-    "remark-validate-links": "^4.0.0",
-    "tape": "^4.0.0",
+    "remark-cli": "^2.0.0",
+    "remark-preset-wooorm": "^1.0.0",
+    "tape": "^4.4.0",
     "xo": "^0.16.0"
   },
   "scripts": {
-    "build-md": "remark . --quiet --frail",
-    "build-bundle": "browserify --no-builtins index.js -s remarkGitHub > remark-github.js",
+    "build-md": "remark *.md --quiet --frail",
+    "build-bundle": "browserify index.js -s remarkGitHub > remark-github.js",
     "build-mangle": "esmangle remark-github.js > remark-github.min.js",
     "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
     "lint": "xo",
-    "test-api": "node test/index.js",
-    "test-coverage": "istanbul cover test/index.js",
+    "test-api": "node test",
+    "test-coverage": "nyc --reporter lcov tape test.js",
     "test": "npm run build && npm run lint && npm run test-coverage"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 100,
+    "functions": 100,
+    "branches": 100
   },
   "xo": {
     "space": true,
-    "rules": {
-      "guard-for-in": "off",
-      "eqeqeq": "off",
-      "no-eq-null": "off"
-    },
     "ignores": [
-      "remark-github.js",
-      "remark-github.min.js"
+      "remark-github.js"
     ]
   },
   "remarkConfig": {
     "output": true,
-    "plugins": [
-      "comment-config",
-      "./",
-      "lint",
-      "usage",
-      "validate-links"
-    ],
-    "settings": {
-      "bullet": "*"
-    }
+    "presets": "wooorm"
   }
 }
