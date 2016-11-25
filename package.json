@@ -22,9 +22,6 @@
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
   ],
-  "engines": {
-    "node": ">=0.11.0"
-  },
   "dependencies": {
     "has": "^1.0.1",
     "is-alphabetical": "^1.0.0",
