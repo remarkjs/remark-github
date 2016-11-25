@@ -1,54 +1,21 @@
-/**
- * @author Titus Wormer
- * @copyright 2015 Titus Wormer
- * @license MIT
- * @module remark:github:test
- * @fileoverview Test suite for remark-github.
- */
-
 'use strict';
 
-/* eslint-env node */
 /* eslint-disable import/no-extraneous-dependencies */
 
-/* Dependencies. */
 var fs = require('fs');
 var path = require('path');
 var test = require('tape');
 var remark = require('remark');
 var remarkGitHub = require('..');
 
-/* Methods. */
 var join = path.join;
 var read = fs.readFileSync;
 var readdir = fs.readdirSync;
 
-/* Constants. */
 var ROOT = join(__dirname, 'fixtures');
 
-/* Fixtures. */
 var fixtures = readdir(ROOT);
 
-/**
- * Shortcut to process.
- *
- * @param {string} value - Value to process.
- * @param {string|Object} repo - Repository.
- * @return {string} - Processed `value`.
- */
-function github(value, repo) {
-  var options;
-
-  if (typeof repo === 'string' || !repo) {
-    options = {repository: repo || null};
-  } else {
-    options = repo;
-  }
-
-  return remark().use(remarkGitHub, options).process(value).toString();
-}
-
-/* Tests. */
 test('remark-github()', function (t) {
   t.equal(typeof remarkGitHub, 'function', 'should be a function');
 
@@ -71,7 +38,6 @@ test('remark-github()', function (t) {
   t.end();
 });
 
-/* Fixtures. */
 test('Fixtures', function (t) {
   fixtures.filter(function (filepath) {
     return filepath.indexOf('.') !== 0;
@@ -88,7 +54,6 @@ test('Fixtures', function (t) {
 });
 
 /* List of repo references possible in `package.json`s.
- *
  * From repo-utils/parse-github-repo-url, with some
  * tiny additions. */
 var repositories = [
@@ -262,3 +227,16 @@ test('Miscellaneous', function (t) {
 
   t.end();
 });
+
+/* Shortcut to process. */
+function github(value, repo) {
+  var options;
+
+  if (typeof repo === 'string' || !repo) {
+    options = {repository: repo || null};
+  } else {
+    options = repo;
+  }
+
+  return remark().use(remarkGitHub, options).process(value).toString();
+}
