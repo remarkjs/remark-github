@@ -13,22 +13,10 @@ npm install remark-github
 
 ## Usage
 
-Dependencies:
-
 ```javascript
 var remark = require('remark');
 var github = require('remark-github');
-```
 
-Processor:
-
-```javascript
-var processor = remark().use(github);
-```
-
-Input:
-
-```javascript
 var input = [
   'References:',
   '',
@@ -49,12 +37,8 @@ var input = [
   '* Issue or PR comment: https://github.com/wooorm/remark-github/issues/3#issue-151160339',
   '* Mention: @ben-eb.'
 ].join('\n');
-```
 
-Process:
-
-```javascript
-var doc = processor.process(input).toString();
+console.log(remark().use(github).process(input).toString());
 ```
 
 Yields:
