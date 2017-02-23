@@ -238,5 +238,5 @@ function github(value, repo) {
     options = repo;
   }
 
-  return remark().use(remarkGitHub, options).process(value).toString();
+  return remark().use(remarkGitHub, options).processSync(value).toString();
 }

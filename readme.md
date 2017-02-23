@@ -38,7 +38,7 @@ var input = [
   '* Mention: @ben-eb.'
 ].join('\n');
 
-console.log(remark().use(github).process(input).toString());
+console.log(remark().use(github).processSync(input).toString());
 ```
 
 Yields:
