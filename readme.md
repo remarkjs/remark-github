@@ -79,25 +79,38 @@ Some links:
 ### `remark.use(github[, options])`
 
 Adds references to commits, issues, pull-requests, and users similar to how
-[GitHub][writing-on-github]
-renders these in issues, comments, and pull request descriptions.
+[GitHub][writing-on-github] renders these in issues, comments, and pull request
+descriptions.
 
-*   Commits: `1f2a4fb` — [`1f2a4fb`][sha]
-*   Commits across forks: `wooorm@1f2a4fb` — [wooorm@`1f2a4fb`][user-sha]
-*   Commits across projects: `wooorm/remark-github@1f2a4fb`
-    — [wooorm/remark-github@`1f2a4fb`][project-sha]
-*   Prefix issues: `GH-1` — [GH-1][issue]
-*   Hash issues: `#1` — [#1][issue]
-*   Issues across forks: `wooorm#1` — [wooorm#1][user-issue]
-*   Issues across projects: `wooorm/remark-github#1`
-    — [wooorm/remark-github#1][project-issue]
-*   At-mentions: `@mention` and `@wooorm`.
-    — [**@mention**][mentions] and [**@wooorm**][mention]
+###### Conversion
+
+*   Commits:
+    `1f2a4fb` → [`1f2a4fb`][sha]
+*   Commits across forks:
+    `wooorm@1f2a4fb` → [wooorm@`1f2a4fb`][user-sha]
+*   Commits across projects:
+    `wooorm/remark-github@1f2a4fb` →
+    [wooorm/remark-github@`1f2a4fb`][project-sha]
+*   Prefix issues:
+    `GH-1` → [GH-1][issue]
+*   Hash issues:
+    `#1` → [#1][issue]
+*   Issues across forks:
+    `wooorm#1` → [wooorm#1][user-issue]
+*   Issues across projects:
+    `wooorm/remark-github#1` → [wooorm/remark-github#1][project-issue]
+*   At-mentions:
+    `@mention` and `@wooorm` →
+    [**@mention**][mentions] and [**@wooorm**][mention]
+
+###### Repository
 
 These links are generated relative to a project.  In Node this is
 auto-detected by loading `package.json` and looking for a `repository`
 field.  In the browser, or when overwriting this, you can pass a
 `repository` in `options`.
+
+###### Mentions
 
 By default, mentions are wrapped in `strong` nodes (which render to
 `<strong>` in HTML), to simulate the look of mentions on GitHub.
