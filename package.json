@@ -23,7 +23,6 @@
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
   ],
   "dependencies": {
-    "has": "^1.0.1",
     "is-alphabetical": "^1.0.0",
     "is-decimal": "^1.0.0",
     "is-hexadecimal": "^1.0.0",
