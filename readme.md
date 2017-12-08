@@ -118,6 +118,13 @@ However, this creates different HTML markup, as the GitHub site applies
 these styles using CSS.  Pass `mentionStrong: false` to turn off this
 behaviour.
 
+## Contribute
+
+See [`contribute.md` in `remarkjs/remarkj`][contribute] for ways to get started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -159,3 +166,7 @@ behaviour.
 [mentions]: https://github.com/blog/821
 
 [mention]: https://github.com/wooorm
+
+[contribute]: https://github.com/remarkjs/remark/blob/master/contributing.md
+
+[coc]: https://github.com/remarkjs/remark/blob/master/code-of-conduct.md
