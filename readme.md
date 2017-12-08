@@ -20,19 +20,19 @@ Some references:
 
 -   Commit: f8083175fe890cbf14f41d0a06e7aa35d4989587
 -   Commit (fork): foo@f8083175fe890cbf14f41d0a06e7aa35d4989587
--   Commit (repo): wooorm/remark@e1aa9f6c02de18b9459b7d269712bcb50183ce89
+-   Commit (repo): remarkjs/remark@e1aa9f6c02de18b9459b7d269712bcb50183ce89
 -   Issue or PR (`#`): #1
 -   Issue or PR (`GH-`): GH-1
 -   Issue or PR (fork): foo#1
--   Issue or PR (project): wooorm/remark#1
+-   Issue or PR (project): remarkjs/remark#1
 -   Mention: @wooorm
 
 Some links:
 
--   Commit: https://github.com/wooorm/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89
--   Commit comment: https://github.com/wooorm/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693
--   Issue or PR: https://github.com/wooorm/remark/issues/182
--   Issue or PR comment: https://github.com/wooorm/remark-github/issues/3#issue-151160339
+-   Commit: https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89
+-   Commit comment: https://github.com/remarkjs/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693
+-   Issue or PR: https://github.com/remarkjs/remark/issues/182
+-   Issue or PR comment: https://github.com/remarkjs/remark-github/issues/3#issue-151160339
 -   Mention: @ben-eb
 ```
 
@@ -56,21 +56,21 @@ Now, running `node example` yields:
 ```markdown
 Some references:
 
--   Commit: [`f808317`](https://github.com/wooorm/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
+-   Commit: [`f808317`](https://github.com/remarkjs/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
 -   Commit (fork): [foo@`f808317`](https://github.com/foo/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
--   Commit (repo): [wooorm/remark@`e1aa9f6`](https://github.com/wooorm/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
--   Issue or PR (`#`): [#1](https://github.com/wooorm/remark-github/issues/1)
--   Issue or PR (`GH-`): [GH-1](https://github.com/wooorm/remark-github/issues/1)
+-   Commit (repo): [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
+-   Issue or PR (`#`): [#1](https://github.com/remarkjs/remark-github/issues/1)
+-   Issue or PR (`GH-`): [GH-1](https://github.com/remarkjs/remark-github/issues/1)
 -   Issue or PR (fork): [foo#1](https://github.com/foo/remark-github/issues/1)
--   Issue or PR (project): [wooorm/remark#1](https://github.com/wooorm/remark/issues/1)
+-   Issue or PR (project): [remarkjs/remark#1](https://github.com/remarkjs/remark/issues/1)
 -   Mention: [**@wooorm**](https://github.com/wooorm)
 
 Some links:
 
--   Commit: [wooorm/remark@`e1aa9f6`](https://github.com/wooorm/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
--   Commit comment: [wooorm/remark@`ac63bc3` (comment)](https://github.com/wooorm/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693)
--   Issue or PR: [wooorm/remark#182](https://github.com/wooorm/remark/issues/182)
--   Issue or PR comment: [#3 (comment)](https://github.com/wooorm/remark-github/issues/3#issue-151160339)
+-   Commit: [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
+-   Commit comment: [remarkjs/remark@`ac63bc3` (comment)](https://github.com/remarkjs/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693)
+-   Issue or PR: [remarkjs/remark#182](https://github.com/remarkjs/remark/issues/182)
+-   Issue or PR comment: [#3 (comment)](https://github.com/remarkjs/remark-github/issues/3#issue-151160339)
 -   Mention: [**@ben-eb**](https://github.com/ben-eb)
 ```
 
@@ -87,18 +87,18 @@ descriptions.
 *   Commits:
     `1f2a4fb` → [`1f2a4fb`][sha]
 *   Commits across forks:
-    `wooorm@1f2a4fb` → [wooorm@`1f2a4fb`][user-sha]
+    `remarkjs@1f2a4fb` → [remarkjs@`1f2a4fb`][user-sha]
 *   Commits across projects:
-    `wooorm/remark-github@1f2a4fb` →
-    [wooorm/remark-github@`1f2a4fb`][project-sha]
+    `remarkjs/remark-github@1f2a4fb` →
+    [remarkjs/remark-github@`1f2a4fb`][project-sha]
 *   Prefix issues:
     `GH-1` → [GH-1][issue]
 *   Hash issues:
     `#1` → [#1][issue]
 *   Issues across forks:
-    `wooorm#1` → [wooorm#1][user-issue]
+    `remarkjs#1` → [remarkjs#1][user-issue]
 *   Issues across projects:
-    `wooorm/remark-github#1` → [wooorm/remark-github#1][project-issue]
+    `remarkjs/remark-github#1` → [remarkjs/remark-github#1][project-issue]
 *   At-mentions:
     `@mention` and `@wooorm` →
     [**@mention**][mentions] and [**@wooorm**][mention]
@@ -124,17 +124,17 @@ behaviour.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/wooorm/remark-github.svg
+[build-badge]: https://img.shields.io/travis/remarkjs/remark-github.svg
 
-[build-status]: https://travis-ci.org/wooorm/remark-github
+[build-status]: https://travis-ci.org/remarkjs/remark-github
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/remark-github.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/remarkjs/remark-github.svg
 
-[coverage-status]: https://codecov.io/github/wooorm/remark-github
+[coverage-status]: https://codecov.io/github/remarkjs/remark-github
 
-[chat-badge]: https://img.shields.io/gitter/room/wooorm/remark.svg
+[chat-badge]: https://img.shields.io/gitter/room/remarkjs/Lobby.svg
 
-[chat]: https://gitter.im/wooorm/remark
+[chat]: https://gitter.im/remarkjs/Lobby
 
 [license]: LICENSE
 
@@ -144,17 +144,17 @@ behaviour.
 
 [writing-on-github]: https://help.github.com/articles/writing-on-github/#references
 
-[sha]: https://github.com/wooorm/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
+[sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
 
-[user-sha]: https://github.com/wooorm/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
+[user-sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
 
-[project-sha]: https://github.com/wooorm/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
+[project-sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
 
-[issue]: https://github.com/wooorm/remark-github/issues/1
+[issue]: https://github.com/remarkjs/remark-github/issues/1
 
-[user-issue]: https://github.com/wooorm/remark-github/issues/1
+[user-issue]: https://github.com/remarkjs/remark-github/issues/1
 
-[project-issue]: https://github.com/wooorm/remark-github/issues/1
+[project-issue]: https://github.com/remarkjs/remark-github/issues/1
 
 [mentions]: https://github.com/blog/821
 
