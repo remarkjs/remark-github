@@ -143,6 +143,11 @@ var repositories = [
     'emitter'
   ],
   [
+    'mame/_',
+    'mame',
+    '_'
+  ],
+  [
     'github/.gitignore',
     'github',
     '.gitignore'
