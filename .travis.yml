@@ -7,7 +7,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: FbRS8IqAHbmwPSSuMaE9a2EV4Br/AIbAwFrsxKmhqMlK8Rc/irnopku+3WKYeuRud/cAqTZsPvv8h4iAik+91KVS5l9acSVpf5M8Wghz6AAxXRBjJ0NALMgqqbDypmdJZf30QCuVq0G0u6Nuxc4D7udg7o76o09fCBmP2ZahjIc=
+    secure: aUDrUzCeMiwPIJu03cd/cZNRy2JBRvVtfqntfChmmXJEb0A3UZVN4pMqOPk5iRa27I+h8oLYinbT7b4x4Ehn303kUemQeiIJgXdWVwwPXfYfSun+DdpVbNQSEv0evlKMt61SUvoAnp/oVCWrFz96a7jpy9JgZyRM8nLipG1VeOw=
   file:
     - "remark-github.js"
     - "remark-github.min.js"
