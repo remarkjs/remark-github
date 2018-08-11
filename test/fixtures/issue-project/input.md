@@ -13,7 +13,9 @@ wooorm/remark#1
 and here
     wooorm/remark#1
 
-Usernames: this is not a valid, -wooorm/remark#1; nor is this wooorm-/remark#1; but this is w-w/remark#1, and so is w/remark#1 and ww/remark#1.
+Usernames: this is not a valid, -wooorm/remark#1; but this is w-w/remark#1, and so is w/remark#1 and ww/remark#1.
+
+Note that this is no longer valid, but used to be: w-/remark#1.
 
 Project names: this is not a valid, wooorm/c.git#1; but this is wooorm/c#1, so is w/w#1, and ww/.gitconfig#1.
 

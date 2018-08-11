@@ -8,4 +8,8 @@ Additionally, GitHub does something funny with [**@mention**](https://github.com
 
 Some valid real world examples: [**@a**](https://github.com/a), [**@github**](https://github.com/github), [**@github/security**](https://github.com/github/security).
 
-But these names are invalid: @-w, @w-, but this is: [**@w-w**](https://github.com/w-w).
+But this is invalid: @-w.
+
+This is valid: [**@w-w**](https://github.com/w-w).
+
+This used to be valid: [**@w-**](https://github.com/w-)

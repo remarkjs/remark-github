@@ -13,6 +13,6 @@ They work here
 and here
     [wooorm#1](https://github.com/wooorm/remark/issues/1)
 
-This is not a valid, -wooorm#1; nor is this wooorm-#1; but this is [w-w#1](https://github.com/w-w/remark/issues/1), and so is [w#1](https://github.com/w/remark/issues/1) and [ww#1](https://github.com/ww/remark/issues/1).
+This is not a valid, -wooorm#1; but this is [w-w#1](https://github.com/w-w/remark/issues/1), and so is [w#1](https://github.com/w/remark/issues/1) and [ww#1](https://github.com/ww/remark/issues/1), and [w-#1](https://github.com/w-/remark/issues/1) used to be valid.
 
 This is too long: wooormwooormwooormwooormwooormwooormwooo#1 (40 character username).

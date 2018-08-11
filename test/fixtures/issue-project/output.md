@@ -13,7 +13,9 @@ They work here
 and here
     [wooorm/remark#1](https://github.com/wooorm/remark/issues/1)
 
-Usernames: this is not a valid, -wooorm/remark#1; nor is this wooorm-/remark#1; but this is [w-w/remark#1](https://github.com/w-w/remark/issues/1), and so is [w/remark#1](https://github.com/w/remark/issues/1) and [ww/remark#1](https://github.com/ww/remark/issues/1).
+Usernames: this is not a valid, -wooorm/remark#1; but this is [w-w/remark#1](https://github.com/w-w/remark/issues/1), and so is [w/remark#1](https://github.com/w/remark/issues/1) and [ww/remark#1](https://github.com/ww/remark/issues/1).
+
+Note that this is no longer valid, but used to be: [w-/remark#1](https://github.com/w-/remark/issues/1).
 
 Project names: this is not a valid, wooorm/c.git#1; but this is [wooorm/c#1](https://github.com/wooorm/c/issues/1), so is [w/w#1](https://github.com/w/w/issues/1), and [ww/.gitconfig#1](https://github.com/ww/.gitconfig/issues/1).
 

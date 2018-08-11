@@ -56,6 +56,8 @@ Or here
 
 And these SHAs which could also be words? wooorm/remark@deedeed, and wooorm/remark@fabaceae.
 
-Usernames: this is not a valid, -wooorm/remark@0000000; nor is this wooorm-/remark@0000000; but this is w-w/remark@0000000, and so is w/remark@0000000 and ww/remark@0000000.
+Usernames: this is not a valid, -wooorm/remark@0000000; but this is w-w/remark@0000000, and so is w/remark@0000000 and ww/remark@0000000.
+
+This used to be valid: wooorm-/remark@0000000.
 
 Project names: this is not a valid, wooorm/c.git@0000000; but this is wooorm/c@0000000, so is w/w@0000000, and ww/.gitconfig@0000000.

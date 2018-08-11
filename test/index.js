@@ -114,7 +114,8 @@ var repositories = [
   ],
   ['mame/_', 'mame', '_'],
   ['github/.gitignore', 'github', '.gitignore'],
-  ['github/.gitc', 'github', '.gitc']
+  ['github/.gitc', 'github', '.gitc'],
+  ['Qix-/color-convert', 'Qix-', 'color-convert']
 ]
 
 test('Repositories', function(t) {

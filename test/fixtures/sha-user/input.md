@@ -56,7 +56,9 @@ Or here
 
 And these SHAs which could also be words? wooorm@deedeed, and wooorm@fabaceae.
 
-This is not a valid, -wooorm@0000000; nor is this wooorm-@0000000; but this is w-w@0000000, and so is w@0000000 and ww@0000000.
+This is not a valid, -wooorm@0000000; but this is w-w@0000000, and so is w@0000000 and ww@0000000.
+
+This used to be valid: wooorm-@0000000.
 
 And here’s an example of a disposable e-mail domain, which starts with 7 hexidecimal characters: wooorm@deadaddress.com, which shouldn’t match, because there’s no word break after the SHA-like part.
 

@@ -8,4 +8,8 @@ Additionally, GitHub does something funny with @mention’s and @mentions.
 
 Some valid real world examples: @a, @github, @github/security.
 
-But these names are invalid: @-w, @w-, but this is: @w-w.
+But this is invalid: @-w.
+
+This is valid: @w-w.
+
+This used to be valid: @w-
