@@ -35,18 +35,18 @@
   },
   "devDependencies": {
     "browserify": "^14.0.0",
-    "esmangle": "^1.0.0",
     "nyc": "^11.0.2",
     "remark": "^8.0.0",
     "remark-cli": "^4.0.0",
     "remark-preset-wooorm": "^3.0.0",
     "tape": "^4.4.0",
+    "tinyify": "^2.4.3",
     "xo": "^0.18.0"
   },
   "scripts": {
     "build-md": "remark *.md -qfo",
-    "build-bundle": "browserify index.js -s remarkGitHub > remark-github.js",
-    "build-mangle": "esmangle remark-github.js > remark-github.min.js",
+    "build-bundle": "browserify . -s remarkGitHub > remark-github.js",
+    "build-mangle": "browserify . -s remarkGitHub -p tinyify > remark-github.js",
     "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
     "lint": "xo",
     "test-api": "node test",
