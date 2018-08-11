@@ -5,3 +5,4 @@ coverage/
 node_modules/
 remark-github.js
 remark-github.min.js
+yarn.lock
