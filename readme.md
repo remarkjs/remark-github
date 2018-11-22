@@ -1,4 +1,11 @@
-# remark-github [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
+# remark-github
+
+[![Build][build-badge]][build]
+[![Coverage][coverage-badge]][coverage]
+[![Downloads][downloads-badge]][downloads]
+[![Chat][chat-badge]][chat]
+[![Sponsors][sponsors-badge]][collective]
+[![Backers][backers-badge]][collective]
 
 Auto-link references to commits, issues, pull-requests, and users like
 GitHub: [Writing on GitHub][writing-on-github].
@@ -134,15 +141,25 @@ repository, organisation, or community you agree to abide by its terms.
 
 [build-badge]: https://img.shields.io/travis/remarkjs/remark-github.svg
 
-[build-status]: https://travis-ci.org/remarkjs/remark-github
+[build]: https://travis-ci.org/remarkjs/remark-github
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/remarkjs/remark-github.svg
 
-[coverage-status]: https://codecov.io/github/remarkjs/remark-github
+[coverage]: https://codecov.io/github/remarkjs/remark-github
 
-[chat-badge]: https://img.shields.io/gitter/room/remarkjs/Lobby.svg
+[downloads-badge]: https://img.shields.io/npm/dm/remark-github.svg
 
-[chat]: https://gitter.im/remarkjs/Lobby
+[downloads]: https://www.npmjs.com/package/remark-github
+
+[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+
+[chat]: https://spectrum.chat/unified/remark
+
+[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
+
+[backers-badge]: https://opencollective.com/unified/backers/badge.svg
+
+[collective]: https://opencollective.com/unified
 
 [license]: license
 
