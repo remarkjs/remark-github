@@ -20,7 +20,7 @@ test('remark-github()', function(t) {
   t.equal(typeof remarkGitHub, 'function', 'should be a function')
 
   t.doesNotThrow(function() {
-    remark().use(remarkGitHub)
+    remark().use(remarkGitHub).freeze()
   }, 'should not throw if not passed options')
 
   t.equal(
