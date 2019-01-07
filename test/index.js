@@ -20,7 +20,9 @@ test('remark-github()', function(t) {
   t.equal(typeof remarkGitHub, 'function', 'should be a function')
 
   t.doesNotThrow(function() {
-    remark().use(remarkGitHub).freeze()
+    remark()
+      .use(remarkGitHub)
+      .freeze()
   }, 'should not throw if not passed options')
 
   t.equal(
@@ -115,7 +117,8 @@ var repositories = [
   ['mame/_', 'mame', '_'],
   ['github/.gitignore', 'github', '.gitignore'],
   ['github/.gitc', 'github', '.gitc'],
-  ['Qix-/color-convert', 'Qix-', 'color-convert']
+  ['Qix-/color-convert', 'Qix-', 'color-convert'],
+  ['wooorm/wooorm.github.io', 'wooorm', 'wooorm.github.io']
 ]
 
 test('Repositories', function(t) {

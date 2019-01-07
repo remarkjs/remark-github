@@ -54,6 +54,9 @@ Across repositories:
 Same user, different repository:
 [wooorm/bar@`1f2a`](https://github.com/wooorm/bar/commit/1f2a)
 
+With dots ([GH-14](https://github.com/wooorm/remark/issues/14))
+[wooorm/wooorm.github.io@`e5bd`](https://github.com/wooorm/wooorm.github.io/commit/e5bd)
+
 ## Commit comments
 
 A commit comment:
