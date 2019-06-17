@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-- lts/boron
-- node
+  - lts/dubnium
+  - node
 after_script: bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: releases
@@ -9,7 +9,7 @@ deploy:
   api_key:
     secure: aUDrUzCeMiwPIJu03cd/cZNRy2JBRvVtfqntfChmmXJEb0A3UZVN4pMqOPk5iRa27I+h8oLYinbT7b4x4Ehn303kUemQeiIJgXdWVwwPXfYfSun+DdpVbNQSEv0evlKMt61SUvoAnp/oVCWrFz96a7jpy9JgZyRM8nLipG1VeOw=
   file:
-    - "remark-github.js"
-    - "remark-github.min.js"
+    - 'remark-github.js'
+    - 'remark-github.min.js'
   on:
     tags: true
