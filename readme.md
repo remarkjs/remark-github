@@ -3,22 +3,24 @@
 [![Build][build-badge]][build]
 [![Coverage][coverage-badge]][coverage]
 [![Downloads][downloads-badge]][downloads]
-[![Chat][chat-badge]][chat]
+[![Size][size-badge]][size]
 [![Sponsors][sponsors-badge]][collective]
 [![Backers][backers-badge]][collective]
+[![Chat][chat-badge]][chat]
 
-Auto-link references to commits, issues, pull-requests, and users like
-GitHub: [Writing on GitHub][writing-on-github].
+[**remark**][remark] plugin to autolink references to commits, issues,
+pull-requests, and users, like in GitHub issues, PRs, and comments (see [Writing
+on GitHub][writing-on-github]).
 
-## Installation
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install remark-github
 ```
 
-## Usage
+## Use
 
 Say we have the following file, `example.md`:
 
@@ -45,7 +47,7 @@ Some links:
 
 And our script, `example.js`, looks as follows:
 
-```javascript
+```js
 var vfile = require('to-vfile')
 var remark = require('remark')
 var github = require('remark-github')
@@ -85,9 +87,8 @@ Some links:
 
 ### `remark.use(github[, options])`
 
-Adds references to commits, issues, pull-requests, and users similar to how
-[GitHub][writing-on-github] renders these in issues, comments, and pull request
-descriptions.
+Autolink references to commits, issues, pull-requests, and users, like in GitHub
+issues, PRs, and comments (see [Writing on GitHub][writing-on-github]).
 
 ###### Conversion
 
@@ -112,26 +113,29 @@ descriptions.
 
 ###### Repository
 
-These links are generated relative to a project.  In Node this is
-auto-detected by loading `package.json` and looking for a `repository`
-field.  In the browser, or when overwriting this, you can pass a
-`repository` in `options`.
+These links are generated relative to a project.
+In Node this is detected automatically by loading `package.json` and looking for
+a `repository` field.
+In the browser, or when overwriting this, you can pass a `repository` in
+`options`.
 
 ###### Mentions
 
-By default, mentions are wrapped in `strong` nodes (which render to
-`<strong>` in HTML), to simulate the look of mentions on GitHub.
-However, this creates different HTML markup, as the GitHub site applies
-these styles using CSS.  Pass `mentionStrong: false` to turn off this
-behaviour.
+By default, mentions are wrapped in `strong` nodes (that render to `<strong>` in
+HTML), to simulate the look of mentions on GitHub.
+However, this creates different HTML markup, as the GitHub site applies these
+styles using CSS.
+Pass `mentionStrong: false` to turn off this behaviour.
 
 ## Contribute
 
-See [`contributing.md` in `remarkjs/remark`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`remarkjs/.github`][health] for ways
+to get started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -139,7 +143,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/remarkjs/remark-github.svg
+[build-badge]: https://img.shields.io/travis/remarkjs/remark-github/master.svg
 
 [build]: https://travis-ci.org/remarkjs/remark-github
 
@@ -151,9 +155,9 @@ repository, organisation, or community you agree to abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/remark-github
 
-[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+[size-badge]: https://img.shields.io/bundlephobia/minzip/remark-github.svg
 
-[chat]: https://spectrum.chat/unified/remark
+[size]: https://bundlephobia.com/result?p=remark-github
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -161,11 +165,25 @@ repository, organisation, or community you agree to abide by its terms.
 
 [collective]: https://opencollective.com/unified
 
+[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+
+[chat]: https://spectrum.chat/unified/remark
+
+[npm]: https://docs.npmjs.com/cli/install
+
+[health]: https://github.com/remarkjs/.github
+
+[contributing]: https://github.com/remarkjs/.github/blob/master/contributing.md
+
+[support]: https://github.com/remarkjs/.github/blob/master/support.md
+
+[coc]: https://github.com/remarkjs/.github/blob/master/code-of-conduct.md
+
 [license]: license
 
 [author]: https://wooorm.com
 
-[npm]: https://docs.npmjs.com/cli/install
+[remark]: https://github.com/remarkjs/remark
 
 [writing-on-github]: https://help.github.com/articles/writing-on-github/#references
 
@@ -184,7 +202,3 @@ repository, organisation, or community you agree to abide by its terms.
 [mentions]: https://github.com/blog/821
 
 [mention]: https://github.com/wooorm
-
-[contributing]: https://github.com/remarkjs/remark/blob/master/contributing.md
-
-[coc]: https://github.com/remarkjs/remark/blob/master/code-of-conduct.md
