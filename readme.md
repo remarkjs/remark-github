@@ -108,8 +108,7 @@ issues, PRs, and comments (see [Writing on GitHub][writing-on-github]).
 *   Issues across projects:
     `remarkjs/remark-github#1` → [remarkjs/remark-github#1][project-issue]
 *   At-mentions:
-    `@mention` and `@wooorm` →
-    [**@mention**][mentions] and [**@wooorm**][mention]
+    `@wooorm` → [**@wooorm**][mention]
 
 ###### Repository
 
@@ -198,7 +197,5 @@ abide by its terms.
 [user-issue]: https://github.com/remarkjs/remark-github/issues/1
 
 [project-issue]: https://github.com/remarkjs/remark-github/issues/1
-
-[mentions]: https://github.com/blog/821
 
 [mention]: https://github.com/wooorm

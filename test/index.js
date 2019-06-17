@@ -26,14 +26,14 @@ test('remark-github()', function(t) {
   }, 'should not throw if not passed options')
 
   t.equal(
-    github('@mention'),
-    '[**@mention**](https://github.com/blog/821)\n',
+    github('@wooorm'),
+    '[**@wooorm**](https://github.com/wooorm)\n',
     'should wrap mentions in `strong` by default'
   )
 
   t.equal(
-    github('@mention', {mentionStrong: false}),
-    '[@mention](https://github.com/blog/821)\n',
+    github('@wooorm', {mentionStrong: false}),
+    '[@wooorm](https://github.com/wooorm)\n',
     'should support `mentionStrong: false`'
   )
 
