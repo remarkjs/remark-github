@@ -57,9 +57,8 @@ test('Fixtures', function(t) {
   t.end()
 })
 
-/* List of repo references possible in `package.json`s.
- * From repo-utils/parse-github-repo-url, with some
- * tiny additions. */
+// List of repo references possible in `package.json`s.
+// From repo-utils/parse-github-repo-url, with some tiny additions.
 var repositories = [
   ['component/emitter', 'component', 'emitter'],
   ['https://github.com/component/emitter', 'component', 'emitter'],
@@ -173,7 +172,6 @@ test('Repositories', function(t) {
   t.end()
 })
 
-/* Miscellaneous. */
 test('Miscellaneous', function(t) {
   var original = process.cwd()
 
@@ -207,7 +205,7 @@ test('Miscellaneous', function(t) {
   t.end()
 })
 
-/* Shortcut to process. */
+// Shortcut to process.
 function github(value, repo) {
   var options
 
