@@ -1,11 +1,11 @@
 'use strict'
 
-/* eslint-disable import/no-extraneous-dependencies */
-
 var fs = require('fs')
 var path = require('path')
+/* eslint-disable import/no-extraneous-dependencies */
 var test = require('tape')
 var remark = require('remark')
+/* eslint-enable import/no-extraneous-dependencies */
 var remarkGitHub = require('..')
 
 var join = path.join
