@@ -12,9 +12,9 @@ var join = path.join
 var read = fs.readFileSync
 var readdir = fs.readdirSync
 
-var ROOT = join(__dirname, 'fixtures')
+var root = join(__dirname, 'fixtures')
 
-var fixtures = readdir(ROOT)
+var fixtures = readdir(root)
 
 test('remark-github()', function(t) {
   t.equal(typeof remarkGitHub, 'function', 'should be a function')
@@ -46,7 +46,7 @@ test('Fixtures', function(t) {
       return filepath.indexOf('.') !== 0
     })
     .forEach(function(fixture) {
-      var filepath = join(ROOT, fixture)
+      var filepath = join(root, fixture)
       var output = read(join(filepath, 'output.md'), 'utf-8')
       var input = read(join(filepath, 'input.md'), 'utf-8')
       var result = github(input, 'wooorm/remark')
