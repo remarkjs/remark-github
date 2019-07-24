@@ -95,10 +95,9 @@ issues, PRs, and comments (see [Writing on GitHub][writing-on-github]).
 *   Commits:
     `1f2a4fb` → [`1f2a4fb`][sha]
 *   Commits across forks:
-    `remarkjs@1f2a4fb` → [remarkjs@`1f2a4fb`][user-sha]
+    `remarkjs@1f2a4fb` → [remarkjs@`1f2a4fb`][sha]
 *   Commits across projects:
-    `remarkjs/remark-github@1f2a4fb` →
-    [remarkjs/remark-github@`1f2a4fb`][project-sha]
+    `remarkjs/remark-github@1f2a4fb` → [remarkjs/remark-github@`1f2a4fb`][sha]
 *   Prefix issues:
     `GH-1` → [GH-1][issue]
 *   Hash issues:
@@ -125,6 +124,12 @@ HTML), to simulate the look of mentions on GitHub.
 However, this creates different HTML markup, as the GitHub site applies these
 styles using CSS.
 Pass `mentionStrong: false` to turn off this behaviour.
+
+## Security
+
+Use of `remark-github` does not involve [**rehype**][rehype] ([**hast**][hast]).
+It does inject links based on user content, but those links only go to GitHub.
+There are no openings for [cross-site scripting (XSS)][xss] attacks.
 
 ## Contribute
 
@@ -188,10 +193,6 @@ abide by its terms.
 
 [sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
 
-[user-sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
-
-[project-sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
-
 [issue]: https://github.com/remarkjs/remark-github/issues/1
 
 [user-issue]: https://github.com/remarkjs/remark-github/issues/1
@@ -199,3 +200,9 @@ abide by its terms.
 [project-issue]: https://github.com/remarkjs/remark-github/issues/1
 
 [mention]: https://github.com/wooorm
+
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[rehype]: https://github.com/rehypejs/rehype
+
+[hast]: https://github.com/syntax-tree/hast
