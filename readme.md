@@ -8,7 +8,7 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**remark**][remark] plugin to autolink references to commits, issues,
+[**remark**][remark] plugin to automatically link references to commits, issues,
 pull-requests, and users, like in GitHub issues, PRs, and comments (see [Writing
 on GitHub][writing-on-github]).
 
@@ -87,8 +87,9 @@ Some links:
 
 ### `remark.use(github[, options])`
 
-Autolink references to commits, issues, pull-requests, and users, like in GitHub
-issues, PRs, and comments (see [Writing on GitHub][writing-on-github]).
+Automatically link references to commits, issues, pull-requests, and users, like
+in GitHub issues, PRs, and comments (see
+[Writing on GitHub][writing-on-github]).
 
 ###### Conversion
 
@@ -123,7 +124,7 @@ By default, mentions are wrapped in `strong` nodes (that render to `<strong>` in
 HTML), to simulate the look of mentions on GitHub.
 However, this creates different HTML markup, as the GitHub site applies these
 styles using CSS.
-Pass `mentionStrong: false` to turn off this behaviour.
+Pass `mentionStrong: false` to turn off this behavior.
 
 ## Security
 
@@ -137,8 +138,8 @@ See [`contributing.md`][contributing] in [`remarkjs/.github`][health] for ways
 to get started.
 See [`support.md`][support] for ways to get help.
 
-This project has a [Code of Conduct][coc].
-By interacting with this repository, organisation, or community you agree to
+This project has a [code of conduct][coc].
+By interacting with this repository, organization, or community you agree to
 abide by its terms.
 
 ## License
@@ -169,7 +170,7 @@ abide by its terms.
 
 [collective]: https://opencollective.com/unified
 
-[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+[chat-badge]: https://img.shields.io/badge/chat-spectrum-7b16ff.svg
 
 [chat]: https://spectrum.chat/unified/remark
 
