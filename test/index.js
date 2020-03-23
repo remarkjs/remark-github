@@ -2,10 +2,8 @@
 
 var fs = require('fs')
 var path = require('path')
-/* eslint-disable import/no-extraneous-dependencies */
 var test = require('tape')
 var remark = require('remark')
-/* eslint-enable import/no-extraneous-dependencies */
 var remarkGitHub = require('..')
 
 var join = path.join
@@ -16,13 +14,11 @@ var root = join(__dirname, 'fixtures')
 
 var fixtures = readdir(root)
 
-test('remark-github()', function(t) {
+test('remark-github()', function (t) {
   t.equal(typeof remarkGitHub, 'function', 'should be a function')
 
-  t.doesNotThrow(function() {
-    remark()
-      .use(remarkGitHub)
-      .freeze()
+  t.doesNotThrow(function () {
+    remark().use(remarkGitHub).freeze()
   }, 'should not throw if not passed options')
 
   t.equal(
@@ -40,12 +36,12 @@ test('remark-github()', function(t) {
   t.end()
 })
 
-test('Fixtures', function(t) {
+test('Fixtures', function (t) {
   fixtures
-    .filter(function(filepath) {
+    .filter(function (filepath) {
       return filepath.indexOf('.') !== 0
     })
-    .forEach(function(fixture) {
+    .forEach(function (fixture) {
       var filepath = join(root, fixture)
       var output = read(join(filepath, 'output.md'), 'utf-8')
       var input = read(join(filepath, 'input.md'), 'utf-8')
@@ -120,8 +116,8 @@ var repositories = [
   ['wooorm/wooorm.github.io', 'wooorm', 'wooorm.github.io']
 ]
 
-test('Repositories', function(t) {
-  repositories.forEach(function(repo) {
+test('Repositories', function (t) {
+  repositories.forEach(function (repo) {
     var user = repo[1]
     var project = repo[2]
 
@@ -172,7 +168,7 @@ test('Repositories', function(t) {
   t.end()
 })
 
-test('Miscellaneous', function(t) {
+test('Miscellaneous', function (t) {
   var original = process.cwd()
 
   t.equal(
@@ -193,7 +189,7 @@ test('Miscellaneous', function(t) {
   process.chdir(join(__dirname, 'fixtures'))
 
   t.throws(
-    function() {
+    function () {
       github('1234567', null)
     },
     /Missing `repository`/,
@@ -215,8 +211,5 @@ function github(value, repo) {
     options = repo
   }
 
-  return remark()
-    .use(remarkGitHub, options)
-    .processSync(value)
-    .toString()
+  return remark().use(remarkGitHub, options).processSync(value).toString()
 }
