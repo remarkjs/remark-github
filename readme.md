@@ -116,7 +116,9 @@ These links are generated relative to a project.
 In Node this is detected automatically by loading `package.json` and looking for
 a `repository` field.
 In the browser, or when overwriting this, you can pass a `repository` in
-`options`.
+`options`.  
+The value of `repository` should be a URL to a GitHub repository, such as
+`'https://github.com/user/project.git'`, or only `'user/project'`.
 
 ###### Mentions
 
