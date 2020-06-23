@@ -116,7 +116,7 @@ These links are generated relative to a project.
 In Node this is detected automatically by loading `package.json` and looking for
 a `repository` field.
 In the browser, or when overwriting this, you can pass a `repository` in
-`options`.  
+`options`.
 The value of `repository` should be a URL to a GitHub repository, such as
 `'https://github.com/user/project.git'`, or only `'user/project'`.
 
@@ -150,7 +150,7 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/remarkjs/remark-github/master.svg
+[build-badge]: https://img.shields.io/travis/remarkjs/remark-github/main.svg
 
 [build]: https://travis-ci.org/remarkjs/remark-github
 
@@ -180,11 +180,11 @@ abide by its terms.
 
 [health]: https://github.com/remarkjs/.github
 
-[contributing]: https://github.com/remarkjs/.github/blob/master/contributing.md
+[contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
 
-[support]: https://github.com/remarkjs/.github/blob/master/support.md
+[support]: https://github.com/remarkjs/.github/blob/HEAD/support.md
 
-[coc]: https://github.com/remarkjs/.github/blob/master/code-of-conduct.md
+[coc]: https://github.com/remarkjs/.github/blob/HEAD/code-of-conduct.md
 
 [license]: license
 
