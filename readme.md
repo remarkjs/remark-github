@@ -104,9 +104,9 @@ in GitHub issues, PRs, and comments (see
 *   Hash issues:
     `#1` → [#1][issue]
 *   Issues across forks:
-    `remarkjs#1` → [remarkjs#1][user-issue]
+    `remarkjs#1` → [remarkjs#1][issue]
 *   Issues across projects:
-    `remarkjs/remark-github#1` → [remarkjs/remark-github#1][project-issue]
+    `remarkjs/remark-github#1` → [remarkjs/remark-github#1][issue]
 *   At-mentions:
     `@wooorm` → [**@wooorm**][mention]
 
@@ -197,10 +197,6 @@ abide by its terms.
 [sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
 
 [issue]: https://github.com/remarkjs/remark-github/issues/1
-
-[user-issue]: https://github.com/remarkjs/remark-github/issues/1
-
-[project-issue]: https://github.com/remarkjs/remark-github/issues/1
 
 [mention]: https://github.com/wooorm
 

@@ -47,15 +47,15 @@
     "browserify": "^16.0.0",
     "nyc": "^15.0.0",
     "prettier": "^2.0.0",
-    "remark": "^11.0.0",
-    "remark-cli": "^7.0.0",
-    "remark-preset-wooorm": "^6.0.0",
-    "tape": "^4.0.0",
+    "remark": "^12.0.0",
+    "remark-cli": "^8.0.0",
+    "remark-preset-wooorm": "^7.0.0",
+    "tape": "^5.0.0",
     "tinyify": "^2.0.0",
-    "xo": "^0.28.0"
+    "xo": "^0.32.0"
   },
   "scripts": {
-    "format": "remark *.md -qfo && prettier --write \"**/*.js\" && xo --fix",
+    "format": "remark . -qfo --ignore-pattern test/ && prettier . --write && xo --fix",
     "build-bundle": "browserify . -s remarkGitHub > remark-github.js",
     "build-mangle": "browserify . -s remarkGitHub -p tinyify > remark-github.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
@@ -81,6 +81,7 @@
     "prettier": true,
     "esnext": false,
     "rules": {
+      "unicorn/prefer-optional-catch-binding": "off",
       "unicorn/prefer-includes": "off"
     },
     "ignores": [
