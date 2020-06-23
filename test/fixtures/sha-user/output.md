@@ -60,6 +60,6 @@ This is not a valid, -wooorm@0000000; but this is [w-w@`0000000`](https://github
 
 This used to be valid: [wooorm-@`0000000`](https://github.com/wooorm-/remark/commit/0000000).
 
-And here’s an example of a disposable e-mail domain, which starts with 7 hexidecimal characters: wooorm@deadaddress.com, which shouldn’t match, because there’s no word break after the SHA-like part.
+And here’s an example of a disposable e-mail domain, which starts with 7 hexidecimal characters: [wooorm@deadaddress.com](mailto:wooorm@deadaddress.com), which shouldn’t match, because there’s no word break after the SHA-like part.
 
 This is too long: wooormwooormwooormwooormwooormwooormwooo#0000000 (40 character username).
