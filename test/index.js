@@ -232,16 +232,26 @@ test('Base URL', function (t) {
   var original = process.cwd()
 
   t.equal(
-    github('test@12345678', {baseUrl: 'https://enteprise-github.xyz:443'}),
-    '[test@`1234567`](https://enteprise-github.xyz:443/' +
-      'test/remark-github/commit/12345678)\n',
+    github('12345678', {baseUrl: 'https://enteprise-github.xyz:443'}),
+    '[`1234567`](https://enteprise-github.xyz:443/' +
+      'remarkjs/remark-github/commit/12345678)\n',
     'should use explicitly provided first'
   )
 
   t.equal(
-    github('test@12345678', null),
-    '[test@`1234567`](https://github.com/' +
-      'test/remark-github/commit/12345678)\n',
+    github('12345678', {
+      baseUrl: 'https://enteprise-github.xyz:443',
+      repository: 'foo/bar'
+    }),
+    '[`1234567`](https://enteprise-github.xyz:443/' +
+      'foo/bar/commit/12345678)\n',
+    'should work together with repository'
+  )
+
+  t.equal(
+    github('12345678', null),
+    '[`1234567`](https://github.com/' +
+      'remarkjs/remark-github/commit/12345678)\n',
     'should load a `package.json` when available'
   )
 
