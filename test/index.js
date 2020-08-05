@@ -250,7 +250,7 @@ test('Base URL', function (t) {
   t.equal(
     github('12345678', null),
     '[`1234567`](https://github.com/wooorm/remark/commit/12345678)\n',
-    'should accept a `repository.url` in a `package.json`'
+    'should default to https://github.com'
   )
 
   process.chdir(original)
