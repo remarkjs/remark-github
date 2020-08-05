@@ -56,70 +56,100 @@ test('Fixtures', function (t) {
 // List of repo references possible in `package.json`s.
 // From repo-utils/parse-github-repo-url, with some tiny additions.
 var repositories = [
-  ['component/emitter', 'component', 'emitter'],
-  ['https://github.com/component/emitter', 'component', 'emitter'],
-  ['git://github.com/component/emitter.git', 'component', 'emitter'],
+  ['component/emitter', 'component', 'emitter', 'https://github.com/'],
+  [
+    'https://github.com/component/emitter',
+    'component',
+    'emitter',
+    'https://github.com/'
+  ],
+  [
+    'git://github.com/component/emitter.git',
+    'component',
+    'emitter',
+    'https://github.com/'
+  ],
   [
     'https://github.com/repos/component/emitter/tarball',
     'component',
-    'emitter'
+    'emitter',
+    'https://github.com/'
   ],
   [
     'https://github.com/repos/component/emitter/zipball',
     'component',
-    'emitter'
+    'emitter',
+    'https://github.com/'
   ],
   [
     'https://codeload.github.com/component/emitter/legacy.zip',
     'component',
-    'emitter'
+    'emitter',
+    'https://codeload.github.com/'
   ],
   [
     'https://codeload.github.com/component/emitter/legacy.tar.gz',
     'component',
-    'emitter'
+    'emitter',
+    'https://codeload.github.com/'
   ],
-  ['component/emitter#1', 'component', 'emitter'],
-  ['component/emitter@1', 'component', 'emitter'],
-  ['component/emitter#"1"', 'component', 'emitter'],
-  ['component/emitter@"1"', 'component', 'emitter'],
-  ['git://github.com/component/emitter.git#1', 'component', 'emitter'],
+  ['component/emitter#1', 'component', 'emitter', 'https://github.com/'],
+  ['component/emitter@1', 'component', 'emitter', 'https://github.com/'],
+  ['component/emitter#"1"', 'component', 'emitter', 'https://github.com/'],
+  ['component/emitter@"1"', 'component', 'emitter', 'https://github.com/'],
+  [
+    'git://github.com/component/emitter.git#1',
+    'component',
+    'emitter',
+    'https://github.com/'
+  ],
   [
     'https://github.com/repos/component/emitter/tarball/1',
     'component',
-    'emitter'
+    'emitter',
+    'https://github.com/'
   ],
   [
     'https://github.com/repos/component/emitter/zipball/1',
     'component',
-    'emitter'
+    'emitter',
+    'https://github.com/'
   ],
   [
     'https://codeload.github.com/component/emitter/legacy.zip/1',
     'component',
-    'emitter'
+    'emitter',
+    'https://codeload.github.com/'
   ],
   [
     'https://codeload.github.com/component/emitter/legacy.tar.gz/1',
     'component',
-    'emitter'
+    'emitter',
+    'https://codeload.github.com/'
   ],
   [
     'https://github.com/component/emitter/archive/1.tar.gz',
     'component',
-    'emitter'
+    'emitter',
+    'https://github.com/'
   ],
-  ['mame/_', 'mame', '_'],
-  ['github/.gitignore', 'github', '.gitignore'],
-  ['github/.gitc', 'github', '.gitc'],
-  ['Qix-/color-convert', 'Qix-', 'color-convert'],
-  ['wooorm/wooorm.github.io', 'wooorm', 'wooorm.github.io']
+  ['mame/_', 'mame', '_', 'https://github.com/'],
+  ['github/.gitignore', 'github', '.gitignore', 'https://github.com/'],
+  ['github/.gitc', 'github', '.gitc', 'https://github.com/'],
+  ['Qix-/color-convert', 'Qix-', 'color-convert', 'https://github.com/'],
+  [
+    'wooorm/wooorm.github.io',
+    'wooorm',
+    'wooorm.github.io',
+    'https://github.com/'
+  ]
 ]
 
 test('Repositories', function (t) {
   repositories.forEach(function (repo) {
     var user = repo[1]
     var project = repo[2]
+    var baseUrl = repo[3]
 
     repo = repo[0]
 
@@ -136,27 +166,24 @@ test('Repositories', function (t) {
         repo
       ),
       [
-        '-   SHA: [`a5c3785`](https://github.com/' +
+        '-   SHA: [`a5c3785`](' +
+          baseUrl +
           user +
           '/' +
           project +
           '/commit/a5c3785ed8d6a35868bc169f07e40e' +
           '889087fd2e)',
-        '-   User@SHA: [wooorm@`a5c3785`](https://github.com/wooorm/' +
+        '-   User@SHA: [wooorm@`a5c3785`](' +
+          baseUrl +
+          'wooorm/' +
           project +
           '/commit/a5c3785ed8d6a35868bc169f07e40e' +
           '889087fd2e)',
-        '-   # Num: [#26](https://github.com/' +
-          user +
-          '/' +
-          project +
-          '/issues/26)',
-        '-   GH-Num: [GH-26](https://github.com/' +
-          user +
-          '/' +
-          project +
-          '/issues/26)',
-        '-   User#Num: [wooorm#26](https://github.com/wooorm/' +
+        '-   # Num: [#26](' + baseUrl + user + '/' + project + '/issues/26)',
+        '-   GH-Num: [GH-26](' + baseUrl + user + '/' + project + '/issues/26)',
+        '-   User#Num: [wooorm#26](' +
+          baseUrl +
+          'wooorm/' +
           project +
           '/issues/26)',
         ''
@@ -194,6 +221,36 @@ test('Miscellaneous', function (t) {
     },
     /Missing `repository`/,
     'should throw without `repository`'
+  )
+
+  process.chdir(original)
+
+  t.end()
+})
+
+test('Base URL', function (t) {
+  var original = process.cwd()
+
+  t.equal(
+    github('test@12345678', {baseUrl: 'https://enteprise-github.xyz:443'}),
+    '[test@`1234567`](https://enteprise-github.xyz:443/' +
+      'test/remark-github/commit/12345678)\n',
+    'should use explicitly provided first'
+  )
+
+  t.equal(
+    github('test@12345678', null),
+    '[test@`1234567`](https://github.com/' +
+      'test/remark-github/commit/12345678)\n',
+    'should load a `package.json` when available'
+  )
+
+  process.chdir(__dirname)
+
+  t.equal(
+    github('12345678', null),
+    '[`1234567`](https://github.com/wooorm/remark/commit/12345678)\n',
+    'should accept a `repository.url` in a `package.json`'
   )
 
   process.chdir(original)
