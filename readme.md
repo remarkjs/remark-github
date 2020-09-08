@@ -105,7 +105,9 @@ The value of `repository` should be a URL to a GitHub repository, such as
 
 ###### `options.baseUrl`
 
-By default base URL is determined from the `repository` (with the fallback to `'https://github.com'`). You can override this (e.g. when using GitHub Enterprise) by providing custom `baseUrl`.
+By default base URL is determined from the `repository` (with the fallback to  
+`'https://github.com'`).  You can override this (e.g. when using GitHub  
+Enterprise) by providing custom `baseUrl`.
 
 ##### Conversion
 
