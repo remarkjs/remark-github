@@ -82,8 +82,7 @@
     "esnext": false,
     "rules": {
       "unicorn/prefer-optional-catch-binding": "off",
-      "unicorn/prefer-includes": "off",
-      "node/no-deprecated-api": "warn"
+      "unicorn/prefer-includes": "off"
     },
     "ignores": [
       "remark-github.js"
