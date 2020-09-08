@@ -56,30 +56,18 @@ test('Fixtures', function (t) {
 // List of repo references possible in `package.json`s.
 // From repo-utils/parse-github-repo-url, with some tiny additions.
 var repositories = [
-  ['component/emitter', 'component', 'emitter', 'https://github.com/'],
-  [
-    'https://github.com/component/emitter',
-    'component',
-    'emitter',
-    'https://github.com/'
-  ],
-  [
-    'git://github.com/component/emitter.git',
-    'component',
-    'emitter',
-    'https://github.com/'
-  ],
+  ['component/emitter', 'component', 'emitter'],
+  ['https://github.com/component/emitter', 'component', 'emitter'],
+  ['git://github.com/component/emitter.git', 'component', 'emitter'],
   [
     'https://github.com/repos/component/emitter/tarball',
     'component',
-    'emitter',
-    'https://github.com/'
+    'emitter'
   ],
   [
     'https://github.com/repos/component/emitter/zipball',
     'component',
-    'emitter',
-    'https://github.com/'
+    'emitter'
   ],
   [
     'https://codeload.github.com/component/emitter/legacy.zip',
@@ -93,27 +81,20 @@ var repositories = [
     'emitter',
     'https://codeload.github.com/'
   ],
-  ['component/emitter#1', 'component', 'emitter', 'https://github.com/'],
-  ['component/emitter@1', 'component', 'emitter', 'https://github.com/'],
-  ['component/emitter#"1"', 'component', 'emitter', 'https://github.com/'],
-  ['component/emitter@"1"', 'component', 'emitter', 'https://github.com/'],
-  [
-    'git://github.com/component/emitter.git#1',
-    'component',
-    'emitter',
-    'https://github.com/'
-  ],
+  ['component/emitter#1', 'component', 'emitter'],
+  ['component/emitter@1', 'component', 'emitter'],
+  ['component/emitter#"1"', 'component', 'emitter'],
+  ['component/emitter@"1"', 'component', 'emitter'],
+  ['git://github.com/component/emitter.git#1', 'component', 'emitter'],
   [
     'https://github.com/repos/component/emitter/tarball/1',
     'component',
-    'emitter',
-    'https://github.com/'
+    'emitter'
   ],
   [
     'https://github.com/repos/component/emitter/zipball/1',
     'component',
-    'emitter',
-    'https://github.com/'
+    'emitter'
   ],
   [
     'https://codeload.github.com/component/emitter/legacy.zip/1',
@@ -130,26 +111,20 @@ var repositories = [
   [
     'https://github.com/component/emitter/archive/1.tar.gz',
     'component',
-    'emitter',
-    'https://github.com/'
+    'emitter'
   ],
-  ['mame/_', 'mame', '_', 'https://github.com/'],
-  ['github/.gitignore', 'github', '.gitignore', 'https://github.com/'],
-  ['github/.gitc', 'github', '.gitc', 'https://github.com/'],
-  ['Qix-/color-convert', 'Qix-', 'color-convert', 'https://github.com/'],
-  [
-    'wooorm/wooorm.github.io',
-    'wooorm',
-    'wooorm.github.io',
-    'https://github.com/'
-  ]
+  ['mame/_', 'mame', '_'],
+  ['github/.gitignore', 'github', '.gitignore'],
+  ['github/.gitc', 'github', '.gitc'],
+  ['Qix-/color-convert', 'Qix-', 'color-convert'],
+  ['wooorm/wooorm.github.io', 'wooorm', 'wooorm.github.io']
 ]
 
 test('Repositories', function (t) {
   repositories.forEach(function (repo) {
     var user = repo[1]
     var project = repo[2]
-    var baseUrl = repo[3]
+    var baseUrl = repo[3] || 'https://github.com/'
 
     repo = repo[0]
 
@@ -232,26 +207,23 @@ test('Base URL', function (t) {
   var original = process.cwd()
 
   t.equal(
-    github('12345678', {baseUrl: 'https://enteprise-github.xyz:443'}),
-    '[`1234567`](https://enteprise-github.xyz:443/' +
-      'remarkjs/remark-github/commit/12345678)\n',
+    github('12345678', {baseUrl: 'https://enteprise-github.xyz:8080'}),
+    '[`1234567`](https://enteprise-github.xyz:8080/remarkjs/remark-github/commit/12345678)\n',
     'should use explicitly provided first'
   )
 
   t.equal(
     github('12345678', {
-      baseUrl: 'https://enteprise-github.xyz:443',
+      baseUrl: 'https://enteprise-github.xyz:8080',
       repository: 'foo/bar'
     }),
-    '[`1234567`](https://enteprise-github.xyz:443/' +
-      'foo/bar/commit/12345678)\n',
+    '[`1234567`](https://enteprise-github.xyz:8080/foo/bar/commit/12345678)\n',
     'should work together with repository'
   )
 
   t.equal(
     github('12345678', null),
-    '[`1234567`](https://github.com/' +
-      'remarkjs/remark-github/commit/12345678)\n',
+    '[`1234567`](https://github.com/remarkjs/remark-github/commit/12345678)\n',
     'should load a `package.json` when available'
   )
 
