@@ -91,7 +91,23 @@ Automatically link references to commits, issues, pull-requests, and users, like
 in GitHub issues, PRs, and comments (see
 [Writing on GitHub][writing-on-github]).
 
-###### Conversion
+##### Options
+
+###### `options.repository`
+
+These links are generated relative to a project.
+In Node this is detected automatically by loading `package.json` and looking for
+a `repository` field.
+In the browser, or when overwriting this, you can pass a `repository` in
+`options`.
+The value of `repository` should be a URL to a GitHub repository, such as
+`'https://github.com/user/project.git'`, or only `'user/project'`.
+
+###### `options.baseUrl`
+
+By default base URL is determined from the `repository` (with the fallback to `'https://github.com'`). You can override this (e.g. when using GitHub Enterprise) by providing custom `baseUrl`.
+
+##### Conversion
 
 *   Commits:
     `1f2a4fb` → [`1f2a4fb`][sha]
@@ -110,17 +126,7 @@ in GitHub issues, PRs, and comments (see
 *   At-mentions:
     `@wooorm` → [**@wooorm**][mention]
 
-###### Repository
-
-These links are generated relative to a project.
-In Node this is detected automatically by loading `package.json` and looking for
-a `repository` field.
-In the browser, or when overwriting this, you can pass a `repository` in
-`options`.
-The value of `repository` should be a URL to a GitHub repository, such as
-`'https://github.com/user/project.git'`, or only `'user/project'`.
-
-###### Mentions
+##### Mentions
 
 By default, mentions are wrapped in `strong` nodes (that render to `<strong>` in
 HTML), to simulate the look of mentions on GitHub.
