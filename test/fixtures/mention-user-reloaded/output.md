@@ -40,7 +40,7 @@ After a colon :[**@username**](https://github.com/username).
 
 After a semicolon ;[**@username**](https://github.com/username).
 
-After a less than &lt;[**@username**](https://github.com/username).
+After a less than <[**@username**](https://github.com/username).
 
 After an equals to =[**@username**](https://github.com/username).
 
@@ -54,7 +54,7 @@ After an upper case A@username.
 
 After a left square bracket \[[**@username**](https://github.com/username).
 
-After a backslash \\[**@username**](https://github.com/username).
+After a backslash [**@username**](https://github.com/username).
 
 After a right square bracket ][**@username**](https://github.com/username).
 
@@ -114,7 +114,7 @@ Before a colon [**@username**](https://github.com/username):
 
 Before a semicolon [**@username**](https://github.com/username);
 
-Before a less than [**@username**](https://github.com/username)&lt;
+Before a less than [**@username**](https://github.com/username)<
 
 Before an equals to [**@username**](https://github.com/username)=
 
@@ -142,7 +142,7 @@ Before a lower case [**@usernamea**](https://github.com/usernamea)
 
 Before a left curly brace [**@username**](https://github.com/username){
 
-Before a pipe [**@username**](https://github.com/username)\|
+Before a pipe [**@username**](https://github.com/username)|
 
 Before a right curly bracket [**@username**](https://github.com/username)}
 

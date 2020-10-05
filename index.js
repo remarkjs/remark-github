@@ -369,40 +369,32 @@ function abbr(sha) {
 
 // Parse a link and determine whether it links to GitHub.
 function parse(node) {
-  var link = {}
   var url = node.url || ''
   var match = linkRegex.exec(url)
 
   if (
+    // Not a proper URL.
     !match ||
+    // Looks like formatting.
     node.children.length !== 1 ||
     node.children[0].type !== 'text' ||
-    toString(node) !== url
+    toString(node) !== url ||
+    // Issues / PRs are decimal only.
+    (match[3] !== 'commit' && /[a-f]/i.test(match[4])) ||
+    // SHAs can be min 4, max 40 characters.
+    (match[3] === 'commit' && (match[4].length < 4 || match[4].length > 40)) ||
+    // Projects can be at most 99 characters.
+    match[2].length >= 100
   ) {
     return
   }
 
-  // Issues / PRs are decimal only.
-  if (match[3] !== 'commit' && /[a-f]/i.test(match[4])) {
-    return
+  return {
+    user: match[1],
+    project: match[2],
+    page: match[3],
+    reference: match[4],
+    comment:
+      url.charAt(match[0].length) === '#' && match[0].length + 1 < url.length
   }
-
-  // SHAs can be min 4 max 40 characters.
-  if (match[3] === 'commit' && (match[4].length < 4 || match[4].length > 40)) {
-    return
-  }
-
-  // Projects can be at most 99 characters.
-  if (match[2].length >= 100) {
-    return
-  }
-
-  link.user = match[1]
-  link.project = match[2]
-  link.page = match[3]
-  link.reference = match[4]
-  link.comment =
-    url.charAt(match[0].length) === '#' && match[0].length + 1 < url.length
-
-  return link
 }

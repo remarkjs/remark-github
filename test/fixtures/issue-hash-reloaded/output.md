@@ -40,7 +40,7 @@ After a colon :[#1](https://github.com/wooorm/remark/issues/1).
 
 After a semicolon ;[#1](https://github.com/wooorm/remark/issues/1).
 
-After a less than &lt;[#1](https://github.com/wooorm/remark/issues/1).
+After a less than <[#1](https://github.com/wooorm/remark/issues/1).
 
 After an equals to =[#1](https://github.com/wooorm/remark/issues/1).
 
@@ -114,7 +114,7 @@ Before a colon [#1](https://github.com/wooorm/remark/issues/1):
 
 Before a semicolon [#1](https://github.com/wooorm/remark/issues/1);
 
-Before a less than [#1](https://github.com/wooorm/remark/issues/1)&lt;
+Before a less than [#1](https://github.com/wooorm/remark/issues/1)<
 
 Before an equals to [#1](https://github.com/wooorm/remark/issues/1)=
 
@@ -142,7 +142,7 @@ Before a lower case #1a
 
 Before a left curly brace [#1](https://github.com/wooorm/remark/issues/1){
 
-Before a pipe [#1](https://github.com/wooorm/remark/issues/1)\|
+Before a pipe [#1](https://github.com/wooorm/remark/issues/1)|
 
 Before a right curly bracket [#1](https://github.com/wooorm/remark/issues/1)}
 

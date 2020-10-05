@@ -14,7 +14,7 @@ After a dollar sign $username@[`0000000`](https://github.com/wooorm/remark/commi
 
 After a percentage sign %username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
-After an ampersand &username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
+After an ampersand \&username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
 After an apostrophe 'username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
@@ -40,7 +40,7 @@ After a colon :username@[`0000000`](https://github.com/wooorm/remark/commit/0000
 
 After a semicolon ;username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
-After a less than &lt;username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
+After a less than \<username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
 After an equals to =username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
@@ -54,7 +54,7 @@ After an upper case [Ausername@`0000000`](https://github.com/Ausername/remark/co
 
 After a left square bracket \[[username@`0000000`](https://github.com/username/remark/commit/0000000).
 
-After a backslash \\username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
+After a backslash \username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
 After a right square bracket ]username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
@@ -114,7 +114,7 @@ Before a colon [username@`0000000`](https://github.com/username/remark/commit/00
 
 Before a semicolon [username@`0000000`](https://github.com/username/remark/commit/0000000);
 
-Before a less than [username@`0000000`](https://github.com/username/remark/commit/0000000)&lt;
+Before a less than [username@`0000000`](https://github.com/username/remark/commit/0000000)<
 
 Before an equals to [username@`0000000`](https://github.com/username/remark/commit/0000000)=
 
@@ -142,7 +142,7 @@ Before a lower case [username@`0000000`](https://github.com/username/remark/comm
 
 Before a left curly brace [username@`0000000`](https://github.com/username/remark/commit/0000000){
 
-Before a pipe [username@`0000000`](https://github.com/username/remark/commit/0000000)\|
+Before a pipe [username@`0000000`](https://github.com/username/remark/commit/0000000)|
 
 Before a right curly bracket [username@`0000000`](https://github.com/username/remark/commit/0000000)}
 

@@ -40,7 +40,7 @@ After a colon :0000000.
 
 After a semicolon ;0000000.
 
-After a less than &lt;0000000.
+After a less than <0000000.
 
 After an equals to =0000000.
 
@@ -54,7 +54,7 @@ After an upper case [`A000000`](https://github.com/wooorm/remark/commit/A0000000
 
 After a left square bracket \[[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
-After a backslash \\0000000.
+After a backslash \0000000.
 
 After a right square bracket ]0000000.
 
@@ -114,7 +114,7 @@ Before a colon [`0000000`](https://github.com/wooorm/remark/commit/0000000):
 
 Before a semicolon [`0000000`](https://github.com/wooorm/remark/commit/0000000);
 
-Before a less than [`0000000`](https://github.com/wooorm/remark/commit/0000000)&lt;
+Before a less than [`0000000`](https://github.com/wooorm/remark/commit/0000000)<
 
 Before an equals to [`0000000`](https://github.com/wooorm/remark/commit/0000000)=
 
@@ -142,7 +142,7 @@ Before a lower case [`0000000`](https://github.com/wooorm/remark/commit/0000000a
 
 Before a left curly brace [`0000000`](https://github.com/wooorm/remark/commit/0000000){
 
-Before a pipe [`0000000`](https://github.com/wooorm/remark/commit/0000000)\|
+Before a pipe [`0000000`](https://github.com/wooorm/remark/commit/0000000)|
 
 Before a right curly bracket [`0000000`](https://github.com/wooorm/remark/commit/0000000)}
 

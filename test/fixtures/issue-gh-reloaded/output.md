@@ -40,7 +40,7 @@ After a colon :[GH-1](https://github.com/wooorm/remark/issues/1).
 
 After a semicolon ;[GH-1](https://github.com/wooorm/remark/issues/1).
 
-After a less than &lt;[GH-1](https://github.com/wooorm/remark/issues/1).
+After a less than <[GH-1](https://github.com/wooorm/remark/issues/1).
 
 After an equals to =[GH-1](https://github.com/wooorm/remark/issues/1).
 
@@ -54,7 +54,7 @@ After an upper case AGH-1.
 
 After a left square bracket \[[GH-1](https://github.com/wooorm/remark/issues/1).
 
-After a backslash [GH-1](https://github.com/wooorm/remark/issues/1).
+After a backslash \\[GH-1](https://github.com/wooorm/remark/issues/1).
 
 After a right square bracket ][GH-1](https://github.com/wooorm/remark/issues/1).
 
@@ -114,7 +114,7 @@ Before a colon [GH-1](https://github.com/wooorm/remark/issues/1):
 
 Before a semicolon [GH-1](https://github.com/wooorm/remark/issues/1);
 
-Before a less than [GH-1](https://github.com/wooorm/remark/issues/1)&lt;
+Before a less than [GH-1](https://github.com/wooorm/remark/issues/1)<
 
 Before an equals to [GH-1](https://github.com/wooorm/remark/issues/1)=
 
@@ -142,7 +142,7 @@ Before a lower case GH-1a
 
 Before a left curly brace [GH-1](https://github.com/wooorm/remark/issues/1){
 
-Before a pipe [GH-1](https://github.com/wooorm/remark/issues/1)\|
+Before a pipe [GH-1](https://github.com/wooorm/remark/issues/1)|
 
 Before a right curly bracket [GH-1](https://github.com/wooorm/remark/issues/1)}
 

@@ -12,6 +12,13 @@
 pull-requests, and users, like in GitHub issues, PRs, and comments (see [Writing
 on GitHub][writing-on-github]).
 
+## Note!
+
+This plugin is ready for the new parser in remark
+([`micromark`](https://github.com/micromark/micromark),
+see [`remarkjs/remark#536`](https://github.com/remarkjs/remark/pull/536)).
+Version 10 works with old (12) and new (13+) remark!
+
 ## Install
 
 [npm][]:
@@ -27,22 +34,22 @@ Say we have the following file, `example.md`:
 ```markdown
 Some references:
 
--   Commit: f8083175fe890cbf14f41d0a06e7aa35d4989587
--   Commit (fork): foo@f8083175fe890cbf14f41d0a06e7aa35d4989587
--   Commit (repo): remarkjs/remark@e1aa9f6c02de18b9459b7d269712bcb50183ce89
--   Issue or PR (`#`): #1
--   Issue or PR (`GH-`): GH-1
--   Issue or PR (fork): foo#1
--   Issue or PR (project): remarkjs/remark#1
--   Mention: @wooorm
+*   Commit: f8083175fe890cbf14f41d0a06e7aa35d4989587
+*   Commit (fork): foo@f8083175fe890cbf14f41d0a06e7aa35d4989587
+*   Commit (repo): remarkjs/remark@e1aa9f6c02de18b9459b7d269712bcb50183ce89
+*   Issue or PR (`#`): #1
+*   Issue or PR (`GH-`): GH-1
+*   Issue or PR (fork): foo#1
+*   Issue or PR (project): remarkjs/remark#1
+*   Mention: @wooorm
 
 Some links:
 
--   Commit: https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89
--   Commit comment: https://github.com/remarkjs/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693
--   Issue or PR: https://github.com/remarkjs/remark/issues/182
--   Issue or PR comment: https://github.com/remarkjs/remark-github/issues/3#issue-151160339
--   Mention: @ben-eb
+*   Commit: <https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89>
+*   Commit comment: <https://github.com/remarkjs/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693>
+*   Issue or PR: <https://github.com/remarkjs/remark/issues/182>
+*   Issue or PR comment: <https://github.com/remarkjs/remark-github/issues/3#issue-151160339>
+*   Mention: <https://github.com/ben-eb>
 ```
 
 And our script, `example.js`, looks as follows:
@@ -65,22 +72,22 @@ Now, running `node example` yields:
 ```markdown
 Some references:
 
--   Commit: [`f808317`](https://github.com/remarkjs/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
--   Commit (fork): [foo@`f808317`](https://github.com/foo/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
--   Commit (repo): [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
--   Issue or PR (`#`): [#1](https://github.com/remarkjs/remark-github/issues/1)
--   Issue or PR (`GH-`): [GH-1](https://github.com/remarkjs/remark-github/issues/1)
--   Issue or PR (fork): [foo#1](https://github.com/foo/remark-github/issues/1)
--   Issue or PR (project): [remarkjs/remark#1](https://github.com/remarkjs/remark/issues/1)
--   Mention: [**@wooorm**](https://github.com/wooorm)
+*   Commit: [`f808317`](https://github.com/remarkjs/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
+*   Commit (fork): [foo@`f808317`](https://github.com/foo/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
+*   Commit (repo): [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
+*   Issue or PR (`#`): [#1](https://github.com/remarkjs/remark-github/issues/1)
+*   Issue or PR (`GH-`): [GH-1](https://github.com/remarkjs/remark-github/issues/1)
+*   Issue or PR (fork): [foo#1](https://github.com/foo/remark-github/issues/1)
+*   Issue or PR (project): [remarkjs/remark#1](https://github.com/remarkjs/remark/issues/1)
+*   Mention: [**@wooorm**](https://github.com/wooorm)
 
 Some links:
 
--   Commit: [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
--   Commit comment: [remarkjs/remark@`ac63bc3` (comment)](https://github.com/remarkjs/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693)
--   Issue or PR: [remarkjs/remark#182](https://github.com/remarkjs/remark/issues/182)
--   Issue or PR comment: [#3 (comment)](https://github.com/remarkjs/remark-github/issues/3#issue-151160339)
--   Mention: [**@ben-eb**](https://github.com/ben-eb)
+*   Commit: [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
+*   Commit comment: [remarkjs/remark@`ac63bc3` (comment)](https://github.com/remarkjs/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693)
+*   Issue or PR: [remarkjs/remark#182](https://github.com/remarkjs/remark/issues/182)
+*   Issue or PR comment: [#3 (comment)](https://github.com/remarkjs/remark-github/issues/3#issue-151160339)
+*   Mention: <https://github.com/ben-eb>
 ```
 
 ## API

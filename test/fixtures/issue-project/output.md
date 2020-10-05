@@ -4,14 +4,14 @@ A project-SHA is not relative to the current project.
 
 GitHub’s project names can include alphabetical characters, dashes, and full-stops. They may end in a TLD (such as `.com`), but may not end in `.git` (for obvious reasons).
 
--   This is a valid issue: [foo/bar#1](https://github.com/foo/bar/issues/1);
--   So is this: [foo/bar#123456789](https://github.com/foo/bar/issues/123456789).
+*   This is a valid issue: [foo/bar#1](https://github.com/foo/bar/issues/1);
+*   So is this: [foo/bar#123456789](https://github.com/foo/bar/issues/123456789).
 
 They work here
 [foo/bar#1](https://github.com/foo/bar/issues/1)
 
 and here
-    [foo/bar#1](https://github.com/foo/bar/issues/1)
+[foo/bar#1](https://github.com/foo/bar/issues/1)
 
 Usernames: this is not a valid, -foo/bar#1; but this is [w-w/bar#1](https://github.com/w-w/bar/issues/1), and so is [w/bar#1](https://github.com/w/bar/issues/1) and [ww/bar#1](https://github.com/ww/bar/issues/1).
 
