@@ -38,9 +38,12 @@ test('remark-github()', function (t) {
 
 test('Fixtures', function (t) {
   fixtures
-    .filter(function (filepath) {
-      return filepath.indexOf('.') !== 0
+    .filter(function (basename) {
+      return basename.charAt(0) !== '.'
     })
+    // .filter(function (basename) {
+    //   return basename === 'sha-user-reloaded'
+    // })
     .forEach(function (fixture) {
       var filepath = join(root, fixture)
       var output = read(join(filepath, 'output.md'), 'utf-8')
@@ -48,6 +51,7 @@ test('Fixtures', function (t) {
       var result = github(input, 'wooorm/remark')
 
       t.equal(result, output, 'should work on `' + fixture + '`')
+      // Fs.writeFileSync(join(filepath, 'output.md'), result)
     })
 
   t.end()
@@ -113,7 +117,7 @@ var repositories = [
   ['github/.gitignore', 'github', '.gitignore'],
   ['github/.gitc', 'github', '.gitc'],
   ['Qix-/color-convert', 'Qix-', 'color-convert'],
-  ['wooorm/wooorm.github.io', 'wooorm', 'wooorm.github.io']
+  ['example/example.github.io', 'example', 'example.github.io']
 ]
 
 test('Repositories', function (t) {

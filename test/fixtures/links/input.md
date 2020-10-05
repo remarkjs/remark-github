@@ -57,6 +57,9 @@ Same user, different repository:
 With dots (GH-14)
 <https://github.com/wooorm/wooorm.github.io/commit/e5bd>
 
+Too long repo
+<https://github.com/user/1231231231231231231231231231231231231231231231231231231231231231231231231231231231231231231231231231/commit/1f2a>
+
 ## Commit comments
 
 A commit comment:
@@ -111,6 +114,12 @@ Pulls across repositories:
 
 Pull on same user, different repository:
 <https://github.com/wooorm/bar/pull/2>
+
+Issue with non-digit:
+<https://github.com/wooorm/bar/issues/2a>
+
+Pull with non-digit:
+<https://github.com/wooorm/bar/pull/2a>
 
 ## Issue comments
 

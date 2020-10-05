@@ -33,15 +33,15 @@
     "Anthony Maki <4cm4k1@gmail.com>"
   ],
   "files": [
-    "index.js",
-    "lib"
+    "index.js"
   ],
   "dependencies": {
     "is-alphabetical": "^1.0.0",
     "is-decimal": "^1.0.0",
     "is-hexadecimal": "^1.0.0",
     "mdast-util-to-string": "^1.0.0",
-    "unist-util-visit": "^2.0.0"
+    "unist-util-visit": "^2.0.0",
+    "unist-util-visit-parents": "^3.0.0"
   },
   "devDependencies": {
     "browserify": "^16.0.0",
@@ -81,6 +81,8 @@
     "prettier": true,
     "esnext": false,
     "rules": {
+      "complexity": "off",
+      "max-params": "off",
       "unicorn/prefer-optional-catch-binding": "off",
       "unicorn/prefer-includes": "off"
     },

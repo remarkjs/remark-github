@@ -57,6 +57,9 @@ Same user, different repository:
 With dots ([GH-14](https://github.com/wooorm/remark/issues/14))
 [wooorm/wooorm.github.io@`e5bd`](https://github.com/wooorm/wooorm.github.io/commit/e5bd)
 
+Too long repo
+<https://github.com/user/1231231231231231231231231231231231231231231231231231231231231231231231231231231231231231231231231231/commit/1f2a>
+
 ## Commit comments
 
 A commit comment:
@@ -86,13 +89,13 @@ An issue:
 [#2](https://github.com/wooorm/remark/issues/2)
 
 Not an issue, no HTTPS (should not render):
-<http://github.com/wooorm/remark/issues/2>
+[#2](http://github.com/wooorm/remark/issues/2)
 
 A pull:
 [#2](https://github.com/wooorm/remark/pull/2)
 
 Not a pull, no HTTPS (should not render):
-<http://github.com/wooorm/remark/pull/2>
+[#2](http://github.com/wooorm/remark/pull/2)
 
 Issues across users:
 [foo#2](https://github.com/foo/remark/issues/2)
@@ -112,10 +115,16 @@ Pulls across repositories:
 Pull on same user, different repository:
 [wooorm/bar#2](https://github.com/wooorm/bar/pull/2)
 
+Issue with non-digit:
+<https://github.com/wooorm/bar/issues/2a>
+
+Pull with non-digit:
+<https://github.com/wooorm/bar/pull/2a>
+
 ## Issue comments
 
 Not a comment, no HTTPS (should not render):
-<http://github.com/wooorm/remark/issues/2#issuecomment-123123>
+[#2 (comment)](http://github.com/wooorm/remark/issues/2#issuecomment-123123)
 
 A commit comment:
 [#2 (comment)](https://github.com/wooorm/remark/issues/2#issuecomment-123123)
