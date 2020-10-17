@@ -41,7 +41,7 @@
     "unist-util-visit": "^2.0.0"
   },
   "devDependencies": {
-    "browserify": "^16.0.0",
+    "browserify": "^17.0.0",
     "nyc": "^15.0.0",
     "prettier": "^2.0.0",
     "remark": "^13.0.0",
