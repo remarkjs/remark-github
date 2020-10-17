@@ -1,8 +1,8 @@
 'use strict'
 
 var visit = require('unist-util-visit')
-var visitParents = require('unist-util-visit-parents')
 var toString = require('mdast-util-to-string')
+var findAndReplace = require('mdast-util-find-and-replace')
 
 module.exports = github
 
@@ -17,9 +17,6 @@ try {
   fs = require('fs')
   path = require('path')
 } catch (_) {}
-
-// Methods.
-var splice = [].splice
 
 // Previously, GitHub linked `@mention` and `@mentions` to their blog post about
 // mentions (<https://github.com/blog/821>).
@@ -83,7 +80,6 @@ var mentionRegex = new RegExp(
 function github(options) {
   var settings = options || {}
   var repository = settings.repository
-  var patterns
   var pkg
 
   // Get the repository from `package.json`.
@@ -108,112 +104,28 @@ function github(options) {
 
   repository = {user: repository[1], project: repository[2]}
 
-  patterns = [
-    [referenceRegex, replaceReference],
-    [mentionRegex, replaceMention],
-    [/(?:#|\bgh-)([1-9]\d*)/gi, replaceIssue],
-    [/\b[a-f\d]{7,40}\b/gi, replaceHash]
-  ]
-
   return transformer
 
   function transformer(tree) {
-    visitParents(tree, 'text', visitFactory(patterns))
+    findAndReplace(
+      tree,
+      [
+        [referenceRegex, replaceReference],
+        [mentionRegex, replaceMention],
+        [/(?:#|\bgh-)([1-9]\d*)/gi, replaceIssue],
+        [/\b[a-f\d]{7,40}\b/gi, replaceHash]
+      ],
+      {ignore: ['link', 'linkReference']}
+    )
     visit(tree, 'link', visitor)
   }
 
-  function visitFactory(pairs) {
-    var pair = pairs[0]
-
-    return visit
-
-    function visit(node, parents) {
-      var find = pair[0]
-      var replace = pair[1]
-      var parent = parents[parents.length - 1]
-      var siblings = parent.children
-      var index = siblings.indexOf(node)
-      var nodes = []
-      var start = 0
-      var tail = parents.length
-      var position
-      var match
-      var value
-      var subhandler
-
-      // Do nothing if we’re in a link.
-      while (tail--) {
-        if (
-          parents[tail].type === 'link' ||
-          parents[tail].type === 'linkReference'
-        ) {
-          return
-        }
-      }
-
-      find.lastIndex = 0
-
-      match = find.exec(node.value)
-
-      while (match) {
-        position = match.index
-
-        value = replace.apply(
-          null,
-          [].concat(match, [
-            node.value.charAt(position - 1),
-            node.value.charAt(position + match[0].length)
-          ])
-        )
-
-        if (value !== false) {
-          if (start !== position) {
-            nodes.push({type: 'text', value: node.value.slice(start, position)})
-          }
-
-          nodes.push(value)
-
-          start = position + match[0].length
-        }
-
-        match = find.exec(node.value)
-      }
-
-      if (nodes.length === 0) {
-        nodes = [node]
-      } else {
-        if (start < node.value.length) {
-          nodes.push({type: 'text', value: node.value.slice(start)})
-        }
-
-        splice.apply(siblings, [index, 1].concat(nodes))
-      }
-
-      if (pairs.length <= 1) {
-        return
-      }
-
-      subhandler = visitFactory(pairs.slice(1))
-      index = -1
-
-      while (++index < nodes.length) {
-        node = nodes[index]
-
-        if (node.type === 'text') {
-          subhandler(node, [parent])
-        } else {
-          visitParents(node, 'text', subhandler)
-        }
-      }
-    }
-  }
-
-  function replaceMention(value, username, before, after) {
+  function replaceMention(value, username, match) {
     var node
 
     if (
-      (before && /[\w`]/.test(before)) ||
-      (after && /[/\w`]/.test(after)) ||
+      /[\w`]/.test(match.input.charAt(match.index - 1)) ||
+      /[/\w`]/.test(match.input.charAt(match.index + value.length)) ||
       denyMention.indexOf(username) !== -1
     ) {
       return false
@@ -233,8 +145,11 @@ function github(options) {
     }
   }
 
-  function replaceIssue(value, no, before, after) {
-    if ((before && /\w/.test(before)) || (after && /\w/.test(after))) {
+  function replaceIssue(value, no, match) {
+    if (
+      /\w/.test(match.input.charAt(match.index - 1)) ||
+      /\w/.test(match.input.charAt(match.index + value.length))
+    ) {
       return false
     }
 
@@ -252,10 +167,10 @@ function github(options) {
     }
   }
 
-  function replaceHash(value, before, after) {
+  function replaceHash(value, match) {
     if (
-      (before && /[^\t\n\r (@[{]/.test(before)) ||
-      (after && /\w/.test(after)) ||
+      /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
+      /\w/.test(match.input.charAt(match.index + value.length)) ||
       denyHash.indexOf(value) !== -1
     ) {
       return false
@@ -275,13 +190,13 @@ function github(options) {
     }
   }
 
-  function replaceReference($0, user, project, no, sha, before, after) {
+  function replaceReference($0, user, project, no, sha, match) {
     var value = ''
     var nodes
 
     if (
-      (before && /[^\t\n\r (@[{]/.test(before)) ||
-      (after && /\w/.test(after))
+      /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
+      /\w/.test(match.input.charAt(match.index + $0.length))
     ) {
       return false
     }

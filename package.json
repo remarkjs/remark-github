@@ -36,9 +36,9 @@
     "index.js"
   ],
   "dependencies": {
+    "mdast-util-find-and-replace": "^1.0.0",
     "mdast-util-to-string": "^1.0.0",
-    "unist-util-visit": "^2.0.0",
-    "unist-util-visit-parents": "^3.0.0"
+    "unist-util-visit": "^2.0.0"
   },
   "devDependencies": {
     "browserify": "^16.0.0",
