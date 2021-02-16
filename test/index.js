@@ -211,11 +211,8 @@ test('Miscellaneous', function (t) {
 function github(value, repo) {
   var options
 
-  if (typeof repo === 'string' || !repo) {
-    options = {repository: repo || null}
-  } else {
-    options = repo
-  }
+  options =
+    typeof repo === 'string' || !repo ? {repository: repo || null} : repo
 
   return remark().use(remarkGitHub, options).processSync(value).toString()
 }

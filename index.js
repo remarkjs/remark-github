@@ -88,11 +88,8 @@ function github(options) {
       pkg = JSON.parse(fs.readFileSync(path.join(proc.cwd(), 'package.json')))
     } catch (_) {}
 
-    if (pkg && pkg.repository) {
-      repository = pkg.repository.url || pkg.repository
-    } else {
-      repository = ''
-    }
+    repository =
+      pkg && pkg.repository ? pkg.repository.url || pkg.repository : ''
   }
 
   // Parse the URL: See the tests for all possible kinds.
