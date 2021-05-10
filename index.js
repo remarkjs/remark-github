@@ -110,6 +110,7 @@ function github(options) {
         [referenceRegex, replaceReference],
         [mentionRegex, replaceMention],
         [/(?:#|\bgh-)([1-9]\d*)/gi, replaceIssue],
+        [/\b([a-f\d]{7,40})\.{3}([a-f\d]{7,40})/gi, replaceHashRange],
         [/\b[a-f\d]{7,40}\b/gi, replaceHash]
       ],
       {ignore: ['link', 'linkReference']}
@@ -184,6 +185,29 @@ function github(options) {
         '/commit/' +
         value,
       children: [{type: 'inlineCode', value: abbr(value)}]
+    }
+  }
+
+  function replaceHashRange(value, a, b, match) {
+    if (
+      /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
+      /\w/.test(match.input.charAt(match.index + value.length)) ||
+      denyHash.indexOf(value) !== -1
+    ) {
+      return false
+    }
+
+    return {
+      type: 'link',
+      title: null,
+      url:
+        'https://github.com/' +
+        repository.user +
+        '/' +
+        repository.project +
+        '/compare/' +
+        value,
+      children: [{type: 'inlineCode', value: abbr(a) + '...' + abbr(b)}]
     }
   }
 
