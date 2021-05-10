@@ -1,4 +1,4 @@
-# User@Project
+# User\@Project
 
 A project-SHA is not relative to the current project.
 

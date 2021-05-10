@@ -34,7 +34,7 @@ After a dot .[**@username**](https://github.com/username).
 
 After a slash /[**@username**](https://github.com/username).
 
-After a digit 0@username.
+After a digit 0\@username.
 
 After a colon :[**@username**](https://github.com/username).
 
@@ -50,7 +50,7 @@ After a question mark ?[**@username**](https://github.com/username).
 
 After an at sign @[**@username**](https://github.com/username).
 
-After an upper case A@username.
+After an upper case A\@username.
 
 After a left square bracket \[[**@username**](https://github.com/username).
 
@@ -60,11 +60,11 @@ After a right square bracket ][**@username**](https://github.com/username).
 
 After a caret ^[**@username**](https://github.com/username).
 
-After an underscore \_@username.
+After an underscore \_\@username.
 
 After a grave accent \`@username.
 
-After a lower case a@username.
+After a lower case a\@username.
 
 After a left curly brace {[**@username**](https://github.com/username).
 
@@ -72,7 +72,7 @@ After a pipe |[**@username**](https://github.com/username).
 
 After a right curly bracket }[**@username**](https://github.com/username).
 
-After a tilde ~[**@username**](https://github.com/username).
+After a tilde \~[**@username**](https://github.com/username).
 
 ## Before
 
@@ -146,4 +146,4 @@ Before a pipe [**@username**](https://github.com/username)|
 
 Before a right curly bracket [**@username**](https://github.com/username)}
 
-Before a tilde [**@username**](https://github.com/username)~
+Before a tilde [**@username**](https://github.com/username)\~

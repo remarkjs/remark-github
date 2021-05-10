@@ -72,7 +72,7 @@ After a pipe |[#1](https://github.com/wooorm/remark/issues/1).
 
 After a right curly bracket }[#1](https://github.com/wooorm/remark/issues/1).
 
-After a tilde ~[#1](https://github.com/wooorm/remark/issues/1).
+After a tilde \~[#1](https://github.com/wooorm/remark/issues/1).
 
 ## Before
 
@@ -146,4 +146,4 @@ Before a pipe [#1](https://github.com/wooorm/remark/issues/1)|
 
 Before a right curly bracket [#1](https://github.com/wooorm/remark/issues/1)}
 
-Before a tilde [#1](https://github.com/wooorm/remark/issues/1)~
+Before a tilde [#1](https://github.com/wooorm/remark/issues/1)\~
