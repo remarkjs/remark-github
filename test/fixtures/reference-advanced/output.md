@@ -1,4 +1,4 @@
-# User@SHA
+# User\@SHA
 
 Multiple slashes: foo/bar/baz@[`0000000`](https://github.com/wooorm/remark/commit/0000000), foo/bar/baz#1, @foo/bar/baz.
 
@@ -10,4 +10,4 @@ Upper-case projects: [foobar/bAz@`0000000`](https://github.com/foobar/bAz/commit
 
 [f/b#1](https://github.com/f/b/issues/1). f/b#0. [f/b@`0000000`](https://github.com/f/b/commit/0000000).
 
-.[#1](https://github.com/wooorm/remark/issues/1). .[**@0000000**](https://github.com/0000000). foo#. bar@.
+.[#1](https://github.com/wooorm/remark/issues/1). .[**@0000000**](https://github.com/0000000). foo#. bar\@.

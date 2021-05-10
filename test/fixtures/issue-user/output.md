@@ -1,4 +1,4 @@
-# User@Issue
+# User\@Issue
 
 A user-issue is relative to the project, but relative to the user’s fork.
 

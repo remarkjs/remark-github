@@ -72,7 +72,7 @@ After a pipe |0000000.
 
 After a right curly bracket }0000000.
 
-After a tilde ~0000000.
+After a tilde \~0000000.
 
 ## Before
 
@@ -146,4 +146,4 @@ Before a pipe [`0000000`](https://github.com/wooorm/remark/commit/0000000)|
 
 Before a right curly bracket [`0000000`](https://github.com/wooorm/remark/commit/0000000)}
 
-Before a tilde [`0000000`](https://github.com/wooorm/remark/commit/0000000)~
+Before a tilde [`0000000`](https://github.com/wooorm/remark/commit/0000000)\~
