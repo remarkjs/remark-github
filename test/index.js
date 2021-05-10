@@ -4,6 +4,7 @@ var fs = require('fs')
 var path = require('path')
 var test = require('tape')
 var remark = require('remark')
+var remarkGfm = require('remark-gfm')
 var remarkGitHub = require('..')
 
 var join = path.join
@@ -41,9 +42,6 @@ test('Fixtures', function (t) {
     .filter(function (basename) {
       return basename.charAt(0) !== '.'
     })
-    // .filter(function (basename) {
-    //   return basename === 'sha-user-reloaded'
-    // })
     .forEach(function (fixture) {
       var filepath = join(root, fixture)
       var output = read(join(filepath, 'output.md'), 'utf-8')
@@ -162,7 +160,7 @@ test('Repositories', function (t) {
           project +
           '/commit/a5c3785ed8d6a35868bc169f07e40e' +
           '889087fd2e)',
-        '*   User@SHA: [wooorm@`a5c3785`](https://github.com/wooorm/' +
+        '*   User\\@SHA: [wooorm@`a5c3785`](https://github.com/wooorm/' +
           project +
           '/commit/a5c3785ed8d6a35868bc169f07e40e' +
           '889087fd2e)',
@@ -228,5 +226,9 @@ function github(value, repo) {
   options =
     typeof repo === 'string' || !repo ? {repository: repo || null} : repo
 
-  return remark().use(remarkGitHub, options).processSync(value).toString()
+  return remark()
+    .use(remarkGfm)
+    .use(remarkGitHub, options)
+    .processSync(value)
+    .toString()
 }

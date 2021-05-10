@@ -1,10 +1,10 @@
-# Project@SHA
+# Project\@SHA
 
 A project-SHA is not relative to the current project.
 
 GitHub’s project names can include alphabetical characters, dashes, and full-stops. They may end in a TLD (such as `.com`), but may not end in `.git` (for obvious reasons).
 
-*   foo/bar@000000;
+*   foo/bar\@000000;
 *   [foo/bar@`0000000`](https://github.com/foo/bar/commit/0000000);
 *   [foo/bar@`0000000`](https://github.com/foo/bar/commit/00000000);
 *   [foo/bar@`0000000`](https://github.com/foo/bar/commit/000000000);
@@ -40,7 +40,7 @@ GitHub’s project names can include alphabetical characters, dashes, and full-s
 *   [foo/bar@`0000000`](https://github.com/foo/bar/commit/00000000000000000000000000000000000000);
 *   [foo/bar@`0000000`](https://github.com/foo/bar/commit/000000000000000000000000000000000000000);
 *   [foo/bar@`0000000`](https://github.com/foo/bar/commit/0000000000000000000000000000000000000000);
-*   foo/bar@00000000000000000000000000000000000000000.
+*   foo/bar\@00000000000000000000000000000000000000000.
 
 And:
 

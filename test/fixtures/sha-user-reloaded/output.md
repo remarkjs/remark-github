@@ -72,7 +72,7 @@ After a pipe |username@[`0000000`](https://github.com/wooorm/remark/commit/00000
 
 After a right curly bracket }username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
-After a tilde ~username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
+After a tilde \~username@[`0000000`](https://github.com/wooorm/remark/commit/0000000).
 
 ## Before
 
@@ -134,7 +134,7 @@ Before a right square bracket [username@`0000000`](https://github.com/username/r
 
 Before a caret [username@`0000000`](https://github.com/username/remark/commit/0000000)^
 
-Before an underscore username@0000000\_
+Before an underscore username\@0000000\_
 
 Before a grave accent [username@`0000000`](https://github.com/username/remark/commit/0000000)\`
 
@@ -146,4 +146,4 @@ Before a pipe [username@`0000000`](https://github.com/username/remark/commit/000
 
 Before a right curly bracket [username@`0000000`](https://github.com/username/remark/commit/0000000)}
 
-Before a tilde [username@`0000000`](https://github.com/username/remark/commit/0000000)~
+Before a tilde [username@`0000000`](https://github.com/username/remark/commit/0000000)\~
