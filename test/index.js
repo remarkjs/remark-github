@@ -50,7 +50,21 @@ test('Fixtures', function (t) {
       var input = read(join(filepath, 'input.md'), 'utf-8')
       var result = github(input, 'wooorm/remark')
 
-      t.equal(result, output, 'should work on `' + fixture + '`')
+      test('should work on `' + fixture + '`', function (t) {
+        var results = result.split('\n')
+        var outputs = output.split('\n')
+
+        t.equal(results.length, outputs.length, 'should  be same length')
+
+        results.forEach(function (resultLine, index) {
+          if (resultLine !== '') {
+            t.equal(resultLine, outputs[index], resultLine)
+          }
+        })
+
+        t.end()
+      })
+
       // Fs.writeFileSync(join(filepath, 'output.md'), result)
     })
 
