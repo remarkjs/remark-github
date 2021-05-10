@@ -147,3 +147,5 @@ Before a pipe [`0000000`](https://github.com/wooorm/remark/commit/0000000)|
 Before a right curly bracket [`0000000`](https://github.com/wooorm/remark/commit/0000000)}
 
 Before a tilde [`0000000`](https://github.com/wooorm/remark/commit/0000000)~
+
+Sha range [`3890fb5...680edb4`](https://github.com/wooorm/remark/compare/3890fb52fe3ca3c71f0422329248c36731ef9cbc...680edb4bf13e850bd07e10388002e01b49e53e83)
