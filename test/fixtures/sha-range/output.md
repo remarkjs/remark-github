@@ -14,7 +14,7 @@ fork? [brumm@`e2acebc`](https://github.com/brumm/remark/commit/e2acebc)...[`2aa9
 
 repo: [remarkjs/remark-github@`e2acebc`](https://github.com/remarkjs/remark-github/commit/e2acebc)...[`2aa9311`](https://github.com/wooorm/remark/commit/2aa9311)
 
-Pasting the link: [`e2acebc...2aa9311`](https://github.com/wooorm/remark/compare/e2acebc...2aa9311)
+Pasting the link: [`e2acebc...2aa9311`](https://github.com/remarkjs/remark-github/compare/e2acebcb40ae1bbe5b3ed87488f294faa45b2b85...2aa931154d6e0f6317aff644924163999cb61894)
 
 5/5: e2ace...2aa93
 

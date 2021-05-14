@@ -58,6 +58,13 @@ var linkRegex = new RegExp(
   'i'
 )
 
+var rangeCompareLinkRegex = new RegExp(
+  '^https?:\\/\\/github\\.com\\/' +
+    repoGroup +
+    '\\/(compare)\\/([a-f\\d]{7,40}).{3}([a-f\\d]{7,40})',
+  'i'
+)
+
 var repoRegex = new RegExp(
   '(?:^|/(?:repos/)?)' + repoGroup + '(?=\\.git|[\\/#@]|$)',
   'i'
@@ -280,7 +287,13 @@ function github(options) {
       base = link.user
     }
 
-    if (link.page === 'commit') {
+    if (link.page === 'compare') {
+      children = []
+      children.push({
+        type: 'inlineCode',
+        value: abbr(link.a) + '...' + abbr(link.b)
+      })
+    } else if (link.page === 'commit') {
       children = []
 
       if (base) {
@@ -310,6 +323,21 @@ function abbr(sha) {
 function parse(node) {
   var url = node.url || ''
   var match = linkRegex.exec(url)
+  match = match === null ? rangeCompareLinkRegex.exec(url) : match
+
+  if (!match) {
+    return
+  }
+
+  if (match[3] === 'compare') {
+    return {
+      user: match[1],
+      project: match[2],
+      page: match[3],
+      a: match[4],
+      b: match[5]
+    }
+  }
 
   if (
     // Not a proper URL.
