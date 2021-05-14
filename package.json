@@ -1,6 +1,6 @@
 {
   "name": "remark-github",
-  "version": "10.0.1",
+  "version": "10.1.0",
   "description": "remark plugin to autolink references like in GitHub issues, PRs, and comments",
   "license": "MIT",
   "keywords": [
@@ -32,7 +32,9 @@
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
     "Anthony Maki <4cm4k1@gmail.com>"
   ],
+  "types": "types/index.d.ts",
   "files": [
+    "types/index.d.ts",
     "index.js"
   ],
   "dependencies": {
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "browserify": "^17.0.0",
+    "dtslint": "^3.0.0",
     "nyc": "^15.0.0",
     "prettier": "^2.0.0",
     "remark": "^13.0.0",
@@ -50,6 +53,7 @@
     "remark-preset-wooorm": "^8.0.0",
     "tape": "^5.0.0",
     "tinyify": "^3.0.0",
+    "unified": "^9.0.0",
     "xo": "^0.37.0"
   },
   "scripts": {
@@ -59,7 +63,8 @@
     "build": "npm run build-bundle && npm run build-mangle",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
-    "test": "npm run format && npm run build && npm run test-coverage"
+    "test-types": "dtslint types",
+    "test": "npm run format && npm run build && npm run test-coverage && npm run test-types"
   },
   "nyc": {
     "check-coverage": true,
