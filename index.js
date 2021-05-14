@@ -178,7 +178,6 @@ function github(options) {
       /\w/.test(match.input.charAt(match.index + value.length)) ||
       denyHash.indexOf(value) !== -1
     ) {
-      // only bail out if there weren't two periods before the match
       if (match.input.slice(match.index - 2, match.index) !== '..') {
         return false
       }
