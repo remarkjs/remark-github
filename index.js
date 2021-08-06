@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
-import visit from 'unist-util-visit'
-import toString from 'mdast-util-to-string'
-import findAndReplace from 'mdast-util-find-and-replace'
+import {visit} from 'unist-util-visit'
+import {toString} from 'mdast-util-to-string'
+import {findAndReplace} from 'mdast-util-find-and-replace'
 
 // Hide process use from browserify and the like.
 var proc = typeof global !== 'undefined' && global.process
