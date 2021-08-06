@@ -21,6 +21,9 @@ Version 10 works with old (12) and new (13+) remark!
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -52,17 +55,19 @@ Some links:
 *   Mention: <https://github.com/ben-eb>
 ```
 
-And our script, `example.js`, looks as follows:
+And our module, `example.js`, looks as follows:
 
 ```js
-var vfile = require('to-vfile')
-var remark = require('remark')
-var github = require('remark-github')
+import {readSync} from 'to-vfile'
+import {remark} from 'remark'
+import remarkGithub from 'remark-github'
+
+const file = readSync('example.md')
 
 remark()
-  .use(github)
-  .process(vfile.readSync('example.md'), function (err, file) {
-    if (err) throw err
+  .use(remarkGithub)
+  .process(file)
+  .then((file) => {
     console.log(String(file))
   })
 ```
@@ -92,7 +97,10 @@ Some links:
 
 ## API
 
-### `remark.use(github[, options])`
+This package exports no identifiers.
+The default export is `remarkGithub`.
+
+### `unified().use(remarkGithub[, options])`
 
 Automatically link references to commits, issues, pull-requests, and users, like
 in GitHub issues, PRs, and comments (see
