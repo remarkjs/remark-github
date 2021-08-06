@@ -1,5 +1,2 @@
 coverage/
-remark-github.js
-remark-github.min.js
-*.json
 *.md

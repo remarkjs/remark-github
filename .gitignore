@@ -1,8 +1,5 @@
-.DS_Store
-*.log
-.nyc_output/
 coverage/
 node_modules/
-remark-github.js
-remark-github.min.js
+.DS_Store
+*.log
 yarn.lock

@@ -1,5 +1,7 @@
 'use strict'
 
+var fs = require('fs')
+var path = require('path')
 var visit = require('unist-util-visit')
 var toString = require('mdast-util-to-string')
 var findAndReplace = require('mdast-util-find-and-replace')
@@ -8,15 +10,6 @@ module.exports = github
 
 // Hide process use from browserify and the like.
 var proc = typeof global !== 'undefined' && global.process
-
-// Load `fs` and `path` if available.
-var fs
-var path
-
-try {
-  fs = require('fs')
-  path = require('path')
-} catch (_) {}
 
 // Previously, GitHub linked `@mention` and `@mentions` to their blog post about
 // mentions (<https://github.com/blog/821>).
