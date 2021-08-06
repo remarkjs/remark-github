@@ -32,9 +32,10 @@
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
     "Anthony Maki <4cm4k1@gmail.com>"
   ],
-  "types": "types/index.d.ts",
+  "sideEffects": false,
+  "type": "module",
+  "main": "index.js",
   "files": [
-    "types/index.d.ts",
     "index.js"
   ],
   "dependencies": {

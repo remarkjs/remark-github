@@ -1,17 +1,15 @@
-'use strict'
-
-var fs = require('fs')
-var path = require('path')
-var test = require('tape')
-var remark = require('remark')
-var remarkGfm = require('remark-gfm')
-var remarkGitHub = require('..')
+import fs from 'fs'
+import path from 'path'
+import test from 'tape'
+import remark from 'remark'
+import remarkGfm from 'remark-gfm'
+import remarkGitHub from '../index.js'
 
 var join = path.join
 var read = fs.readFileSync
 var readdir = fs.readdirSync
 
-var root = join(__dirname, 'fixtures')
+var root = join('test', 'fixtures')
 
 var fixtures = readdir(root)
 
@@ -196,7 +194,7 @@ test('Miscellaneous', function (t) {
     'should load a `package.json` when available'
   )
 
-  process.chdir(__dirname)
+  process.chdir(path.join(process.cwd(), 'test'))
 
   t.equal(
     github('12345678', null),
@@ -204,7 +202,7 @@ test('Miscellaneous', function (t) {
     'should accept a `repository.url` in a `package.json`'
   )
 
-  process.chdir(join(__dirname, 'fixtures'))
+  process.chdir(join(process.cwd(), 'fixtures'))
 
   t.throws(
     function () {

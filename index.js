@@ -1,12 +1,8 @@
-'use strict'
-
-var fs = require('fs')
-var path = require('path')
-var visit = require('unist-util-visit')
-var toString = require('mdast-util-to-string')
-var findAndReplace = require('mdast-util-find-and-replace')
-
-module.exports = github
+import fs from 'fs'
+import path from 'path'
+import visit from 'unist-util-visit'
+import toString from 'mdast-util-to-string'
+import findAndReplace from 'mdast-util-find-and-replace'
 
 // Hide process use from browserify and the like.
 var proc = typeof global !== 'undefined' && global.process
@@ -70,7 +66,7 @@ var mentionRegex = new RegExp(
   'gi'
 )
 
-function github(options) {
+export default function remarkGithub(options) {
   var settings = options || {}
   var repository = settings.repository
   var pkg
