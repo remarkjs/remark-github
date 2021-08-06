@@ -1,3 +1,16 @@
+/**
+ * @typedef {import('mdast').Root} Root
+ *
+ * @typedef Options
+ *   Configuration.
+ * @property {boolean} [mentionStrong=true]
+ *   Wrap mentions in `<strong>`, true by default.
+ *   This makes them render more like how GitHub styles them.
+ *   But GitHub itself uses CSS instead of a strong.
+ * @property {string} [repository]
+ *   Repository to link against.
+ */
+
 import fs from 'fs'
 import path from 'path'
 import {visit} from 'unist-util-visit'
@@ -5,7 +18,11 @@ import {toString} from 'mdast-util-to-string'
 import {findAndReplace} from 'mdast-util-find-and-replace'
 
 // Hide process use from browserify and the like.
-const proc = typeof global !== 'undefined' && global.process
+const proc =
+  typeof global === 'undefined'
+    ? /* c8 ignore next */
+      {cwd: () => '/'}
+    : global.process
 
 // Previously, GitHub linked `@mention` and `@mentions` to their blog post about
 // mentions (<https://github.com/blog/821>).
@@ -72,33 +89,51 @@ const mentionRegex = new RegExp(
   'gi'
 )
 
-export default function remarkGithub(options) {
-  const settings = options || {}
-  let repository = settings.repository
+/**
+ * Plugin to enable, disable, and ignore messages.
+ *
+ * @type {import('unified').Plugin<[Options?]|void[], Root>}
+ */
+export default function remarkGithub(options = {}) {
+  /**
+   * @typedef {import('mdast').StaticPhrasingContent} StaticPhrasingContent
+   * @typedef {import('mdast-util-find-and-replace').ReplaceFunction} ReplaceFunction
+   * @typedef {import('type-fest').PackageJson} PackageJson
+   * @typedef {{input: string, index: number}} Match
+   */
+
+  let repository = options.repository
+  /** @type {PackageJson|undefined} */
   let pkg
 
   // Get the repository from `package.json`.
   if (!repository) {
     try {
-      pkg = JSON.parse(fs.readFileSync(path.join(proc.cwd(), 'package.json')))
+      pkg = JSON.parse(
+        String(fs.readFileSync(path.join(proc.cwd(), 'package.json')))
+      )
     } catch {}
 
     repository =
-      pkg && pkg.repository ? pkg.repository.url || pkg.repository : ''
+      pkg && pkg.repository
+        ? // Object form.
+          /* c8 ignore next 2 */
+          typeof pkg.repository === 'object'
+          ? pkg.repository.url
+          : pkg.repository
+        : ''
   }
 
   // Parse the URL: See the tests for all possible kinds.
-  repository = repoRegex.exec(repository)
+  const repositoryMatch = repoRegex.exec(repository || '')
 
-  if (!repository) {
+  if (!repositoryMatch) {
     throw new Error('Missing `repository` field in `options`')
   }
 
-  repository = {user: repository[1], project: repository[2]}
+  const repositoryInfo = {user: repositoryMatch[1], project: repositoryMatch[2]}
 
-  return transformer
-
-  function transformer(tree) {
+  return (tree) => {
     findAndReplace(
       tree,
       [
@@ -109,12 +144,57 @@ export default function remarkGithub(options) {
       ],
       {ignore: ['link', 'linkReference']}
     )
-    visit(tree, 'link', visitor)
+    visit(tree, 'link', (node) => {
+      const link = parse(node)
+
+      if (!link) {
+        return
+      }
+
+      const comment = link.comment ? ' (comment)' : ''
+      /** @type {string} */
+      let base
+
+      if (link.project !== repositoryInfo.project) {
+        base = link.user + '/' + link.project
+      } else if (link.user === repositoryInfo.user) {
+        base = ''
+      } else {
+        base = link.user
+      }
+
+      /** @type {StaticPhrasingContent[]} */
+      const children = []
+
+      if (link.page === 'commit') {
+        if (base) {
+          children.push({type: 'text', value: base + '@'})
+        }
+
+        children.push({type: 'inlineCode', value: abbr(link.reference)})
+
+        if (link.comment) {
+          children.push({type: 'text', value: comment})
+        }
+      } else {
+        base += '#'
+        children.push({
+          type: 'text',
+          value: base + abbr(link.reference) + comment
+        })
+      }
+
+      node.children = children
+    })
   }
 
+  /**
+   * @type {ReplaceFunction}
+   * @param {string} value
+   * @param {string} username
+   * @param {Match} match
+   */
   function replaceMention(value, username, match) {
-    let node
-
     if (
       /[\w`]/.test(match.input.charAt(match.index - 1)) ||
       /[/\w`]/.test(match.input.charAt(match.index + value.length)) ||
@@ -123,9 +203,10 @@ export default function remarkGithub(options) {
       return false
     }
 
-    node = {type: 'text', value}
+    /** @type {StaticPhrasingContent} */
+    let node = {type: 'text', value}
 
-    if (settings.mentionStrong !== false) {
+    if (options.mentionStrong !== false) {
       node = {type: 'strong', children: [node]}
     }
 
@@ -137,6 +218,12 @@ export default function remarkGithub(options) {
     }
   }
 
+  /**
+   * @type {ReplaceFunction}
+   * @param {string} value
+   * @param {string} no
+   * @param {Match} match
+   */
   function replaceIssue(value, no, match) {
     if (
       /\w/.test(match.input.charAt(match.index - 1)) ||
@@ -150,15 +237,20 @@ export default function remarkGithub(options) {
       title: null,
       url:
         'https://github.com/' +
-        repository.user +
+        repositoryInfo.user +
         '/' +
-        repository.project +
+        repositoryInfo.project +
         '/issues/' +
         no,
       children: [{type: 'text', value}]
     }
   }
 
+  /**
+   * @type {ReplaceFunction}
+   * @param {string} value
+   * @param {Match} match
+   */
   function replaceHash(value, match) {
     if (
       /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
@@ -173,15 +265,24 @@ export default function remarkGithub(options) {
       title: null,
       url:
         'https://github.com/' +
-        repository.user +
+        repositoryInfo.user +
         '/' +
-        repository.project +
+        repositoryInfo.project +
         '/commit/' +
         value,
       children: [{type: 'inlineCode', value: abbr(value)}]
     }
   }
 
+  /**
+   * @type {ReplaceFunction}
+   * @param {string} $0
+   * @param {string} user
+   * @param {string} project
+   * @param {string} no
+   * @param {string} sha
+   * @param {Match} match
+   */
   // eslint-disable-next-line max-params
   function replaceReference($0, user, project, no, sha, match) {
     let value = ''
@@ -193,13 +294,14 @@ export default function remarkGithub(options) {
       return false
     }
 
+    /** @type {StaticPhrasingContent[]} */
     const nodes = []
 
-    if (user !== repository.user) {
+    if (user !== repositoryInfo.user) {
       value += user
     }
 
-    if (project && project !== repository.project) {
+    if (project && project !== repositoryInfo.project) {
       value = user + '/' + project
     }
 
@@ -219,7 +321,7 @@ export default function remarkGithub(options) {
         'https://github.com/' +
         user +
         '/' +
-        (project || repository.project) +
+        (project || repositoryInfo.project) +
         '/' +
         (no ? 'issues' : 'commit') +
         '/' +
@@ -227,53 +329,24 @@ export default function remarkGithub(options) {
       children: nodes
     }
   }
-
-  function visitor(node) {
-    const link = parse(node)
-    let children
-    let base
-
-    if (!link) {
-      return
-    }
-
-    const comment = link.comment ? ' (comment)' : ''
-
-    if (link.project !== repository.project) {
-      base = link.user + '/' + link.project
-    } else if (link.user === repository.user) {
-      base = ''
-    } else {
-      base = link.user
-    }
-
-    if (link.page === 'commit') {
-      children = []
-
-      if (base) {
-        children.push({type: 'text', value: base + '@'})
-      }
-
-      children.push({type: 'inlineCode', value: abbr(link.reference)})
-
-      if (link.comment) {
-        children.push({type: 'text', value: comment})
-      }
-    } else {
-      base += '#'
-      children = [{type: 'text', value: base + abbr(link.reference) + comment}]
-    }
-
-    node.children = children
-  }
 }
 
-// Abbreviate a SHA.
+/**
+ * Abbreviate a SHA.
+ *
+ * @param {string} sha
+ * @returns {string}
+ */
 function abbr(sha) {
   return sha.slice(0, minShaLength)
 }
 
-// Parse a link and determine whether it links to GitHub.
+/**
+ * Parse a link and determine whether it links to GitHub.
+ *
+ * @param {import('mdast').Link} node
+ * @returns {{user: string, project: string, page: string, reference: string, comment: boolean}|undefined}
+ */
 function parse(node) {
   const url = node.url || ''
   const match = linkRegex.exec(url)

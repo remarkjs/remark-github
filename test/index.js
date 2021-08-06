@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('type-fest').PackageJson} PackageJson
+ * @typedef {import('../index.js').Options} Options
+ */
+
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
@@ -219,10 +224,15 @@ test('Miscellaneous', (t) => {
   t.end()
 })
 
-// Shortcut to process.
+/***
+ * Shortcut to process.
+ *
+ * @param {string} value
+ * @param {string|Options|null} [repo]
+ */
 function github(value, repo) {
   const options =
-    typeof repo === 'string' || !repo ? {repository: repo || null} : repo
+    typeof repo === 'string' || !repo ? {repository: repo || undefined} : repo
 
   return remark()
     .use(remarkGfm)
