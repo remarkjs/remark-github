@@ -11,18 +11,12 @@
  *   Repository to link against.
  */
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import process from 'node:process'
+import path from 'node:path'
 import {visit} from 'unist-util-visit'
 import {toString} from 'mdast-util-to-string'
 import {findAndReplace} from 'mdast-util-find-and-replace'
-
-// Hide process use from browserify and the like.
-const proc =
-  typeof global === 'undefined'
-    ? /* c8 ignore next */
-      {cwd: () => '/'}
-    : global.process
 
 // Previously, GitHub linked `@mention` and `@mentions` to their blog post about
 // mentions (<https://github.com/blog/821>).
@@ -110,7 +104,7 @@ export default function remarkGithub(options = {}) {
   if (!repository) {
     try {
       pkg = JSON.parse(
-        String(fs.readFileSync(path.join(proc.cwd(), 'package.json')))
+        String(fs.readFileSync(path.join(process.cwd(), 'package.json')))
       )
     } catch {}
 

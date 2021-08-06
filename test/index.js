@@ -3,8 +3,10 @@
  * @typedef {import('../index.js').Options} Options
  */
 
-import fs from 'fs'
-import path from 'path'
+import assert from 'node:assert'
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 import test from 'tape'
 import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
@@ -51,22 +53,24 @@ test('Fixtures', (t) => {
     const input = read(join(filepath, 'input.md'), 'utf-8')
     const result = github(input, 'wooorm/remark')
 
-    test('should work on `' + fixture + '`', (t) => {
+    t.doesNotThrow(() => {
       const results = result.split('\n')
       const outputs = output.split('\n')
       let index = -1
 
-      t.equal(results.length, outputs.length, 'should  be same length')
+      assert.strictEqual(
+        results.length,
+        outputs.length,
+        'should be same length'
+      )
 
       while (++index < results.length) {
         const resultLine = results[index]
         if (resultLine !== '') {
-          t.equal(resultLine, outputs[index], resultLine)
+          assert.strictEqual(resultLine, outputs[index], resultLine)
         }
       }
-
-      t.end()
-    })
+    }, 'should work on `' + fixture + '`')
   }
 
   t.end()
