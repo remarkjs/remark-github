@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
-import remark from 'remark'
+import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkGitHub from '../index.js'
 
