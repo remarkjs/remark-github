@@ -5,18 +5,18 @@ import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkGitHub from '../index.js'
 
-var join = path.join
-var read = fs.readFileSync
-var readdir = fs.readdirSync
+const join = path.join
+const read = fs.readFileSync
+const readdir = fs.readdirSync
 
-var root = join('test', 'fixtures')
+const root = join('test', 'fixtures')
 
-var fixtures = readdir(root)
+const fixtures = readdir(root)
 
-test('remark-github()', function (t) {
+test('remark-github()', (t) => {
   t.equal(typeof remarkGitHub, 'function', 'should be a function')
 
-  t.doesNotThrow(function () {
+  t.doesNotThrow(() => {
     remark().use(remarkGitHub).freeze()
   }, 'should not throw if not passed options')
 
@@ -35,41 +35,41 @@ test('remark-github()', function (t) {
   t.end()
 })
 
-test('Fixtures', function (t) {
-  fixtures
-    .filter(function (basename) {
-      return basename.charAt(0) !== '.'
+test('Fixtures', (t) => {
+  let index = -1
+
+  while (++index < fixtures.length) {
+    const fixture = fixtures[index]
+    if (fixture.charAt(0) === '.') continue
+    const filepath = join(root, fixture)
+    const output = read(join(filepath, 'output.md'), 'utf-8')
+    const input = read(join(filepath, 'input.md'), 'utf-8')
+    const result = github(input, 'wooorm/remark')
+
+    test('should work on `' + fixture + '`', (t) => {
+      const results = result.split('\n')
+      const outputs = output.split('\n')
+      let index = -1
+
+      t.equal(results.length, outputs.length, 'should  be same length')
+
+      while (++index < results.length) {
+        const resultLine = results[index]
+        if (resultLine !== '') {
+          t.equal(resultLine, outputs[index], resultLine)
+        }
+      }
+
+      t.end()
     })
-    .forEach(function (fixture) {
-      var filepath = join(root, fixture)
-      var output = read(join(filepath, 'output.md'), 'utf-8')
-      var input = read(join(filepath, 'input.md'), 'utf-8')
-      var result = github(input, 'wooorm/remark')
-
-      test('should work on `' + fixture + '`', function (t) {
-        var results = result.split('\n')
-        var outputs = output.split('\n')
-
-        t.equal(results.length, outputs.length, 'should  be same length')
-
-        results.forEach(function (resultLine, index) {
-          if (resultLine !== '') {
-            t.equal(resultLine, outputs[index], resultLine)
-          }
-        })
-
-        t.end()
-      })
-
-      // Fs.writeFileSync(join(filepath, 'output.md'), result)
-    })
+  }
 
   t.end()
 })
 
 // List of repo references possible in `package.json`s.
 // From repo-utils/parse-github-repo-url, with some tiny additions.
-var repositories = [
+const repositories = [
   ['component/emitter', 'component', 'emitter'],
   ['https://github.com/component/emitter', 'component', 'emitter'],
   ['git://github.com/component/emitter.git', 'component', 'emitter'],
@@ -130,12 +130,14 @@ var repositories = [
   ['example/example.github.io', 'example', 'example.github.io']
 ]
 
-test('Repositories', function (t) {
-  repositories.forEach(function (repo) {
-    var user = repo[1]
-    var project = repo[2]
+test('Repositories', (t) => {
+  let index = -1
 
-    repo = repo[0]
+  while (++index < repositories.length) {
+    const repo = repositories[index]
+    const user = repo[1]
+    let project = repo[2]
+    const value = repo[0]
 
     if (project === '_') project = '\\_'
 
@@ -149,7 +151,7 @@ test('Repositories', function (t) {
           '*   User#Num: wooorm#26',
           ''
         ].join('\n'),
-        repo
+        value
       ),
       [
         '*   SHA: [`a5c3785`](https://github.com/' +
@@ -177,15 +179,15 @@ test('Repositories', function (t) {
           '/issues/26)',
         ''
       ].join('\n'),
-      'should work on `' + repo + '`'
+      'should work on `' + value + '`'
     )
-  })
+  }
 
   t.end()
 })
 
-test('Miscellaneous', function (t) {
-  var original = process.cwd()
+test('Miscellaneous', (t) => {
+  const original = process.cwd()
 
   t.equal(
     github('test@12345678', null),
@@ -205,7 +207,7 @@ test('Miscellaneous', function (t) {
   process.chdir(join(process.cwd(), 'fixtures'))
 
   t.throws(
-    function () {
+    () => {
       github('1234567', null)
     },
     /Missing `repository`/,
@@ -219,9 +221,7 @@ test('Miscellaneous', function (t) {
 
 // Shortcut to process.
 function github(value, repo) {
-  var options
-
-  options =
+  const options =
     typeof repo === 'string' || !repo ? {repository: repo || null} : repo
 
   return remark()

@@ -5,12 +5,12 @@ import {toString} from 'mdast-util-to-string'
 import {findAndReplace} from 'mdast-util-find-and-replace'
 
 // Hide process use from browserify and the like.
-var proc = typeof global !== 'undefined' && global.process
+const proc = typeof global !== 'undefined' && global.process
 
 // Previously, GitHub linked `@mention` and `@mentions` to their blog post about
 // mentions (<https://github.com/blog/821>).
 // Since June 2019, and possibly earlier, they stopped linking those references.
-var denyMention = ['mention', 'mentions']
+const denyMention = new Set(['mention', 'mentions'])
 
 // Denylist of SHAs that are also valid words.
 //
@@ -27,32 +27,38 @@ var denyMention = ['mention', 'mentions']
 //
 // Added a couple forms of 6 character words in GH-20:
 // <https://github.com/remarkjs/remark-github/issues/20>.
-var denyHash = ['acceded', 'deedeed', 'defaced', 'effaced', 'fabaceae']
+const denyHash = new Set([
+  'acceded',
+  'deedeed',
+  'defaced',
+  'effaced',
+  'fabaceae'
+])
 
 // Constants.
-var minShaLength = 7
+const minShaLength = 7
 
 // Username may only contain alphanumeric characters or single hyphens, and
 // cannot begin or end with a hyphen*.
 //
 // \* That is: until <https://github.com/remarkjs/remark-github/issues/13>.
-var userGroup = '[\\da-z][-\\da-z]{0,38}'
-var projectGroup = '(?:\\.git[\\w-]|\\.(?!git)|[\\w-])+'
-var repoGroup = '(' + userGroup + ')\\/(' + projectGroup + ')'
+const userGroup = '[\\da-z][-\\da-z]{0,38}'
+const projectGroup = '(?:\\.git[\\w-]|\\.(?!git)|[\\w-])+'
+const repoGroup = '(' + userGroup + ')\\/(' + projectGroup + ')'
 
-var linkRegex = new RegExp(
+const linkRegex = new RegExp(
   '^https?:\\/\\/github\\.com\\/' +
     repoGroup +
     '\\/(commit|issues|pull)\\/([a-f\\d]+\\/?(?=[#?]|$))',
   'i'
 )
 
-var repoRegex = new RegExp(
+const repoRegex = new RegExp(
   '(?:^|/(?:repos/)?)' + repoGroup + '(?=\\.git|[\\/#@]|$)',
   'i'
 )
 
-var referenceRegex = new RegExp(
+const referenceRegex = new RegExp(
   '(' +
     userGroup +
     ')(?:\\/(' +
@@ -61,21 +67,21 @@ var referenceRegex = new RegExp(
   'gi'
 )
 
-var mentionRegex = new RegExp(
+const mentionRegex = new RegExp(
   '@(' + userGroup + '(?:\\/' + userGroup + ')?)',
   'gi'
 )
 
 export default function remarkGithub(options) {
-  var settings = options || {}
-  var repository = settings.repository
-  var pkg
+  const settings = options || {}
+  let repository = settings.repository
+  let pkg
 
   // Get the repository from `package.json`.
   if (!repository) {
     try {
       pkg = JSON.parse(fs.readFileSync(path.join(proc.cwd(), 'package.json')))
-    } catch (_) {}
+    } catch {}
 
     repository =
       pkg && pkg.repository ? pkg.repository.url || pkg.repository : ''
@@ -107,17 +113,17 @@ export default function remarkGithub(options) {
   }
 
   function replaceMention(value, username, match) {
-    var node
+    let node
 
     if (
       /[\w`]/.test(match.input.charAt(match.index - 1)) ||
       /[/\w`]/.test(match.input.charAt(match.index + value.length)) ||
-      denyMention.indexOf(username) !== -1
+      denyMention.has(username)
     ) {
       return false
     }
 
-    node = {type: 'text', value: value}
+    node = {type: 'text', value}
 
     if (settings.mentionStrong !== false) {
       node = {type: 'strong', children: [node]}
@@ -149,7 +155,7 @@ export default function remarkGithub(options) {
         repository.project +
         '/issues/' +
         no,
-      children: [{type: 'text', value: value}]
+      children: [{type: 'text', value}]
     }
   }
 
@@ -157,7 +163,7 @@ export default function remarkGithub(options) {
     if (
       /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
       /\w/.test(match.input.charAt(match.index + value.length)) ||
-      denyHash.indexOf(value) !== -1
+      denyHash.has(value)
     ) {
       return false
     }
@@ -176,9 +182,9 @@ export default function remarkGithub(options) {
     }
   }
 
+  // eslint-disable-next-line max-params
   function replaceReference($0, user, project, no, sha, match) {
-    var value = ''
-    var nodes
+    let value = ''
 
     if (
       /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
@@ -187,7 +193,7 @@ export default function remarkGithub(options) {
       return false
     }
 
-    nodes = []
+    const nodes = []
 
     if (user !== repository.user) {
       value += user
@@ -204,7 +210,7 @@ export default function remarkGithub(options) {
       nodes.push({type: 'inlineCode', value: abbr(sha)})
     }
 
-    nodes.unshift({type: 'text', value: value})
+    nodes.unshift({type: 'text', value})
 
     return {
       type: 'link',
@@ -223,16 +229,15 @@ export default function remarkGithub(options) {
   }
 
   function visitor(node) {
-    var link = parse(node)
-    var children
-    var base
-    var comment
+    const link = parse(node)
+    let children
+    let base
 
     if (!link) {
       return
     }
 
-    comment = link.comment ? ' (comment)' : ''
+    const comment = link.comment ? ' (comment)' : ''
 
     if (link.project !== repository.project) {
       base = link.user + '/' + link.project
@@ -270,8 +275,8 @@ function abbr(sha) {
 
 // Parse a link and determine whether it links to GitHub.
 function parse(node) {
-  var url = node.url || ''
-  var match = linkRegex.exec(url)
+  const url = node.url || ''
+  const match = linkRegex.exec(url)
 
   if (
     // Not a proper URL.

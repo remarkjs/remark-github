@@ -1,4 +1,5 @@
 {
   "type": "module",
-  "repository": "wooorm/remark"
+  "repository": "wooorm/remark",
+  "xo": false
 }

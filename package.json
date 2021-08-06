@@ -52,7 +52,7 @@
     "remark-preset-wooorm": "^8.0.0",
     "tape": "^5.0.0",
     "unified": "^10.0.0",
-    "xo": "^0.37.0"
+    "xo": "^0.39.0"
   },
   "scripts": {
     "format": "remark . -qfo --ignore-pattern test/ && prettier . -w --loglevel warn && xo --fix",
@@ -71,13 +71,6 @@
   },
   "xo": {
     "prettier": true,
-    "esnext": false,
-    "rules": {
-      "complexity": "off",
-      "max-params": "off",
-      "unicorn/prefer-optional-catch-binding": "off",
-      "unicorn/prefer-includes": "off"
-    },
     "ignores": [
       "types/"
     ]
