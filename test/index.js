@@ -3,7 +3,6 @@
  * @typedef {import('../index.js').Options} Options
  */
 
-import assert from 'node:assert'
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
@@ -49,28 +48,11 @@ test('Fixtures', (t) => {
     const fixture = fixtures[index]
     if (fixture.charAt(0) === '.') continue
     const filepath = join(root, fixture)
-    const output = read(join(filepath, 'output.md'), 'utf-8')
+    const expected = read(join(filepath, 'output.md'), 'utf-8')
     const input = read(join(filepath, 'input.md'), 'utf-8')
-    const result = github(input, 'wooorm/remark')
+    const actual = github(input, 'wooorm/remark')
 
-    t.doesNotThrow(() => {
-      const results = result.split('\n')
-      const outputs = output.split('\n')
-      let index = -1
-
-      assert.strictEqual(
-        results.length,
-        outputs.length,
-        'should be same length'
-      )
-
-      while (++index < results.length) {
-        const resultLine = results[index]
-        if (resultLine !== '') {
-          assert.strictEqual(resultLine, outputs[index], resultLine)
-        }
-      }
-    }, 'should work on `' + fixture + '`')
+    t.equal(actual, expected, 'should work on `' + fixture + '`')
   }
 
   t.end()
