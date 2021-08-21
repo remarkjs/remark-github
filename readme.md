@@ -114,6 +114,15 @@ in GitHub issues, PRs, and comments (see
     `remarkjs@1f2a4fb` → [remarkjs@`1f2a4fb`][sha]
 *   Commits across projects:
     `remarkjs/remark-github@1f2a4fb` → [remarkjs/remark-github@`1f2a4fb`][sha]
+*   Compare ranges:
+    `e2acebc...2aa9311` →
+    [`e2acebc...2aa9311`][sha-range]
+*   Compare ranges across forks:
+    `remarkjs@e2acebc...2aa9311` →
+    [remarkjs/remark-github@`e2acebc...2aa9311`][sha-range]
+*   Compare ranges across projects:
+    `remarkjs/remark-github@e2acebc...2aa9311` →
+    [remarkjs/remark-github@`e2acebc...2aa9311`][sha-range]
 *   Prefix issues:
     `GH-1` → [GH-1][issue]
 *   Hash issues:
@@ -210,6 +219,8 @@ abide by its terms.
 [writing-on-github]: https://help.github.com/articles/writing-on-github/#references
 
 [sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
+
+[sha-range]: https://github.com/wooorm/remark/compare/e2acebc...2aa9311
 
 [issue]: https://github.com/remarkjs/remark-github/issues/1
 
