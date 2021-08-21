@@ -60,7 +60,7 @@ const repoGroup = '(' + userGroup + ')\\/(' + projectGroup + ')'
 const linkRegex = new RegExp(
   '^https?:\\/\\/github\\.com\\/' +
     repoGroup +
-    '\\/(commit|issues|pull)\\/([a-f\\d]+\\/?(?=[#?]|$))',
+    '\\/(commit|compare|issues|pull)\\/([a-f\\d]+(?:\\.{3}[a-f\\d]+)?\\/?(?=[#?]|$))',
   'i'
 )
 
@@ -134,10 +134,12 @@ export default function remarkGithub(options = {}) {
         [referenceRegex, replaceReference],
         [mentionRegex, replaceMention],
         [/(?:#|\bgh-)([1-9]\d*)/gi, replaceIssue],
+        [/\b([a-f\d]{7,40})\.{3}([a-f\d]{7,40})\b/gi, replaceHashRange],
         [/\b[a-f\d]{7,40}\b/gi, replaceHash]
       ],
       {ignore: ['link', 'linkReference']}
     )
+
     visit(tree, 'link', (node) => {
       const link = parse(node)
 
@@ -149,7 +151,11 @@ export default function remarkGithub(options = {}) {
       /** @type {string} */
       let base
 
-      if (link.project !== repositoryInfo.project) {
+      if (
+        link.project !== repositoryInfo.project ||
+        // Compare page uses full `user/project` for forks.
+        (link.page === 'compare' && link.user !== repositoryInfo.user)
+      ) {
         base = link.user + '/' + link.project
       } else if (link.user === repositoryInfo.user) {
         base = ''
@@ -160,22 +166,22 @@ export default function remarkGithub(options = {}) {
       /** @type {StaticPhrasingContent[]} */
       const children = []
 
-      if (link.page === 'commit') {
+      if (link.page === 'issues' || link.page === 'pull') {
+        base += '#'
+        children.push({
+          type: 'text',
+          value: base + link.reference + comment
+        })
+      } else {
         if (base) {
           children.push({type: 'text', value: base + '@'})
         }
 
-        children.push({type: 'inlineCode', value: abbr(link.reference)})
+        children.push({type: 'inlineCode', value: link.reference})
 
         if (link.comment) {
           children.push({type: 'text', value: comment})
         }
-      } else {
-        base += '#'
-        children.push({
-          type: 'text',
-          value: base + abbr(link.reference) + comment
-        })
       }
 
       node.children = children
@@ -243,11 +249,44 @@ export default function remarkGithub(options = {}) {
   /**
    * @type {ReplaceFunction}
    * @param {string} value
+   * @param {string} a
+   * @param {string} b
+   * @param {Match} match
+   */
+  function replaceHashRange(value, a, b, match) {
+    if (
+      /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
+      /\w/.test(match.input.charAt(match.index + value.length)) ||
+      denyHash.has(value)
+    ) {
+      return false
+    }
+
+    return {
+      type: 'link',
+      title: null,
+      url:
+        'https://github.com/' +
+        repositoryInfo.user +
+        '/' +
+        repositoryInfo.project +
+        '/compare/' +
+        value,
+      children: [{type: 'inlineCode', value: abbr(a) + '...' + abbr(b)}]
+    }
+  }
+
+  /**
+   * @type {ReplaceFunction}
+   * @param {string} value
    * @param {Match} match
    */
   function replaceHash(value, match) {
     if (
-      /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
+      /[^\t\n\r (@[{.]/.test(match.input.charAt(match.index - 1)) ||
+      // For some weird reason GH does link two dots, but not one 🤷‍♂️
+      (match.input.charAt(match.index - 1) === '.' &&
+        match.input.charAt(match.index - 2) !== '.') ||
       /\w/.test(match.input.charAt(match.index + value.length)) ||
       denyHash.has(value)
     ) {
@@ -352,21 +391,34 @@ function parse(node) {
     node.children.length !== 1 ||
     node.children[0].type !== 'text' ||
     toString(node) !== url ||
-    // Issues / PRs are decimal only.
-    (match[3] !== 'commit' && /[a-f]/i.test(match[4])) ||
     // SHAs can be min 4, max 40 characters.
     (match[3] === 'commit' && (match[4].length < 4 || match[4].length > 40)) ||
+    // SHAs can be min 4, max 40 characters.
+    (match[3] === 'compare' &&
+      !/^[a-f\d]{4,40}\.{3}[a-f\d]{4,40}$/.test(match[4])) ||
+    // Issues / PRs are decimal only.
+    ((match[3] === 'issues' || match[3] === 'pull') &&
+      /[a-f]/i.test(match[4])) ||
     // Projects can be at most 99 characters.
     match[2].length >= 100
   ) {
     return
   }
 
+  let reference = match[4]
+
+  if (match[3] === 'compare') {
+    const [base, compare] = reference.split('...')
+    reference = abbr(base) + '...' + abbr(compare)
+  } else {
+    reference = abbr(reference)
+  }
+
   return {
     user: match[1],
     project: match[2],
     page: match[3],
-    reference: match[4],
+    reference,
     comment:
       url.charAt(match[0].length) === '#' && match[0].length + 1 < url.length
   }
