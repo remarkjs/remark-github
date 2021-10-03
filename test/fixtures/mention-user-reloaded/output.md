@@ -60,7 +60,7 @@ After a right square bracket ][**@username**](https://github.com/username).
 
 After a caret ^[**@username**](https://github.com/username).
 
-After an underscore \_\@username.
+After an underscore \_@username.
 
 After a grave accent \`@username.
 
