@@ -134,6 +134,30 @@ in GitHub issues, PRs, and comments (see
 *   At-mentions:
     `@wooorm` → [**@wooorm**][mention]
 
+##### Custom URLs
+
+By default we build URLs to public GitHub.
+You can overwrite them to point to GitHub Enterprise or other places by passing
+a `buildUrl`.
+That function is given an object with different values and the default
+`buildUrl`.
+
+```js
+remark()
+  .use(remarkGithub, {
+    // The fields in `values` depends on the kind reference:
+    // {type: 'commit', hash, project, user}
+    // {type: 'hashrange', base, compare, project, user}
+    // {type: 'issue', no, project, user}
+    // {type: 'mention', user}
+    buildUrl: (values, defaultBuildUrl) => {
+        return values.type === 'mention'
+            ? `https://yourwebsite.com/${values.user}/`
+            : defaultBuildUrl(values)
+    }
+  })
+```
+
 ###### Repository
 
 These links are generated relative to a project.

@@ -30,7 +30,8 @@
   "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
-    "Anthony Maki <4cm4k1@gmail.com>"
+    "Anthony Maki <4cm4k1@gmail.com>",
+    "Ev Haus <ev@haus.gg>"
   ],
   "sideEffects": false,
   "type": "module",
