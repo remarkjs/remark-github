@@ -11,9 +11,9 @@
  *   Repository to link against.
  */
 
-import fs from 'node:fs'
-import process from 'node:process'
-import path from 'node:path'
+import fs from 'fs'
+import process from 'process'
+import path from 'path'
 import {visit} from 'unist-util-visit'
 import {toString} from 'mdast-util-to-string'
 import {findAndReplace} from 'mdast-util-find-and-replace'
