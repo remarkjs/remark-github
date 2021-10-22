@@ -78,7 +78,10 @@
     "trailingComma": "none"
   },
   "xo": {
-    "prettier": true
+    "prettier": true,
+    "rules": {
+      "unicorn/prefer-node-protocol": "off"
+    }
   },
   "remarkConfig": {
     "plugins": [

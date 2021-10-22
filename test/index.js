@@ -3,9 +3,9 @@
  * @typedef {import('../index.js').Options} Options
  */
 
-import fs from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
+import fs from 'fs'
+import path from 'path'
+import process from 'process'
 import test from 'tape'
 import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
