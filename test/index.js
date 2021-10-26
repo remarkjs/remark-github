@@ -302,7 +302,7 @@ test('Miscellaneous', (t) => {
     () => {
       github('1234567', null)
     },
-    /Missing `repository`/,
+    /Missing or invalid `repository`/,
     'should throw without `repository`'
   )
 

@@ -37,7 +37,14 @@
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
+  "browser": {
+    "./lib/get-repo-from-package.js": "./lib/get-repo-from-package.browser.js"
+  },
+  "react-native": {
+    "./lib/get-repo-from-package.js": "./lib/get-repo-from-package.browser.js"
+  },
   "files": [
+    "lib/",
     "index.d.ts",
     "index.js"
   ],
