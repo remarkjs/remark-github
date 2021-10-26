@@ -180,86 +180,99 @@ test('Repositories', (t) => {
 test('Custom URL builder option', (t) => {
   t.equal(
     github('@wooorm', {
-      buildUrl: (values, defaultBuildUrl) => {
+      buildUrl(values, defaultBuildUrl) {
         return values.type === 'mention'
           ? `https://github.yourcompany.com/${values.user}/`
           : defaultBuildUrl(values)
       }
     }),
     '[**@wooorm**](https://github.yourcompany.com/wooorm/)\n',
-    'should support custom `baseUrl` function value for mentions'
+    'should support `buildUrl` for mentions'
   )
 
   t.equal(
     github('#123', {
-      buildUrl: (values, defaultBuildUrl) => {
+      buildUrl(values, defaultBuildUrl) {
         return values.type === 'issue'
           ? `https://github.yourcompany.com/${values.user}/${values.project}/issues/${values.no}`
           : defaultBuildUrl(values)
       }
     }),
     '[#123](https://github.yourcompany.com/remarkjs/remark-github/issues/123)\n',
-    'should support custom `baseUrl` function value for issues'
+    'should support `buildUrl` for issues'
   )
 
   t.equal(
     github('GH-1', {
-      buildUrl: (values, defaultBuildUrl) => {
+      buildUrl(values, defaultBuildUrl) {
         return values.type === 'issue'
           ? `https://github.yourcompany.com/${values.user}/${values.project}/issues/${values.no}`
           : defaultBuildUrl(values)
       }
     }),
     '[GH-1](https://github.yourcompany.com/remarkjs/remark-github/issues/1)\n',
-    'should support custom `baseUrl` function value for non-standard issues'
+    'should support `buildUrl` for `GH-` issues'
   )
 
   t.equal(
     github('e2acebc...2aa9311', {
-      buildUrl: (values, defaultBuildUrl) => {
+      buildUrl(values, defaultBuildUrl) {
         return values.type === 'compare'
           ? `https://github.yourcompany.com/${values.user}/${values.project}/compare/${values.base}...${values.compare}`
           : defaultBuildUrl(values)
       }
     }),
     '[`e2acebc...2aa9311`](https://github.yourcompany.com/remarkjs/remark-github/compare/e2acebc...2aa9311)\n',
-    'should support custom `baseUrl` function value for hash ranges'
+    'should support `buildUrl` for compare ranges'
   )
 
   t.equal(
     github('1f2a4fb', {
-      buildUrl: (values, defaultBuildUrl) => {
+      buildUrl(values, defaultBuildUrl) {
         return values.type === 'commit'
           ? `https://github.yourcompany.com/${values.user}/${values.project}/commit/${values.hash}`
           : defaultBuildUrl(values)
       }
     }),
     '[`1f2a4fb`](https://github.yourcompany.com/remarkjs/remark-github/commit/1f2a4fb)\n',
-    'should support custom `baseUrl` function value for commit hashes'
+    'should support `buildUrl` for commits'
   )
 
   t.equal(
     github('remarkjs/remark-github#1', {
-      buildUrl: (values, defaultBuildUrl) => {
+      buildUrl(values, defaultBuildUrl) {
         return values.type === 'issue'
           ? `https://github.yourcompany.com/${values.user}/${values.project}/issues/${values.no}`
           : defaultBuildUrl(values)
       }
     }),
     '[#1](https://github.yourcompany.com/remarkjs/remark-github/issues/1)\n',
-    'should support custom `baseUrl` function value for cross-project issue references'
+    'should support `buildUrl` for cross-repo issues'
   )
 
   t.equal(
     github('remarkjs/remark-github@1f2a4fb', {
-      buildUrl: (values, defaultBuildUrl) => {
+      buildUrl(values, defaultBuildUrl) {
         return values.type === 'commit'
           ? `https://github.yourcompany.com/${values.user}/${values.project}/commit/${values.hash}`
           : defaultBuildUrl(values)
       }
     }),
     '[@`1f2a4fb`](https://github.yourcompany.com/remarkjs/remark-github/commit/1f2a4fb)\n',
-    'should support custom `baseUrl` function value for cross-project hash references'
+    'should support `buildUrl` for cross-repo commits'
+  )
+
+  t.equal(
+    github(
+      '@user, #1, 1f2a4fb, e2acebc...2aa9311, remarkjs/remark-github#1, remarkjs/remark-github@1f2a4fb',
+      {
+        buildUrl() {
+          return false
+        }
+      }
+    ),
+    '@user, #1, 1f2a4fb, e2acebc...2aa9311, remarkjs/remark-github#1, remarkjs/remark-github\\@1f2a4fb\n',
+    'should support `buildUrl` returning `false` to not link something'
   )
 
   t.end()

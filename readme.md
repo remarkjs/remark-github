@@ -134,30 +134,6 @@ in GitHub issues, PRs, and comments (see
 *   At-mentions:
     `@wooorm` → [**@wooorm**][mention]
 
-##### Custom URLs
-
-By default we build URLs to public GitHub.
-You can overwrite them to point to GitHub Enterprise or other places by passing
-a `buildUrl`.
-That function is given an object with different values and the default
-`buildUrl`.
-
-```js
-remark()
-  .use(remarkGithub, {
-    // The fields in `values` depends on the kind reference:
-    // {type: 'commit', hash, project, user}
-    // {type: 'hashrange', base, compare, project, user}
-    // {type: 'issue', no, project, user}
-    // {type: 'mention', user}
-    buildUrl: (values, defaultBuildUrl) => {
-        return values.type === 'mention'
-            ? `https://yourwebsite.com/${values.user}/`
-            : defaultBuildUrl(values)
-    }
-  })
-```
-
 ###### Repository
 
 These links are generated relative to a project.
@@ -175,6 +151,32 @@ HTML), to simulate the look of mentions on GitHub.
 However, this creates different HTML markup, as the GitHub site applies these
 styles using CSS.
 Pass `mentionStrong: false` to turn off this behavior.
+
+##### Custom URLs
+
+By default we build URLs to public GitHub.
+You can overwrite them to point to GitHub Enterprise or other places by passing
+a `buildUrl`.
+That function is given an object with different values and the default
+`buildUrl`.
+If `buildUrl` returns `false`, the value is not linked.
+
+```js
+remark()
+  .use(remarkGithub, {
+    // The fields in `values` depends on the kind reference:
+    // {type: 'commit', user, project, hash}
+    // {type: 'compare', user, project, base, compare}
+    // {type: 'issue', user, project, no}
+    // {type: 'mention', user}
+    // You can return a URL, which will be used, or `false`, to not link.
+    buildUrl(values, defaultBuildUrl) {
+      return values.type === 'mention'
+        ? `https://yourwebsite.com/${values.user}/`
+        : defaultBuildUrl(values)
+    }
+  })
+```
 
 ## Security
 

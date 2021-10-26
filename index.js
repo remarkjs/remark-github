@@ -8,31 +8,31 @@
  * @callback BuildUrl
  * @param {BuildUrlValues} values
  * @param {DefaultBuildUrl} defaultBuildUrl
- * @returns {string}
+ * @returns {string|false}
  *
  * @typedef {BuildUrlCommitValues|BuildUrlCompareValues|BuildUrlIssueValues|BuildUrlMentionValues} BuildUrlValues
  *
  * @typedef BuildUrlCommitValues
  *   Arguments for buildUrl functions for commit hash
  * @property {'commit'} type The type of special object
- * @property {string} hash The commit hash value
- * @property {string} project The project of the repo
  * @property {string} user The owner of the repo
+ * @property {string} project The project of the repo
+ * @property {string} hash The commit hash value
  *
  * @typedef BuildUrlCompareValues
  *   Arguments for buildUrl functions for commit hash ranges
  * @property {'compare'} type The type of special object
+ * @property {string} user The owner of the repo
+ * @property {string} project The project of the repo
  * @property {string} base The SHA of the range start
  * @property {string} compare The SHA of the range end
- * @property {string} project The project of the repo
- * @property {string} user The owner of the repo
  *
  * @typedef BuildUrlIssueValues
  *   Arguments for buildUrl functions for issues
  * @property {'issue'} type The type of special object
- * @property {string} no The parsed issue number
- * @property {string} project The project of the repo
  * @property {string} user The owner of the repo
+ * @property {string} project The project of the repo
+ * @property {string} no The parsed issue number
  *
  * @typedef BuildUrlMentionValues
  *   Arguments for buildUrl functions for mentions
@@ -41,8 +41,8 @@
  *
  * @typedef RepositoryInfo
  *   The owner and project of the repo
- * @property {string} project The project/repo name
  * @property {string} user The user/organization name
+ * @property {string} project The project/repo name
  *
  * @typedef Options
  *   Configuration.
@@ -164,7 +164,7 @@ export default function remarkGithub(options = {}) {
 
   /**
    * @param {BuildUrlValues} values
-   * @returns {string}
+   * @returns {string|false}
    */
   function buildUrl(values) {
     if (options.buildUrl) return options.buildUrl(values, defaultBuildUrl)
@@ -257,6 +257,10 @@ export default function remarkGithub(options = {}) {
       return false
     }
 
+    const url = buildUrl({type: 'mention', user: username})
+
+    if (!url) return false
+
     /** @type {StaticPhrasingContent} */
     let node = {type: 'text', value}
 
@@ -264,12 +268,7 @@ export default function remarkGithub(options = {}) {
       node = {type: 'strong', children: [node]}
     }
 
-    return {
-      type: 'link',
-      title: null,
-      url: buildUrl({type: 'mention', user: username}),
-      children: [node]
-    }
+    return {type: 'link', title: null, url, children: [node]}
   }
 
   /**
@@ -286,17 +285,11 @@ export default function remarkGithub(options = {}) {
       return false
     }
 
-    return {
-      type: 'link',
-      title: null,
-      url: buildUrl({
-        type: 'issue',
-        no,
-        project: repositoryInfo.project,
-        user: repositoryInfo.user
-      }),
-      children: [{type: 'text', value}]
-    }
+    const url = buildUrl({type: 'issue', ...repositoryInfo, no})
+
+    return url
+      ? {type: 'link', title: null, url, children: [{type: 'text', value}]}
+      : false
   }
 
   /**
@@ -315,18 +308,21 @@ export default function remarkGithub(options = {}) {
       return false
     }
 
-    return {
-      type: 'link',
-      title: null,
-      url: buildUrl({
-        type: 'compare',
-        base: a,
-        compare: b,
-        project: repositoryInfo.project,
-        user: repositoryInfo.user
-      }),
-      children: [{type: 'inlineCode', value: abbr(a) + '...' + abbr(b)}]
-    }
+    const url = buildUrl({
+      type: 'compare',
+      ...repositoryInfo,
+      base: a,
+      compare: b
+    })
+
+    return url
+      ? {
+          type: 'link',
+          title: null,
+          url,
+          children: [{type: 'inlineCode', value: abbr(a) + '...' + abbr(b)}]
+        }
+      : false
   }
 
   /**
@@ -346,32 +342,29 @@ export default function remarkGithub(options = {}) {
       return false
     }
 
-    return {
-      type: 'link',
-      title: null,
-      url: buildUrl({
-        type: 'commit',
-        project: repositoryInfo.project,
-        user: repositoryInfo.user,
-        hash: value
-      }),
-      children: [{type: 'inlineCode', value: abbr(value)}]
-    }
+    const url = buildUrl({type: 'commit', ...repositoryInfo, hash: value})
+
+    return url
+      ? {
+          type: 'link',
+          title: null,
+          url,
+          children: [{type: 'inlineCode', value: abbr(value)}]
+        }
+      : false
   }
 
   /**
    * @type {ReplaceFunction}
    * @param {string} $0
    * @param {string} user
-   * @param {string} project
+   * @param {string} specificProject
    * @param {string} no
-   * @param {string} sha
+   * @param {string} hash
    * @param {Match} match
    */
   // eslint-disable-next-line max-params
-  function replaceReference($0, user, project, no, sha, match) {
-    let value = ''
-
+  function replaceReference($0, user, specificProject, no, hash, match) {
     if (
       /[^\t\n\r (@[{]/.test(match.input.charAt(match.index - 1)) ||
       /\w/.test(match.input.charAt(match.index + $0.length))
@@ -379,44 +372,33 @@ export default function remarkGithub(options = {}) {
       return false
     }
 
+    const project = specificProject || repositoryInfo.project
+    const url = no
+      ? buildUrl({type: 'issue', user, project, no})
+      : buildUrl({type: 'commit', user, project, hash})
+
+    if (!url) return false
+
     /** @type {StaticPhrasingContent[]} */
     const nodes = []
+    let value = ''
 
-    if (user !== repositoryInfo.user) {
+    if (project !== repositoryInfo.project) {
+      value += user + '/' + project
+    } else if (user !== repositoryInfo.user) {
       value += user
-    }
-
-    if (project && project !== repositoryInfo.project) {
-      value = user + '/' + project
     }
 
     if (no) {
       value += '#' + no
     } else {
       value += '@'
-      nodes.push({type: 'inlineCode', value: abbr(sha)})
+      nodes.push({type: 'inlineCode', value: abbr(hash)})
     }
 
     nodes.unshift({type: 'text', value})
 
-    return {
-      type: 'link',
-      title: null,
-      url: no
-        ? buildUrl({
-            type: 'issue',
-            no,
-            project: project || repositoryInfo.project,
-            user
-          })
-        : buildUrl({
-            type: 'commit',
-            hash: sha,
-            project: project || repositoryInfo.project,
-            user
-          }),
-      children: nodes
-    }
+    return {type: 'link', title: null, url, children: nodes}
   }
 }
 
@@ -448,7 +430,7 @@ function defaultBuildUrl(values) {
   if (values.type === 'issue')
     return [base, user, project, 'issues', values.no].join('/')
 
-  // This should only run if values.type is 'compare'
+  // `values.type` is `'compare'`
   return [
     base,
     user,
