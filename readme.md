@@ -61,7 +61,7 @@ Another plugin, [`remark-breaks`][remark-breaks], turns soft line endings
 ## Install
 
 This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
-In Node.js (12.20+, 14.14+, 16.0+), install with [npm][]:
+In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
 
 ```sh
 npm install remark-github
@@ -289,7 +289,7 @@ versions of Node.js.
 As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
 Our projects sometimes work with older versions, but this is not guaranteed.
 
-This plugin works with `unified` 6+ and `remark` 7+.
+This plugin works with `unified` version 6+ and `remark` version 7+.
 
 ## Security
 
