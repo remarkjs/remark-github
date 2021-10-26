@@ -35,7 +35,8 @@ in the same way that GitHub does in comments, issues, PRs, and releases (see
 This package is a [unified][] ([remark][]) plugin to link references to commits,
 issues, and users: `@wooorm` -> `[**@wooorm**](https://github.com/wooorm)`.
 
-**unified** is a project that transforms content with abstract syntax trees (ASTs).
+**unified** is a project that transforms content with abstract syntax trees
+(ASTs).
 **remark** adds support for markdown to unified.
 **mdast** is the markdown AST that remark uses.
 This is a remark plugin that transforms mdast.
