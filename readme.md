@@ -43,9 +43,9 @@ This plugin transforms the AST.
 
 ## When should I use this?
 
-This project is useful if you want to emulate how markdown would work in a
-GitHub comment/issue/PR/release, but it’s actually displayed somewhere else (on
-a website, or in other places on GitHub which don’t link references, such as
+This project is useful if you want to emulate how markdown would work in GitHub
+comments, issues, PRs, or releases, but it’s actually displayed somewhere else
+(on a website, or in other places on GitHub which don’t link references, such as
 markdown in a repo or Gist).
 This plugin does not support other platforms such as GitLab or Bitbucket and
 their custom features.
