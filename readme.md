@@ -55,7 +55,8 @@ Flavored Markdown).
 GFM is a set of extensions (autolink literals, footnotes, strikethrough, tables,
 and tasklists) to markdown that are supported everywhere on GitHub.
 
-Another plugin, [`remark-breaks`][remark-breaks], turns soft line endings (enters) into hard breaks (`<br>`s).
+Another plugin, [`remark-breaks`][remark-breaks], turns soft line endings
+(enters) into hard breaks (`<br>`s).
 
 ## Install
 
