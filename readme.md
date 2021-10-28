@@ -8,26 +8,77 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**remark**][remark] plugin to automatically link references to commits, issues,
-pull-requests, and users, like in GitHub issues, PRs, and comments (see [Writing
-on GitHub][writing-on-github]).
+[**remark**][remark] plugin to link references to commits, issues, and users,
+in the same way that GitHub does in comments, issues, PRs, and releases (see
+[Writing on GitHub][writing-on-github]).
 
-## Note!
+## Contents
 
-This plugin is ready for the new parser in remark
-([`micromark`](https://github.com/micromark/micromark),
-see [`remarkjs/remark#536`](https://github.com/remarkjs/remark/pull/536)).
-Version 10 works with old (12) and new (13+) remark!
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`unified().use(remarkGithub[, options])`](#unifieduseremarkgithub-options)
+*   [Examples](#examples)
+*   [Example: `buildUrl`](#example-buildurl)
+*   [Syntax](#syntax)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Security](#security)
+*   [Related](#related)
+*   [Contribute](#contribute)
+*   [License](#license)
+
+## What is this?
+
+This package is a [unified][] ([remark][]) plugin to link references to commits,
+issues, and users: `@wooorm` -> `[**@wooorm**](https://github.com/wooorm)`.
+
+**unified** is a project that transforms content with abstract syntax trees
+(ASTs).
+**remark** adds support for markdown to unified.
+**mdast** is the markdown AST that remark uses.
+This is a remark plugin that transforms mdast.
+
+## When should I use this?
+
+This project is useful if you want to emulate how markdown would work in GitHub
+comments, issues, PRs, or releases, but it’s actually displayed somewhere else
+(on a website, or in other places on GitHub which don’t link references, such as
+markdown in a repo or Gist).
+This plugin does not support other platforms such as GitLab or Bitbucket and
+their custom features.
+
+A different plugin, [`remark-gfm`][remark-gfm], adds support for GFM (GitHub
+Flavored Markdown).
+GFM is a set of extensions (autolink literals, footnotes, strikethrough, tables,
+and tasklists) to markdown that are supported everywhere on GitHub.
+
+Another plugin, [`remark-breaks`][remark-breaks], turns soft line endings
+(enters) into hard breaks (`<br>`s).
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
 
 ```sh
 npm install remark-github
+```
+
+In Deno with [Skypack][]:
+
+```js
+import remarkGithub from 'https://cdn.skypack.dev/remark-github@11?dts'
+```
+
+In browsers with [Skypack][]:
+
+```html
+<script type="module">
+  import remarkGithub from 'https://cdn.skypack.dev/remark-github@11?min'
+</script>
 ```
 
 ## Use
@@ -58,18 +109,21 @@ Some links:
 And our module, `example.js`, looks as follows:
 
 ```js
-import {readSync} from 'to-vfile'
+import {read} from 'to-vfile'
 import {remark} from 'remark'
+import remarkGfm from 'remark-gfm'
 import remarkGithub from 'remark-github'
 
-const file = readSync('example.md')
+main()
 
-remark()
-  .use(remarkGithub)
-  .process(file)
-  .then((file) => {
-    console.log(String(file))
-  })
+async function main() {
+  const file = await remark()
+    .use(remarkGfm)
+    .use(remarkGithub)
+    .process(await read('example.md'))
+
+  console.log(String(file))
+}
 ```
 
 Now, running `node example` yields:
@@ -102,11 +156,93 @@ The default export is `remarkGithub`.
 
 ### `unified().use(remarkGithub[, options])`
 
-Automatically link references to commits, issues, pull-requests, and users, like
-in GitHub issues, PRs, and comments (see
+Link references to users, commits, and issues, in the same way that GitHub does
+in comments, issues, PRs, and releases (see
 [Writing on GitHub][writing-on-github]).
 
-###### Conversion
+##### `options`
+
+Configuration (optional).
+
+###### `options.repository`
+
+Repository to link against (`string`, optional).
+Detected in Node.js from the `repository` field in `package.json` if not given.
+Should point to a GitHub repository, such as
+`'https://github.com/user/project.git'` or `'user/project'`.
+
+###### `options.mentionStrong`
+
+Wrap mentions in `strong` (`boolean`, default: `true`).
+This makes them render more like how GitHub styles them.
+But GitHub itself uses CSS instead of strong.
+
+###### `options.buildUrl`
+
+Change how (and whether) things are linked (`Function`, optional).
+This can be used to point links to GitHub Enterprise or other places.
+It’s called with the following parameters:
+
+*   `values` (`BuildUrlValues`)
+    — info on the link to build
+*   `defaultBuildUrl` (`(values: BuildUrlValues) => string`)
+    — function that can be called to perform normal behavior
+
+It should return the URL to use (`string`) or `false` to not create a link.
+
+The following schemas are passed as `BuildUrlValues`:
+
+*   `{type: 'commit', user, project, hash}`
+*   `{type: 'compare', user, project, base, compare}`
+*   `{type: 'issue', user, project, no}`
+*   `{type: 'mention', user}`
+
+## Examples
+
+## Example: `buildUrl`
+
+A `buildUrl` can be passed to not link mentions.
+For example, by changing `example.js` from before like so:
+
+```diff
+@@ -8,7 +8,11 @@ main()
+ async function main() {
+   const file = await remark()
+     .use(remarkGfm)
+-    .use(remarkGithub)
++    .use(remarkGithub, {
++      buildUrl(values, defaultBuildUrl) {
++        return values.type === 'mention' ? false : defaultBuildUrl(values)
++      }
++    })
+     .process(await read('example.md'))
+
+   console.log(String(file))
+```
+
+To instead point mentions to a different place, change `example.js` like so:
+
+```diff
+@@ -8,7 +8,13 @@ main()
+ async function main() {
+   const file = await remark()
+     .use(remarkGfm)
+-    .use(remarkGithub)
++    .use(remarkGithub, {
++      buildUrl(values, defaultBuildUrl) {
++        return values.type === 'mention'
++          ? `https://yourwebsite.com/${values.user}/`
++          : defaultBuildUrl(values)
++      }
++    })
+     .process(await read('example.md'))
+
+   console.log(String(file))
+```
+
+## Syntax
+
+The following references are supported:
 
 *   Commits:
     `1f2a4fb` → [`1f2a4fb`][sha]
@@ -134,55 +270,40 @@ in GitHub issues, PRs, and comments (see
 *   At-mentions:
     `@wooorm` → [**@wooorm**][mention]
 
-###### Repository
+Autolinks to these references are also transformed:
+`https://github.com/wooorm` -> `[**@wooorm**](https://github.com/wooorm)`
 
-These links are generated relative to a project.
-In Node this is detected automatically by loading `package.json` and looking for
-a `repository` field.
-In the browser, or when overwriting this, you can pass a `repository` in
-`options`.
-The value of `repository` should be a URL to a GitHub repository, such as
-`'https://github.com/user/project.git'`, or only `'user/project'`.
+## Types
 
-###### Mentions
+This package is fully typed with [TypeScript][].
+It exports an `Options` type, which specifies the interface of the accepted
+options.
+There are also `BuildUrl`, `BuildUrlValues`, `BuildUrlCommitValues`,
+`BuildUrlCompareValues`, `BuildUrlIssueValues`, `BuildUrlMentionValues`,
+and `DefaultBuildUrl` types exported.
 
-By default, mentions are wrapped in `strong` nodes (that render to `<strong>` in
-HTML), to simulate the look of mentions on GitHub.
-However, this creates different HTML markup, as the GitHub site applies these
-styles using CSS.
-Pass `mentionStrong: false` to turn off this behavior.
+## Compatibility
 
-##### Custom URLs
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
 
-By default we build URLs to public GitHub.
-You can overwrite them to point to GitHub Enterprise or other places by passing
-a `buildUrl`.
-That function is given an object with different values and the default
-`buildUrl`.
-If `buildUrl` returns `false`, the value is not linked.
-
-```js
-remark()
-  .use(remarkGithub, {
-    // The fields in `values` depends on the kind reference:
-    // {type: 'commit', user, project, hash}
-    // {type: 'compare', user, project, base, compare}
-    // {type: 'issue', user, project, no}
-    // {type: 'mention', user}
-    // You can return a URL, which will be used, or `false`, to not link.
-    buildUrl(values, defaultBuildUrl) {
-      return values.type === 'mention'
-        ? `https://yourwebsite.com/${values.user}/`
-        : defaultBuildUrl(values)
-    }
-  })
-```
+This plugin works with `unified` version 6+ and `remark` version 7+.
 
 ## Security
 
 Use of `remark-github` does not involve [**rehype**][rehype] ([**hast**][hast]).
 It does inject links based on user content, but those links only go to GitHub.
 There are no openings for [cross-site scripting (XSS)][xss] attacks.
+
+## Related
+
+*   [`remark-gfm`][remark-gfm]
+    — support GFM (autolink literals, footnotes, strikethrough, tables,
+    tasklists)
+*   [`remark-breaks`][remark-breaks]
+    — support breaks without needing spaces or escapes (enters to `<br>`)
 
 ## Contribute
 
@@ -228,6 +349,8 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[skypack]: https://www.skypack.dev
+
 [health]: https://github.com/remarkjs/.github
 
 [contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
@@ -242,7 +365,9 @@ abide by its terms.
 
 [remark]: https://github.com/remarkjs/remark
 
-[writing-on-github]: https://help.github.com/articles/writing-on-github/#references
+[unified]: https://github.com/unifiedjs/unified
+
+[writing-on-github]: https://docs.github.com/en/github/writing-on-github#references
 
 [sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
 
@@ -254,6 +379,12 @@ abide by its terms.
 
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
 
+[typescript]: https://www.typescriptlang.org
+
 [rehype]: https://github.com/rehypejs/rehype
 
 [hast]: https://github.com/syntax-tree/hast
+
+[remark-gfm]: https://github.com/remarkjs/remark-gfm
+
+[remark-breaks]: https://github.com/remarkjs/remark-breaks
