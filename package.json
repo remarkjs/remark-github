@@ -1,6 +1,6 @@
 {
   "name": "remark-github",
-  "version": "11.2.0",
+  "version": "11.2.1",
   "description": "remark plugin to autolink references like in GitHub issues, PRs, and comments",
   "license": "MIT",
   "keywords": [
