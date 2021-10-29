@@ -57,6 +57,12 @@ and tasklists) to markdown that are supported everywhere on GitHub.
 
 Another plugin, [`remark-breaks`][remark-breaks], turns soft line endings
 (enters) into hard breaks (`<br>`s).
+GitHub does this in a few places (comments, issues, PRs, and releases), but it’s
+not semantic according to HTML and not compliant to markdown.
+
+Yet another plugin, [`remark-frontmatter`][remark-frontmatter], adds support
+for YAML frontmatter.
+GitHub supports frontmatter for files in Gists and repos.
 
 ## Install
 
@@ -304,6 +310,8 @@ There are no openings for [cross-site scripting (XSS)][xss] attacks.
     tasklists)
 *   [`remark-breaks`][remark-breaks]
     — support breaks without needing spaces or escapes (enters to `<br>`)
+*   [`remark-frontmatter`][remark-frontmatter]
+    — support frontmatter (YAML, TOML, and more)
 
 ## Contribute
 
@@ -388,3 +396,5 @@ abide by its terms.
 [remark-gfm]: https://github.com/remarkjs/remark-gfm
 
 [remark-breaks]: https://github.com/remarkjs/remark-breaks
+
+[remark-frontmatter]: https://github.com/remarkjs/remark-frontmatter
