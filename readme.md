@@ -21,7 +21,7 @@ in the same way that GitHub does in comments, issues, PRs, and releases (see
 *   [API](#api)
     *   [`unified().use(remarkGithub[, options])`](#unifieduseremarkgithub-options)
 *   [Examples](#examples)
-*   [Example: `buildUrl`](#example-buildurl)
+    *   [Example: `buildUrl`](#example-buildurl)
 *   [Syntax](#syntax)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
@@ -205,7 +205,7 @@ The following schemas are passed as `BuildUrlValues`:
 
 ## Examples
 
-## Example: `buildUrl`
+### Example: `buildUrl`
 
 A `buildUrl` can be passed to not link mentions.
 For example, by changing `example.js` from before like so:
