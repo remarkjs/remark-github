@@ -130,8 +130,6 @@ test('Repositories', (t) => {
     let project = repo[2]
     const value = repo[0]
 
-    if (project === '_') project = '\\_'
-
     t.equal(
       github(
         [
