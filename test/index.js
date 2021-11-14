@@ -127,7 +127,7 @@ test('Repositories', (t) => {
   while (++index < repositories.length) {
     const repo = repositories[index]
     const user = repo[1]
-    let project = repo[2]
+    const project = repo[2]
     const value = repo[0]
 
     t.equal(
