@@ -73,17 +73,17 @@ In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
 npm install remark-github
 ```
 
-In Deno with [Skypack][]:
+In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import remarkGithub from 'https://cdn.skypack.dev/remark-github@11?dts'
+import remarkGithub from 'https://esm.sh/remark-github@11'
 ```
 
-In browsers with [Skypack][]:
+In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import remarkGithub from 'https://cdn.skypack.dev/remark-github@11?min'
+  import remarkGithub from 'https://esm.sh/remark-github@11?bundle'
 </script>
 ```
 
@@ -357,7 +357,7 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
-[skypack]: https://www.skypack.dev
+[esmsh]: https://esm.sh
 
 [health]: https://github.com/remarkjs/.github
 
