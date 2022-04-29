@@ -38,6 +38,18 @@ test('remark-github()', (t) => {
     'should support `mentionStrong: false`'
   )
 
+  t.equal(
+    github('#1', {issueCharReplacement: '#&#8203;'}),
+    '[#\\&#8203;1](https://github.com/remarkjs/remark-github/issues/1)\n',
+    'should support custom `issueCharReplacement`'
+  )
+
+  t.equal(
+    github('@wooorm', {mentionCharReplacement: '@&#8203;'}),
+    '[**@\\&#8203;wooorm**](https://github.com/wooorm)\n',
+    'should support custom `mentionCharReplacement`'
+  )
+
   t.end()
 })
 
@@ -271,6 +283,16 @@ test('Custom URL builder option', (t) => {
     ),
     '@user, #1, 1f2a4fb, e2acebc...2aa9311, remarkjs/remark-github#1, remarkjs/remark-github\\@1f2a4fb\n',
     'should support `buildUrl` returning `false` to not link something'
+  )
+
+  t.equal(
+    github('@wooorm, #123', {
+      buildUrl(values, defaultBuildUrl) {
+        return defaultBuildUrl(values, 'https://github.yourcompany.com')
+      }
+    }),
+    '[**@wooorm**](https://github.yourcompany.com/wooorm), [#123](https://github.yourcompany.com/remarkjs/remark-github/issues/123)\n',
+    'should support `buildUrl` using `defaultBuildUrl` with custom base URL'
   )
 
   t.end()

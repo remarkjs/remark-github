@@ -191,7 +191,7 @@ It’s called with the following parameters:
 
 *   `values` (`BuildUrlValues`)
     — info on the link to build
-*   `defaultBuildUrl` (`(values: BuildUrlValues) => string`)
+*   `defaultBuildUrl` (`(values: BuildUrlValues, base?: string) => string`)
     — function that can be called to perform normal behavior
 
 It should return the URL to use (`string`) or `false` to not create a link.
@@ -202,6 +202,19 @@ The following schemas are passed as `BuildUrlValues`:
 *   `{type: 'compare', user, project, base, compare}`
 *   `{type: 'issue', user, project, no}`
 *   `{type: 'mention', user}`
+
+###### `options.issueCharReplacement`
+
+Replace the issue character (`#`) with something else (`string`, optional).
+This can be used, for example, to prevent the corresponding issues from
+receiving a reference when the generated Markdown is posted somewhere
+on GitHub.
+
+###### `options.mentionCharReplacement`
+
+Replace the mention character (`@`) with something else (`string`, optional).
+This can be used, for example, to prevent mentioned users from receiving
+a notification when the generated Markdown is posted somewhere on GitHub.
 
 ## Examples
 
@@ -239,6 +252,25 @@ To instead point mentions to a different place, change `example.js` like so:
 +        return values.type === 'mention'
 +          ? `https://yourwebsite.com/${values.user}/`
 +          : defaultBuildUrl(values)
++      }
++    })
+     .process(await read('example.md'))
+
+   console.log(String(file))
+```
+
+To only change the base URL (`https://github.com`) and otherwise keep the
+default behavior, change `example.js` like so:
+
+```diff
+@@ -8,7 +8,11 @@ main()
+ async function main() {
+   const file = await remark()
+     .use(remarkGfm)
+-    .use(remarkGithub)
++    .use(remarkGithub, {
++      buildUrl(values, defaultBuildUrl) {
++        return defaultBuildUrl(values, 'https://yourwebsite.com')
 +      }
 +    })
      .process(await read('example.md'))
