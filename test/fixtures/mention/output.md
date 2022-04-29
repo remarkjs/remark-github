@@ -6,7 +6,7 @@ For example, [**@user**](https://github.com/user), [**@organization**](https://g
 
 GitHub ignores @mention and @mentions.
 
-Some valid real world examples: [**@a**](https://github.com/a), [**@github**](https://github.com/github), [**@github/security**](https://github.com/github/security).
+Some valid real world examples: [**@a**](https://github.com/a), [**@github**](https://github.com/github), [**@github/security**](https://github.com/github/security), [**@dependabot**](https://github.com/dependabot)\[bot].
 
 But this is invalid: @-w.
 
