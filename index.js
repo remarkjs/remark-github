@@ -9,6 +9,4 @@
  * @typedef {import('./lib/index.js').BuildUrlMentionValues} BuildUrlMentionValues
  */
 
-import remarkGithub from './lib/index.js'
-
-export default remarkGithub
+export {default} from './lib/index.js'
