@@ -5,10 +5,10 @@
 
 import fs from 'fs'
 import path from 'path'
-import process from 'process'
 import test from 'tape'
 import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
+import {VFile} from 'vfile'
 import remarkGitHub from '../index.js'
 
 const join = path.join
@@ -277,34 +277,44 @@ test('Custom URL builder option', (t) => {
 })
 
 test('Miscellaneous', (t) => {
-  const original = process.cwd()
-
   t.equal(
-    github('test@12345678', null),
+    github(
+      new VFile({
+        value: 'test@12345678',
+        cwd: new URL('..', import.meta.url).pathname
+      }),
+      null
+    ),
     '[test@`1234567`](https://github.com/' +
       'test/remark-github/commit/12345678)\n',
     'should load a `package.json` when available'
   )
 
-  process.chdir(path.join(process.cwd(), 'test'))
-
   t.equal(
-    github('12345678', null),
+    github(
+      new VFile({
+        value: '12345678',
+        cwd: new URL('.', import.meta.url).pathname
+      }),
+      null
+    ),
     '[`1234567`](https://github.com/wooorm/remark/commit/12345678)\n',
     'should accept a `repository.url` in a `package.json`'
   )
 
-  process.chdir(join(process.cwd(), 'fixtures'))
-
   t.throws(
     () => {
-      github('1234567', null)
+      github(
+        new VFile({
+          value: '12345678',
+          cwd: new URL('./fixtures', import.meta.url).pathname
+        }),
+        null
+      )
     },
     /Missing or invalid `repository`/,
     'should throw without `repository`'
   )
-
-  process.chdir(original)
 
   t.end()
 })
@@ -312,7 +322,7 @@ test('Miscellaneous', (t) => {
 /***
  * Shortcut to process.
  *
- * @param {string} value
+ * @param {string|VFile} value
  * @param {string|Options|null} [repo]
  */
 function github(value, repo) {
