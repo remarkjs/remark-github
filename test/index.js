@@ -307,7 +307,7 @@ test('Miscellaneous', (t) => {
       github(
         new VFile({
           value: '12345678',
-          cwd: new URL('./fixtures', import.meta.url).pathname
+          cwd: new URL('fixtures', import.meta.url).pathname
         }),
         null
       )
