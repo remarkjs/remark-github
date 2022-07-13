@@ -120,16 +120,12 @@ import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkGithub from 'remark-github'
 
-main()
+const file = await remark()
+  .use(remarkGfm)
+  .use(remarkGithub)
+  .process(await read('example.md'))
 
-async function main() {
-  const file = await remark()
-    .use(remarkGfm)
-    .use(remarkGithub)
-    .process(await read('example.md'))
-
-  console.log(String(file))
-}
+console.log(String(file))
 ```
 
 Now, running `node example` yields:
