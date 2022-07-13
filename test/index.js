@@ -48,8 +48,8 @@ test('Fixtures', (t) => {
     const fixture = fixtures[index]
     if (fixture.charAt(0) === '.') continue
     const filepath = join(root, fixture)
-    const expected = read(join(filepath, 'output.md'), 'utf-8')
-    const input = read(join(filepath, 'input.md'), 'utf-8')
+    const expected = read(join(filepath, 'output.md'), 'utf8')
+    const input = read(join(filepath, 'input.md'), 'utf8')
     const actual = github(input, 'wooorm/remark')
 
     t.equal(actual, expected, 'should work on `' + fixture + '`')
