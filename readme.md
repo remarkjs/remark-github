@@ -19,6 +19,7 @@ on GitHub][github-writing]).
 *   [Install](#install)
 *   [Use](#use)
 *   [API](#api)
+    *   [`defaultBuildUrl(values)`](#defaultbuildurlvalues)
     *   [`unified().use(remarkGithub[, options])`](#unifieduseremarkgithub-options)
     *   [`BuildUrl`](#buildurl)
     *   [`BuildUrlCommitValues`](#buildurlcommitvalues)
@@ -26,7 +27,6 @@ on GitHub][github-writing]).
     *   [`BuildUrlIssueValues`](#buildurlissuevalues)
     *   [`BuildUrlMentionValues`](#buildurlmentionvalues)
     *   [`BuildUrlValues`](#buildurlvalues)
-    *   [`DefaultBuildUrl`](#defaultbuildurl)
     *   [`Options`](#options)
 *   [Examples](#examples)
     *   [Example: `buildUrl`](#example-buildurl)
@@ -155,8 +155,21 @@ Some links:
 
 ## API
 
-This package exports no identifiers.
+This package exports the identifier [`defaultBuildUrl`][api-default-build-url].
 The default export is [`remarkGithub`][api-remark-github].
+
+### `defaultBuildUrl(values)`
+
+Create a URL to GH.
+
+###### Parameters
+
+*   `values` ([`BuildUrlValues`][api-build-url-values])
+    — info on the link to build
+
+###### Returns
+
+URL to use (`string`).
 
 ### `unified().use(remarkGithub[, options])`
 
@@ -256,10 +269,6 @@ type BuildUrlValues =
   | BuildUrlIssueValues
   | BuildUrlMentionValues
 ```
-
-### `DefaultBuildUrl`
-
-To do.
 
 ### `Options`
 

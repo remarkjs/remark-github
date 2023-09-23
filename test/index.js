@@ -5,12 +5,13 @@ import test from 'node:test'
 import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
 import {VFile} from 'vfile'
-import remarkGithub from '../index.js'
+import remarkGithub, {defaultBuildUrl} from '../index.js'
 
 test('remarkGithub', async function (t) {
   await t.test('should expose the public api', async function () {
     assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
-      'default'
+      'default',
+      'defaultBuildUrl'
     ])
   })
 
@@ -121,7 +122,7 @@ test('remarkGithub', async function (t) {
     const file = await remark()
       .use(remarkGfm)
       .use(remarkGithub, {
-        buildUrl(values, defaultBuildUrl) {
+        buildUrl(values) {
           return values.type === 'mention'
             ? `https://github.yourcompany.com/${values.user}/`
             : defaultBuildUrl(values)
@@ -139,7 +140,7 @@ test('remarkGithub', async function (t) {
     const file = await remark()
       .use(remarkGfm)
       .use(remarkGithub, {
-        buildUrl(values, defaultBuildUrl) {
+        buildUrl(values) {
           return values.type === 'issue'
             ? `https://github.yourcompany.com/${values.user}/${values.project}/issues/${values.no}`
             : defaultBuildUrl(values)
@@ -157,7 +158,7 @@ test('remarkGithub', async function (t) {
     const file = await remark()
       .use(remarkGfm)
       .use(remarkGithub, {
-        buildUrl(values, defaultBuildUrl) {
+        buildUrl(values) {
           return values.type === 'issue'
             ? `https://github.yourcompany.com/${values.user}/${values.project}/issues/${values.no}`
             : defaultBuildUrl(values)
@@ -177,7 +178,7 @@ test('remarkGithub', async function (t) {
       const file = await remark()
         .use(remarkGfm)
         .use(remarkGithub, {
-          buildUrl(values, defaultBuildUrl) {
+          buildUrl(values) {
             return values.type === 'compare'
               ? `https://github.yourcompany.com/${values.user}/${values.project}/compare/${values.base}...${values.compare}`
               : defaultBuildUrl(values)
@@ -196,7 +197,7 @@ test('remarkGithub', async function (t) {
     const file = await remark()
       .use(remarkGfm)
       .use(remarkGithub, {
-        buildUrl(values, defaultBuildUrl) {
+        buildUrl(values) {
           return values.type === 'commit'
             ? `https://github.yourcompany.com/${values.user}/${values.project}/commit/${values.hash}`
             : defaultBuildUrl(values)
@@ -216,7 +217,7 @@ test('remarkGithub', async function (t) {
       const file = await remark()
         .use(remarkGfm)
         .use(remarkGithub, {
-          buildUrl(values, defaultBuildUrl) {
+          buildUrl(values) {
             return values.type === 'issue'
               ? `https://github.yourcompany.com/${values.user}/${values.project}/issues/${values.no}`
               : defaultBuildUrl(values)
@@ -237,7 +238,7 @@ test('remarkGithub', async function (t) {
       const file = await remark()
         .use(remarkGfm)
         .use(remarkGithub, {
-          buildUrl(values, defaultBuildUrl) {
+          buildUrl(values) {
             return values.type === 'commit'
               ? `https://github.yourcompany.com/${values.user}/${values.project}/commit/${values.hash}`
               : defaultBuildUrl(values)

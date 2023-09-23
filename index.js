@@ -5,8 +5,7 @@
  * @typedef {import('./lib/index.js').BuildUrlIssueValues} BuildUrlIssueValues
  * @typedef {import('./lib/index.js').BuildUrlMentionValues} BuildUrlMentionValues
  * @typedef {import('./lib/index.js').BuildUrlValues} BuildUrlValues
- * @typedef {import('./lib/index.js').DefaultBuildUrl} DefaultBuildUrl
  * @typedef {import('./lib/index.js').Options} Options
  */
 
-export {default} from './lib/index.js'
+export {default, defaultBuildUrl} from './lib/index.js'
