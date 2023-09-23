@@ -8,6 +8,12 @@ import {VFile} from 'vfile'
 import remarkGithub from '../index.js'
 
 test('remarkGithub', async function (t) {
+  await t.test('should expose the public api', async function () {
+    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+      'default'
+    ])
+  })
+
   await t.test('should not throw if not passed options', async function () {
     assert.doesNotThrow(function () {
       remark().use(remarkGithub).freeze()
@@ -43,8 +49,8 @@ test('remarkGithub', async function (t) {
         .use(remarkGithub)
         .process(
           new VFile({
-            value: 'test@12345678',
-            cwd: new URL('..', import.meta.url).pathname
+            cwd: new URL('..', import.meta.url).pathname,
+            value: 'test@12345678'
           })
         )
 
@@ -64,8 +70,8 @@ test('remarkGithub', async function (t) {
         .use(remarkGithub)
         .process(
           new VFile({
-            value: '12345678',
-            cwd: new URL('.', import.meta.url).pathname
+            cwd: new URL('.', import.meta.url).pathname,
+            value: '12345678'
           })
         )
 
@@ -83,8 +89,8 @@ test('remarkGithub', async function (t) {
         .use(remarkGithub)
         .process(
           new VFile({
-            value: '12345678',
-            cwd: new URL('fixtures', import.meta.url).pathname
+            cwd: new URL('fixtures', import.meta.url).pathname,
+            value: '12345678'
           })
         )
       assert.fail()

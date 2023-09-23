@@ -66,7 +66,7 @@
     "type-coverage": "^2.0.0",
     "type-fest": "^4.0.0",
     "typescript": "^5.0.0",
-    "vfile": "^6.0.0",
+    "vfile": "^6.0.1",
     "xo": "^0.56.0"
   },
   "scripts": {
@@ -97,9 +97,6 @@
     "strict": true
   },
   "xo": {
-    "prettier": true,
-    "rules": {
-      "unicorn/prefer-node-protocol": "off"
-    }
+    "prettier": true
   }
 }
