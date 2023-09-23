@@ -329,9 +329,12 @@ function github(value, repo) {
   const options =
     typeof repo === 'string' || !repo ? {repository: repo || undefined} : repo
 
-  return remark()
-    .use(remarkGfm)
-    .use(remarkGitHub, options)
-    .processSync(value)
-    .toString()
+  return (
+    remark()
+      .use(remarkGfm)
+      // @ts-expect-error: to do: fix.
+      .use(remarkGitHub, options)
+      .processSync(value)
+      .toString()
+  )
 }
