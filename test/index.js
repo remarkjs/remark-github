@@ -95,7 +95,25 @@ test('remarkGithub', async function (t) {
         )
       assert.fail()
     } catch (error) {
-      assert.match(String(error), /Missing or invalid `repository`/)
+      assert.match(
+        String(error),
+        /Unexpected missing `repository` in `options`/
+      )
+    }
+  })
+
+  await t.test('should throw w/ incorrect `repository`', async function () {
+    try {
+      await remark()
+        .use(remarkGfm)
+        .use(remarkGithub, {repository: 'a'})
+        .process('@wooorm')
+      assert.fail()
+    } catch (error) {
+      assert.match(
+        String(error),
+        /Unexpected invalid `repository`, expected for example `user\/project`/
+      )
     }
   })
 
