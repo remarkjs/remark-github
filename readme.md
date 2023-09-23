@@ -8,9 +8,9 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**remark**][remark] plugin to link references to commits, issues, and users,
-in the same way that GitHub does in comments, issues, PRs, and releases (see
-[Writing on GitHub][writing-on-github]).
+**[remark][]** plugin to link references to commits, issues, and users, in the
+same way that GitHub does in comments, issues, PRs, and releases (see [Writing
+on GitHub][github-writing]).
 
 ## Contents
 
@@ -20,6 +20,14 @@ in the same way that GitHub does in comments, issues, PRs, and releases (see
 *   [Use](#use)
 *   [API](#api)
     *   [`unified().use(remarkGithub[, options])`](#unifieduseremarkgithub-options)
+    *   [`BuildUrl`](#buildurl)
+    *   [`BuildUrlCommitValues`](#buildurlcommitvalues)
+    *   [`BuildUrlCompareValues`](#buildurlcomparevalues)
+    *   [`BuildUrlIssueValues`](#buildurlissuevalues)
+    *   [`BuildUrlMentionValues`](#buildurlmentionvalues)
+    *   [`BuildUrlValues`](#buildurlvalues)
+    *   [`DefaultBuildUrl`](#defaultbuildurl)
+    *   [`Options`](#options)
 *   [Examples](#examples)
     *   [Example: `buildUrl`](#example-buildurl)
 *   [Syntax](#syntax)
@@ -34,12 +42,6 @@ in the same way that GitHub does in comments, issues, PRs, and releases (see
 
 This package is a [unified][] ([remark][]) plugin to link references to commits,
 issues, and users: `@wooorm` -> `[**@wooorm**](https://github.com/wooorm)`.
-
-**unified** is a project that transforms content with abstract syntax trees
-(ASTs).
-**remark** adds support for markdown to unified.
-**mdast** is the markdown AST that remark uses.
-This is a remark plugin that transforms mdast.
 
 ## When should I use this?
 
@@ -66,8 +68,8 @@ GitHub supports frontmatter for files in Gists and repos.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
-In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
+This package is [ESM only][esm].
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install remark-github
@@ -89,7 +91,7 @@ In browsers with [`esm.sh`][esmsh]:
 
 ## Use
 
-Say we have the following file, `example.md`:
+Say we have the following file `example.md`:
 
 ```markdown
 Some references:
@@ -112,13 +114,13 @@ Some links:
 *   Mention: <https://github.com/ben-eb>
 ```
 
-And our module, `example.js`, looks as follows:
+…and a module `example.js`:
 
 ```js
-import {read} from 'to-vfile'
 import {remark} from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkGithub from 'remark-github'
+import {read} from 'to-vfile'
 
 const file = await remark()
   .use(remarkGfm)
@@ -128,76 +130,154 @@ const file = await remark()
 console.log(String(file))
 ```
 
-Now, running `node example` yields:
+…then running `node example.js` yields:
 
 ```markdown
 Some references:
 
-*   Commit: [`f808317`](https://github.com/remarkjs/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
-*   Commit (fork): [foo@`f808317`](https://github.com/foo/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
-*   Commit (repo): [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
-*   Issue or PR (`#`): [#1](https://github.com/remarkjs/remark-github/issues/1)
-*   Issue or PR (`GH-`): [GH-1](https://github.com/remarkjs/remark-github/issues/1)
-*   Issue or PR (fork): [foo#1](https://github.com/foo/remark-github/issues/1)
-*   Issue or PR (project): [remarkjs/remark#1](https://github.com/remarkjs/remark/issues/1)
-*   Mention: [**@wooorm**](https://github.com/wooorm)
+* Commit: [`f808317`](https://github.com/remarkjs/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
+* Commit (fork): [foo@`f808317`](https://github.com/foo/remark-github/commit/f8083175fe890cbf14f41d0a06e7aa35d4989587)
+* Commit (repo): [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
+* Issue or PR (`#`): [#1](https://github.com/remarkjs/remark-github/issues/1)
+* Issue or PR (`GH-`): [GH-1](https://github.com/remarkjs/remark-github/issues/1)
+* Issue or PR (fork): [foo#1](https://github.com/foo/remark-github/issues/1)
+* Issue or PR (project): [remarkjs/remark#1](https://github.com/remarkjs/remark/issues/1)
+* Mention: [**@wooorm**](https://github.com/wooorm)
 
 Some links:
 
-*   Commit: [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
-*   Commit comment: [remarkjs/remark@`ac63bc3` (comment)](https://github.com/remarkjs/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693)
-*   Issue or PR: [remarkjs/remark#182](https://github.com/remarkjs/remark/issues/182)
-*   Issue or PR comment: [#3 (comment)](https://github.com/remarkjs/remark-github/issues/3#issue-151160339)
-*   Mention: <https://github.com/ben-eb>
+* Commit: [remarkjs/remark@`e1aa9f6`](https://github.com/remarkjs/remark/commit/e1aa9f6c02de18b9459b7d269712bcb50183ce89)
+* Commit comment: [remarkjs/remark@`ac63bc3` (comment)](https://github.com/remarkjs/remark/commit/ac63bc3abacf14cf08ca5e2d8f1f8e88a7b9015c#commitcomment-16372693)
+* Issue or PR: [remarkjs/remark#182](https://github.com/remarkjs/remark/issues/182)
+* Issue or PR comment: [#3 (comment)](https://github.com/remarkjs/remark-github/issues/3#issue-151160339)
+* Mention: <https://github.com/ben-eb>
 ```
 
 ## API
 
 This package exports no identifiers.
-The default export is `remarkGithub`.
+The default export is [`remarkGithub`][api-remark-github].
 
 ### `unified().use(remarkGithub[, options])`
 
 Link references to users, commits, and issues, in the same way that GitHub does
-in comments, issues, PRs, and releases (see
-[Writing on GitHub][writing-on-github]).
+in comments, issues, PRs, and releases.
 
-##### `options`
+###### Parameters
 
-Configuration (optional).
+*   `options` ([`Options`][api-options], optional)
+    — configuration
 
-###### `options.repository`
+###### Returns
 
-Repository to link against (`string`, optional).
-Detected in Node.js from the `repository` field in `package.json` if not given.
-Should point to a GitHub repository, such as
-`'https://github.com/user/project.git'` or `'user/project'`.
+Transform ([`Transformer`][unified-transformer]).
 
-###### `options.mentionStrong`
+### `BuildUrl`
 
-Wrap mentions in `strong` (`boolean`, default: `true`).
-This makes them render more like how GitHub styles them.
-But GitHub itself uses CSS instead of strong.
+Create a URL (TypeScript type).
 
-###### `options.buildUrl`
+###### Parameters
 
-Change how (and whether) things are linked (`Function`, optional).
-This can be used to point links to GitHub Enterprise or other places.
-It’s called with the following parameters:
-
-*   `values` (`BuildUrlValues`)
+*   `values` ([`BuildUrlValues`][api-build-url-values])
     — info on the link to build
-*   `defaultBuildUrl` (`(values: BuildUrlValues) => string`)
-    — function that can be called to perform normal behavior
 
-It should return the URL to use (`string`) or `false` to not create a link.
+###### Returns
 
-The following schemas are passed as `BuildUrlValues`:
+URL to use or `false` to not link (`string | false`).
 
-*   `{type: 'commit', user, project, hash}`
-*   `{type: 'compare', user, project, base, compare}`
-*   `{type: 'issue', user, project, no}`
-*   `{type: 'mention', user}`
+### `BuildUrlCommitValues`
+
+Info for commit hash (TypeScript type).
+
+###### Fields
+
+*   `hash` (`string`)
+    — commit hash value
+*   `project` (`string`)
+    — project name
+*   `type` (`'commit'`)
+    — kind
+*   `user` (`string`)
+    — owner of repo
+
+### `BuildUrlCompareValues`
+
+Info for commit hash ranges (TypeScript type).
+
+###### Fields
+
+*   `base` (`string`)
+    — SHA of the range start
+*   `compare` (`string`)
+    — SHA of the range end
+*   `project` (`string`)
+    — project name
+*   `type` (`'compare'`)
+    — kind
+*   `user` (`string`)
+    — owner of repo
+
+### `BuildUrlIssueValues`
+
+Info for issues (TypeScript type).
+
+###### Fields
+
+*   `no` (`string`)
+    — issue number
+*   `project` (`string`)
+    — project name
+*   `type` (`'issue'`)
+    — kind
+*   `user` (`string`)
+    — owner of repo
+
+### `BuildUrlMentionValues`
+
+Info for mentions (TypeScript type).
+
+###### Fields
+
+*   `type` (`'mention'`)
+    — kind
+*   `user` (`string`)
+    — user name
+
+### `BuildUrlValues`
+
+Info (TypeScript type).
+
+###### Type
+
+```ts
+type BuildUrlValues =
+  | BuildUrlCommitValues
+  | BuildUrlCompareValues
+  | BuildUrlIssueValues
+  | BuildUrlMentionValues
+```
+
+### `DefaultBuildUrl`
+
+To do.
+
+### `Options`
+
+Configuration (TypeScript type).
+
+###### Fields
+
+*   `buildUrl` ([`BuildUrl`][api-build-url], default:
+    [`defaultBuildUrl`][api-default-build-url])
+    — change how things are linked
+*   `mentionStrong` (`boolean`, default: `true`)
+    — wrap mentions in `strong`;
+    this makes them render more like how GitHub styles them, but GH itself
+    uses CSS instead of `strong`
+*   `repository` (`string`, default: `repository` from `packag.json` in CWD in
+    Node, otherwise required)
+    — repository to link against;
+    should point to a GitHub repository (such as `'user/project'`)
 
 ## Examples
 
@@ -207,39 +287,49 @@ A `buildUrl` can be passed to not link mentions.
 For example, by changing `example.js` from before like so:
 
 ```diff
-@@ -8,7 +8,11 @@ main()
- async function main() {
-   const file = await remark()
-     .use(remarkGfm)
--    .use(remarkGithub)
-+    .use(remarkGithub, {
-+      buildUrl(values, defaultBuildUrl) {
-+        return values.type === 'mention' ? false : defaultBuildUrl(values)
-+      }
-+    })
-     .process(await read('example.md'))
+@@ -1,11 +1,15 @@
+ import {remark} from 'remark'
+ import remarkGfm from 'remark-gfm'
+-import remarkGithub from 'remark-github'
++import remarkGithub, {defaultBuildUrl} from 'remark-github'
+ import {read} from 'to-vfile'
 
-   console.log(String(file))
+ const file = await remark()
+   .use(remarkGfm)
+-  .use(remarkGithub)
++  .use(remarkGithub, {
++    buildUrl(values) {
++      return values.type === 'mention' ? false : defaultBuildUrl(values)
++    }
++  })
+   .process(await read('example.md'))
+
+ console.log(String(file))
 ```
 
 To instead point mentions to a different place, change `example.js` like so:
 
 ```diff
-@@ -8,7 +8,13 @@ main()
- async function main() {
-   const file = await remark()
-     .use(remarkGfm)
--    .use(remarkGithub)
-+    .use(remarkGithub, {
-+      buildUrl(values, defaultBuildUrl) {
-+        return values.type === 'mention'
-+          ? `https://yourwebsite.com/${values.user}/`
-+          : defaultBuildUrl(values)
-+      }
-+    })
-     .process(await read('example.md'))
+@@ -1,11 +1,17 @@
+ import {remark} from 'remark'
+ import remarkGfm from 'remark-gfm'
+-import remarkGithub from 'remark-github'
++import remarkGithub, {defaultBuildUrl} from 'remark-github'
+ import {read} from 'to-vfile'
 
-   console.log(String(file))
+ const file = await remark()
+   .use(remarkGfm)
+-  .use(remarkGithub)
++  .use(remarkGithub, {
++    buildUrl(values) {
++      return values.type === 'mention'
++        ? `https://yourwebsite.com/${values.user}/`
++        : defaultBuildUrl(values)
++    }
++  })
+   .process(await read('example.md'))
+
+ console.log(String(file))
 ```
 
 ## Syntax
@@ -247,30 +337,38 @@ To instead point mentions to a different place, change `example.js` like so:
 The following references are supported:
 
 *   Commits:
-    `1f2a4fb` → [`1f2a4fb`][sha]
+    `1f2a4fb` →
+    [`1f2a4fb`][github-sha]
 *   Commits across forks:
-    `remarkjs@1f2a4fb` → [remarkjs@`1f2a4fb`][sha]
+    `remarkjs@1f2a4fb` →
+    [remarkjs@`1f2a4fb`][github-sha]
 *   Commits across projects:
-    `remarkjs/remark-github@1f2a4fb` → [remarkjs/remark-github@`1f2a4fb`][sha]
+    `remarkjs/remark-github@1f2a4fb` →
+    [remarkjs/remark-github@`1f2a4fb`][github-sha]
 *   Compare ranges:
     `e2acebc...2aa9311` →
-    [`e2acebc...2aa9311`][sha-range]
+    [`e2acebc...2aa9311`][github-sha-range]
 *   Compare ranges across forks:
     `remarkjs@e2acebc...2aa9311` →
-    [remarkjs/remark-github@`e2acebc...2aa9311`][sha-range]
+    [remarkjs/remark-github@`e2acebc...2aa9311`][github-sha-range]
 *   Compare ranges across projects:
     `remarkjs/remark-github@e2acebc...2aa9311` →
-    [remarkjs/remark-github@`e2acebc...2aa9311`][sha-range]
+    [remarkjs/remark-github@`e2acebc...2aa9311`][github-sha-range]
 *   Prefix issues:
-    `GH-1` → [GH-1][issue]
+    `GH-1` →
+    [GH-1][github-issue]
 *   Hash issues:
-    `#1` → [#1][issue]
+    `#1` →
+    [#1][github-issue]
 *   Issues across forks:
-    `remarkjs#1` → [remarkjs#1][issue]
+    `remarkjs#1` →
+    [remarkjs#1][github-issue]
 *   Issues across projects:
-    `remarkjs/remark-github#1` → [remarkjs/remark-github#1][issue]
+    `remarkjs/remark-github#1` →
+    [remarkjs/remark-github#1][github-issue]
 *   At-mentions:
-    `@wooorm` → [**@wooorm**][mention]
+    `@wooorm` →
+    [**@wooorm**][github-mention]
 
 Autolinks to these references are also transformed:
 `https://github.com/wooorm` -> `[**@wooorm**](https://github.com/wooorm)`
@@ -278,26 +376,33 @@ Autolinks to these references are also transformed:
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports an `Options` type, which specifies the interface of the accepted
-options.
-There are also `BuildUrl`, `BuildUrlValues`, `BuildUrlCommitValues`,
-`BuildUrlCompareValues`, `BuildUrlIssueValues`, `BuildUrlMentionValues`,
-and `DefaultBuildUrl` types exported.
+It exports the additional types
+[`BuildUrl`][api-build-url],
+[`BuildUrlCommitValues`][api-build-url-commit-values],
+[`BuildUrlCompareValues`][api-build-url-compare-values],
+[`BuildUrlIssueValues`][api-build-url-issue-values],
+[`BuildUrlMentionValues`][api-build-url-mention-values],
+[`BuildUrlValues`][api-build-url-values],
+[`DefaultBuildUrl`][api-default-build-url],
+[`Options`][api-options].
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
+
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line, `remark-github@^11`,
+compatible with Node.js 12.
 
 This plugin works with `unified` version 6+ and `remark` version 7+.
 
 ## Security
 
-Use of `remark-github` does not involve [**rehype**][rehype] ([**hast**][hast]).
+Use of `remark-github` does not involve **[rehype][]** (**[hast][]**).
 It does inject links based on user content, but those links only go to GitHub.
-There are no openings for [cross-site scripting (XSS)][xss] attacks.
+There are no openings for [cross-site scripting (XSS)][wiki-xss] attacks.
 
 ## Related
 
@@ -337,9 +442,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/remark-github
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/remark-github.svg
+[size-badge]: https://img.shields.io/bundlejs/size/remark-github
 
-[size]: https://bundlephobia.com/result?p=remark-github
+[size]: https://bundlejs.com/?q=remark-github
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -353,44 +458,66 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
 [esmsh]: https://esm.sh
 
 [health]: https://github.com/remarkjs/.github
 
-[contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
+[contributing]: https://github.com/remarkjs/.github/blob/main/contributing.md
 
-[support]: https://github.com/remarkjs/.github/blob/HEAD/support.md
+[support]: https://github.com/remarkjs/.github/blob/main/support.md
 
-[coc]: https://github.com/remarkjs/.github/blob/HEAD/code-of-conduct.md
+[coc]: https://github.com/remarkjs/.github/blob/main/code-of-conduct.md
 
 [license]: license
 
 [author]: https://wooorm.com
 
-[remark]: https://github.com/remarkjs/remark
+[github-issue]: https://github.com/remarkjs/remark-github/issues/1
 
-[unified]: https://github.com/unifiedjs/unified
+[github-mention]: https://github.com/wooorm
 
-[writing-on-github]: https://docs.github.com/en/github/writing-on-github#references
+[github-sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
 
-[sha]: https://github.com/remarkjs/remark-github/commit/1f2a4fb8f88a0a98ea9d0c0522cd538a9898f921
+[github-sha-range]: https://github.com/wooorm/remark/compare/e2acebc...2aa9311
 
-[sha-range]: https://github.com/wooorm/remark/compare/e2acebc...2aa9311
+[github-writing]: https://docs.github.com/en/github/writing-on-github#references
 
-[issue]: https://github.com/remarkjs/remark-github/issues/1
-
-[mention]: https://github.com/wooorm
-
-[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
-
-[typescript]: https://www.typescriptlang.org
+[hast]: https://github.com/syntax-tree/hast
 
 [rehype]: https://github.com/rehypejs/rehype
 
-[hast]: https://github.com/syntax-tree/hast
+[remark]: https://github.com/remarkjs/remark
 
 [remark-gfm]: https://github.com/remarkjs/remark-gfm
 
 [remark-breaks]: https://github.com/remarkjs/remark-breaks
 
 [remark-frontmatter]: https://github.com/remarkjs/remark-frontmatter
+
+[typescript]: https://www.typescriptlang.org
+
+[unified]: https://github.com/unifiedjs/unified
+
+[unified-transformer]: https://github.com/unifiedjs/unified#transformer
+
+[wiki-xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[api-options]: #options
+
+[api-remark-github]: #unifieduseremarkgithub-options
+
+[api-build-url]: #buildurl
+
+[api-build-url-commit-values]: #buildurlcommitvalues
+
+[api-build-url-compare-values]: #buildurlcomparevalues
+
+[api-build-url-issue-values]: #buildurlissuevalues
+
+[api-build-url-mention-values]: #buildurlmentionvalues
+
+[api-build-url-values]: #buildurlvalues
+
+[api-default-build-url]: #
