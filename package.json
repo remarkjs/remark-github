@@ -35,13 +35,12 @@
   ],
   "sideEffects": false,
   "type": "module",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "browser": {
-    "./lib/get-repo-from-package.js": "./lib/get-repo-from-package.browser.js"
-  },
-  "react-native": {
-    "./lib/get-repo-from-package.js": "./lib/get-repo-from-package.browser.js"
+  "exports": "./index.js",
+  "imports": {
+    "#get-repo-from-package": {
+      "node": "./lib/get-repo-from-package.node.js",
+      "default": "./lib/get-repo-from-package.default.js"
+    }
   },
   "files": [
     "lib/",

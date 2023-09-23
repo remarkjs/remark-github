@@ -78,14 +78,14 @@ npm install remark-github
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import remarkGithub from 'https://esm.sh/remark-github@11'
+import remarkGithub, {defaultBuildUrl} from 'https://esm.sh/remark-github@11'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import remarkGithub from 'https://esm.sh/remark-github@11?bundle'
+  import remarkGithub, {defaultBuildUrl} from 'https://esm.sh/remark-github@11?bundle'
 </script>
 ```
 
