@@ -328,11 +328,11 @@ test('repositories', async function (t) {
         .use(remarkGithub, {repository: value})
         .process(
           [
-            '*   SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-            '*   User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
-            '*   # Num: #26',
-            '*   GH-Num: GH-26',
-            '*   User#Num: wooorm#26',
+            '* SHA: a5c3785ed8d6a35868bc169f07e40e889087fd2e',
+            '* User@SHA: wooorm@a5c3785ed8d6a35868bc169f07e40e889087fd2e',
+            '* # Num: #26',
+            '* GH-Num: GH-26',
+            '* User#Num: wooorm#26',
             ''
           ].join('\n')
         )
@@ -340,27 +340,27 @@ test('repositories', async function (t) {
       assert.equal(
         String(file),
         [
-          '*   SHA: [`a5c3785`](https://github.com/' +
+          '* SHA: [`a5c3785`](https://github.com/' +
             user +
             '/' +
             project +
             '/commit/a5c3785ed8d6a35868bc169f07e40e' +
             '889087fd2e)',
-          '*   User\\@SHA: [wooorm@`a5c3785`](https://github.com/wooorm/' +
+          '* User\\@SHA: [wooorm@`a5c3785`](https://github.com/wooorm/' +
             project +
             '/commit/a5c3785ed8d6a35868bc169f07e40e' +
             '889087fd2e)',
-          '*   # Num: [#26](https://github.com/' +
+          '* # Num: [#26](https://github.com/' +
             user +
             '/' +
             project +
             '/issues/26)',
-          '*   GH-Num: [GH-26](https://github.com/' +
+          '* GH-Num: [GH-26](https://github.com/' +
             user +
             '/' +
             project +
             '/issues/26)',
-          '*   User#Num: [wooorm#26](https://github.com/wooorm/' +
+          '* User#Num: [wooorm#26](https://github.com/wooorm/' +
             project +
             '/issues/26)',
           ''

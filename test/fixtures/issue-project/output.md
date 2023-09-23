@@ -4,8 +4,8 @@ A project-SHA is not relative to the current project.
 
 GitHub’s project names can include alphabetical characters, dashes, and full-stops. They may end in a TLD (such as `.com`), but may not end in `.git` (for obvious reasons).
 
-*   This is a valid issue: [foo/bar#1](https://github.com/foo/bar/issues/1);
-*   So is this: [foo/bar#123456789](https://github.com/foo/bar/issues/123456789).
+* This is a valid issue: [foo/bar#1](https://github.com/foo/bar/issues/1);
+* So is this: [foo/bar#123456789](https://github.com/foo/bar/issues/123456789).
 
 They work here
 [foo/bar#1](https://github.com/foo/bar/issues/1)
