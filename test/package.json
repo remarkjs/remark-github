@@ -1,5 +1,10 @@
 {
   "type": "module",
   "repository": "wooorm/remark",
-  "xo": false
+  "xo": {
+    "prettier": true,
+    "rules": {
+      "unicorn/prefer-node-protocol": "off"
+    }
+  }
 }
