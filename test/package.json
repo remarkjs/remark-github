@@ -4,6 +4,7 @@
   "xo": {
     "prettier": true,
     "rules": {
+      "no-await-in-loop": "off",
       "unicorn/prefer-node-protocol": "off"
     }
   }
