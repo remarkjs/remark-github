@@ -118,6 +118,26 @@ test('remarkGithub', async function (t) {
     }
   })
 
+  await t.test(
+    'should not throw w/ `repository` that belongs to an Enterprise Managed User',
+    async function () {
+      const file = await remark()
+        .use(remarkGfm)
+        .use(remarkGithub, {repository: 'a_zse/b'})
+        .process(
+          new VFile({
+            cwd: new URL('.', import.meta.url).pathname,
+            value: '12345678'
+          })
+        )
+
+      assert.equal(
+        String(file),
+        '[`1234567`](https://github.com/a_zse/b/commit/12345678)\n'
+      )
+    }
+  )
+
   await t.test('should support `buildUrl` for mentions', async function () {
     const file = await remark()
       .use(remarkGfm)
